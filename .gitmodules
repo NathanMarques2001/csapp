@@ -1,0 +1,9 @@
+[submodule "apps/frontend"]
+	path = apps/frontend
+	url = git@github.com:NathanMarques2001/csapp-front.git
+[submodule "apps/backend"]
+	path = apps/backend
+	url = git@github.com:NathanMarques2001/csapp-back.git
+[submodule "apps/email"]
+	path = apps/email
+	url = git@github.com:NathanMarques2001/csapp-email.git
