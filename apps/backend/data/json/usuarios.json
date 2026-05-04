@@ -1,0 +1,8 @@
+[
+  {
+    "nome": "vendedor inicial",
+    "email": "vendedor_inicial@email.com",
+    "tipo": "admin",
+    "senha": "senha123"
+  }
+]

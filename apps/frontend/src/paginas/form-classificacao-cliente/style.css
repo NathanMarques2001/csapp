@@ -1,0 +1,82 @@
+#cadastro-classificacoes-clientes-descricao {
+  margin-top: 1rem;
+  padding-bottom: 1.5rem;
+  color: var(--cinza);
+  border-bottom: 1px solid var(--cinza);
+}
+
+#cadastro-classificacoes-clientes-form-container {
+  margin-top: 2rem;
+  display: flex;
+}
+
+#cadastro-classificacoes-clientes-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: space-between;
+}
+
+#cadastro-classificacoes-clientes-input-labels {
+  display: flex;
+  flex-direction: column;
+}
+
+.cadastro-classificacoes-clientes-input {
+  padding: 3%;
+  margin: 1rem 0 1.5rem 0;
+  border: 1px solid var(--cinza);
+}
+
+#cadastro-classificacoes-clientes-input {
+  border-radius: 5px;
+}
+
+#cadastro-classificacoes-clientes-select {
+  background-color: var(--branco);
+}
+
+.cadastro-classificacoes-clientes-container-btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 6%;
+}
+
+#cadastro-classificacoes-clientes-container-img {
+  display: flex;
+  align-items: center;
+  height: 70vh;
+  justify-content: end;
+}
+
+#cadastro-classificacoes-clientes-img {
+  width: 65%;
+}
+
+.cadastro-classificacoes-clientes-btn {
+  width: 50%;
+  padding: 2% 3%;
+  border: 1px solid var(--preto);
+  border-radius: 5px;
+}
+
+.cadastro-classificacoes-clientes-btn:hover {
+  cursor: pointer;
+}
+
+#cadastro-classificacoes-clientes-btn-cancelar {
+  background-color: var(--branco);
+}
+
+#cadastro-classificacoes-clientes-btn-cancelar:hover {
+  background-color: var(--branco-hover);
+}
+
+#cadastro-classificacoes-clientes-btn-cadastrar {
+  background-color: var(--verde);
+}
+
+#cadastro-classificacoes-clientes-btn-cadastrar:hover {
+  background-color: var(--verde-hover);
+}

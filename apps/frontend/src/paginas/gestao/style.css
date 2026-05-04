@@ -1,0 +1,123 @@
+#gestao-display {
+  display: flex;
+  margin-bottom: 4%;
+}
+
+#gestao-container {
+  margin: 2% 4% 0 0;
+  width: 75%;
+}
+
+#central-gestao-titulo {
+  font-size: 2rem;
+}
+
+#central-gestao-switch-container {
+  display: flex;
+  margin: 8% 0 3% 0;
+  width: 100%;
+  justify-content: space-around;
+  border-bottom: 1px solid var(--cinza);
+}
+
+.switch-item {
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  color: var(--cinza);
+  padding-bottom: 0.9rem;
+  font-size: 0.9rem;
+}
+
+.switch-item.active {
+  border-bottom: 1px solid var(--azul);
+  color: var(--azul);
+}
+
+.gestao-section-subtitulo {
+  border-bottom: 1px solid var(--cinza);
+  margin-bottom: 3%;
+  padding-bottom: 2.5%;
+  font-size: 1.25rem;
+}
+
+.gestao-section-input {
+  border-radius: 5px;
+  border: 1px solid var(--cinza);
+  padding: 1%;
+  width: 36%;
+  margin-right: 4%;
+  font-size: 0.9rem;
+}
+
+.gestao-section-btn {
+  border-radius: 5px;
+  padding: 1%;
+  width: 24%;
+  cursor: pointer;
+  background-color: var(--verde);
+  border: 1px solid var(--azul-borda);
+  font-size: 0.9rem;
+}
+
+.gestao-section-btn:hover {
+  background-color: var(--verde-hover);
+}
+
+.gestao-section-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 3%;
+}
+
+.gestao-section-titulo-tabela,
+.gestao-section-conteudo-tabela {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--cinza);
+}
+
+.gestao-section-editar-btn {
+  background-color: var(--verde);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gestao-section-editar-btn:hover {
+  background-color: var(--verde-hover);
+}
+
+.gestao-section-excluir-btn {
+  background-color: var(--vermelho);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gestao-section-excluir-btn:hover {
+  background-color: var(--vermelho-hover);
+}
+
+.gestao-section-item-btn {
+  border: 1px solid var(--preto);
+  height: 30px;
+  width: 60px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.gestao-section-container-btn {
+  display: flex;
+  gap: 4%;
+}
+
+.gestao-section-editar-btn:disabled {
+  background-color: var(--cinza);
+  cursor: not-allowed;
+}
+
+.gestao-section-excluir-btn:disabled {
+  background-color: var(--cinza);
+  cursor: not-allowed;
+}

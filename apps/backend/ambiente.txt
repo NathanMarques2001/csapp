@@ -1,0 +1,7 @@
+/src/config/Database.js
+/src/config/passportConfig.js
+/src/controllers/UsuarioController.js
+/src/index.js
+/src/middleware/auth.js
+/src/services/email.js
+/src/services/servicoEmailNotificacoes.js

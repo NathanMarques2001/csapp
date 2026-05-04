@@ -1,0 +1,82 @@
+#cadastro-grupo-economico-descricao {
+  margin-top: 1rem;
+  padding-bottom: 1.5rem;
+  color: var(--cinza);
+  border-bottom: 1px solid var(--cinza);
+}
+
+#cadastro-grupo-economico-form-container {
+  margin-top: 2rem;
+  display: flex;
+}
+
+#cadastro-grupo-economico-form {
+  display: flex;
+  flex-direction: column;
+  width: 200%;
+  justify-content: space-between;
+}
+
+#cadastro-grupo-economico-input-labels {
+  display: flex;
+  flex-direction: column;
+}
+
+.cadastro-grupo-economico-input {
+  padding: 2%;
+  margin: 1rem 0 1.5rem 0;
+  border: 1px solid var(--cinza);
+}
+
+#cadastro-grupo-economico-input {
+  border-radius: 5px;
+}
+
+#cadastro-grupo-economico-select {
+  background-color: var(--branco);
+}
+
+.cadastro-grupo-economico-container-btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 6%;
+}
+
+#cadastro-grupo-economico-container-img {
+  display: flex;
+  align-items: center;
+  height: 70vh;
+  justify-content: end;
+}
+
+#cadastro-grupo-economico-img {
+  width: 80%;
+}
+
+.cadastro-grupo-economico-btn {
+  width: 50%;
+  padding: 2% 3%;
+  border: 1px solid var(--preto);
+  border-radius: 5px;
+}
+
+.cadastro-grupo-economico-btn:hover {
+  cursor: pointer;
+}
+
+#cadastro-grupo-economico-btn-cancelar {
+  background-color: var(--branco);
+}
+
+#cadastro-grupo-economico-btn-cancelar:hover {
+  background-color: var(--branco-hover);
+}
+
+#cadastro-grupo-economico-btn-cadastrar {
+  background-color: var(--verde);
+}
+
+#cadastro-grupo-economico-btn-cadastrar:hover {
+  background-color: var(--verde-hover);
+}

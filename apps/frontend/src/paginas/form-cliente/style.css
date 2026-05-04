@@ -1,0 +1,107 @@
+.required {
+  color: red;
+}
+
+.form {
+  width: 100%;
+}
+
+.form-cliente-container {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 4.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.form-group label {
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+  padding: 2%;
+  border: 1px solid var(--cinza);
+  margin-bottom: 1.25rem;
+}
+
+.form-group input {
+  border-radius: 5px;
+}
+
+.form-group select {
+  background-color: var(--branco);
+}
+
+#form-cliente-container-1 {
+  width: 100%;
+  border-bottom: 1px solid var(--cinza);
+}
+
+#form-cliente-container-2 {
+  margin-top: 1rem;
+  width: 46.5%;
+}
+
+#form-cliente-container-2 h2 {
+  margin-bottom: 1.5rem;
+}
+
+#cadastro-cliente-img {
+  width: 80%;
+}
+
+.date-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-group-3 {
+  width: 30%;
+}
+
+.form-group-3 input {
+  padding: 6%;
+}
+
+.form-cliente-container-border {
+  border-bottom: 1px solid var(--cinza);
+}
+
+.form-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  gap: 2.5%;
+}
+
+.form-cliente-btn-cancelar {
+  cursor: pointer;
+  border: 1px solid var(--preto);
+  padding: 1.5% 0;
+  border-radius: 5px;
+  width: 240px;
+  margin-bottom: 5%;
+}
+
+.form-cliente-btn-cancelar:hover {
+  background-color: var(--branco-hover);
+}
+
+.form-cliente-btn-enviar {
+  cursor: pointer;
+  border: 1px solid var(--azul);
+  padding: 1.5% 0;
+  border-radius: 5px;
+  width: 240px;
+  margin-bottom: 5%;
+}
+
+select#tipo_unidade option {
+  text-transform: capitalize;
+}

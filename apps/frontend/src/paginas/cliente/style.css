@@ -1,0 +1,158 @@
+#cliente-display {
+  display: flex;
+  margin-bottom: 4%;
+}
+
+#cliente-container {
+  margin: 2% 4% 0 0;
+  width: 75%;
+}
+
+#cliente-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--cinza);
+  margin-bottom: 2rem;
+}
+
+#cliente-titulo-nome {
+  font-size: 1.75rem;
+  text-transform: capitalize;
+}
+
+#cliente-titulo-razao {
+  font-size: 1.25rem;
+  color: var(--cinza);
+  text-transform: capitalize;
+}
+
+#cliente-btn-div {
+  display: flex;
+  gap: 8%;
+}
+
+#cliente-botao-editar {
+  border: 1px solid var(--preto);
+  height: 30px;
+  width: 60px;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: var(--verde);
+}
+
+#cliente-botao-inativar {
+  border: 1px solid var(--preto);
+  height: 30px;
+  width: 60px;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: var(--vermelho);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#cliente-botao-ativar {
+  border: 1px solid var(--preto);
+  height: 30px;
+  width: 60px;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: var(--verde);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#cliente-botao-ativar:hover {
+  background-color: var(--verde-hover);
+}
+
+#cliente-botao-editar:hover {
+  background-color: var(--verde-hover);
+}
+
+#cliente-botao-inativar:hover {
+  background-color: var(--vermelho-hover);
+}
+
+#cliente-botao-editar.disabled {
+  cursor: not-allowed;
+  background-color: #ccc;
+  color: #666;
+}
+
+#cliente-subtitulo-contratos {
+  font-size: 1.25rem;
+}
+
+#cliente-tabela {
+  margin-top: 1.5rem;
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--preto);
+  overflow: hidden;
+}
+
+#cliente-tabela th,
+#cliente-tabela td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--preto);
+}
+
+#cliente-tabela th {
+  background-color: var(--preto);
+  color: var(--branco);
+}
+
+#cliente-tabela tbody {
+  max-height: 20rem;
+  overflow-y: scroll;
+}
+
+.cliente-tipo-faturamento {
+  text-transform: capitalize;
+}
+
+#cliente-faturamento-mensal {
+  width: 100%;
+  background-color: var(--verde);
+  padding: 1%;
+  display: flex;
+  align-items: end;
+  border: 1px solid var(--preto);
+  border-radius: 0 0 7px 7px;
+  flex-direction: column;
+}
+
+#cliente-card-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin: 2rem 0;
+}
+
+.cliente-contatos-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.clickable-row:hover {
+  cursor: pointer;
+  background-color: var(--azul-borda);
+  color: var(--branco);
+}
+
+.inactive-contract {
+  background-color: var(--cinza);
+}
+
+#cliente-contatos-container-img {
+  margin-top: 2.5rem;
+}
+
+#cliente-img {
+  width: 40%;
+}

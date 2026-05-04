@@ -1,0 +1,104 @@
+#grupo-economico-display {
+  display: flex;
+  margin-bottom: 4%;
+}
+
+#grupo-economico-container {
+  margin: 2% 4% 0 0;
+  width: 75%;
+}
+
+#grupo-economico-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--cinza);
+  margin-bottom: 2rem;
+}
+
+#grupo-economico-titulo-nome {
+  font-size: 1.75rem;
+  text-transform: capitalize;
+}
+
+#grupo-economico-subtitulo-contratos {
+  font-size: 1.25rem;
+}
+
+/* Bloco de cada cliente */
+.cliente-bloco {
+  margin-top: 2rem;
+  border: 1px solid var(--preto);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* Cabeçalho do cliente (barra preta) */
+.cliente-info {
+  background: var(--preto);
+  color: var(--branco);
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+.cliente-info .fat {
+  font-weight: bold;
+}
+
+/* Tabela de contratos */
+.tabela-contratos {
+  width: 100%;
+  border-collapse: collapse;
+}
+.tabela-contratos th,
+.tabela-contratos td {
+  padding: 0.5rem;
+}
+
+.tabela-contratos th {
+  border-bottom: 1px solid var(--preto);
+}
+
+.tabela-contratos th {
+  background: var(--verde);
+  text-align: start;
+}
+
+/* Linha clicável e contrato inativo */
+#grupo-economico-detalhe-contrato:hover {
+  cursor: pointer;
+  background-color: var(--azul-borda);
+  color: var(--branco);
+}
+.inactive-contract {
+  background-color: var(--cinza);
+}
+
+/* Faturamento mensal total */
+#grupo-economico-faturamento-mensal {
+  width: 100%;
+  background-color: var(--preto);
+  color: var(--branco);
+  padding: 1%;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  border: 4px solid var(--azul-borda);
+  border-radius: 7px;
+  height: fit-content;
+}
+
+/* Imagem decorativa */
+#grupo-economico-contatos-container-img {
+  margin-top: 2.5rem;
+}
+#grupo-economico-img {
+  width: 40%;
+}
+
+.grupo-economico-contatos-container {
+  display: flex;
+  justify-content: space-between;
+}
