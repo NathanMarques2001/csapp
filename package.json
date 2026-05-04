@@ -1,5 +1,15 @@
 {
-  "dependencies": {
+  "name": "csapp",
+  "private": true,
+  "packageManager": "npm@11.6.2",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build"
+  },
+  "devDependencies": {
     "turbo": "^2.5.4"
-  }
+  },
+  "workspaces": [
+    "apps/*"
+  ]
 }

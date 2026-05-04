@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: csapp_mysql_dev
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASS:-root}
+      MYSQL_DATABASE: ${DB_NAME:-csapp_db}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data_dev:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    networks:
+      - csapp_network
+
+  email_service:
+    build:
+      context: ./apps/email
+      dockerfile: Dockerfile
+    container_name: csapp_email_dev
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./apps/email:/app
+      - /app/node_modules
+    command: npm run dev
+    env_file:
+      - .env.development
+    networks:
+      - csapp_network
+
+  backend:
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    container_name: csapp_backend_dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./apps/backend:/app
+      - /app/node_modules
+    env_file:
+      - .env.development
+    environment:
+      DB_HOST: mysql
+      EMAIL_API_URL: http://email_service:9090
+    command: npm run dev
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - csapp_network
+
+  frontend:
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile
+      target: dev
+    container_name: csapp_frontend_dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./apps/frontend:/app
+      - /app/node_modules
+    env_file:
+      - .env.development
+    environment:
+      VITE_API_URL: http://localhost:8080/api
+    networks:
+      - csapp_network
+
+networks:
+  csapp_network:
+    driver: bridge
+
+volumes:
+  mysql_data_dev:

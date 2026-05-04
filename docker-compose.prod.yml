@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: csapp_mysql_prod
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
+    volumes:
+      - mysql_data_prod:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    networks:
+      - csapp_network_prod
+
+  email_service:
+    build:
+      context: ./apps/email
+      dockerfile: Dockerfile
+    container_name: csapp_email_prod
+    env_file:
+      - .env.production
+    networks:
+      - csapp_network_prod
+
+  backend:
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    container_name: csapp_backend_prod
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env.production
+    environment:
+      DB_HOST: mysql
+      EMAIL_API_URL: http://email_service:9090
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - csapp_network_prod
+
+  frontend:
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile
+      target: production
+    container_name: csapp_frontend_prod
+    ports:
+      - "80:80"
+    env_file:
+      - .env.production
+    networks:
+      - csapp_network_prod
+
+networks:
+  csapp_network_prod:
+    driver: bridge
+
+volumes:
+  mysql_data_prod:
