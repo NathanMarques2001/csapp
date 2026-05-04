@@ -1,8 +1,22 @@
 const Usuario = require('../models/Usuario.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const authConfig = require('/var/www/scrt/secret.json');
 const jwksClient = require('jwks-rsa');
+const fs = require('fs');
+
+let authConfig = {};
+try {
+  if (fs.existsSync('/run/secrets/secret.json')) {
+    authConfig = JSON.parse(fs.readFileSync('/run/secrets/secret.json', 'utf8'));
+  } else if (fs.existsSync('/var/www/scrt/secret.json')) {
+    authConfig = JSON.parse(fs.readFileSync('/var/www/scrt/secret.json', 'utf8'));
+  }
+} catch (e) {
+  console.warn("Aviso: Falha ao ler secrets em UsuarioController", e.message);
+}
+if (!authConfig.secret) {
+    authConfig.secret = process.env.SESSION_SECRET || 'secret_de_desenvolvimento_local';
+}
 
 function gerarToken({ id, nome, tipo }) {
   const expireAt = new Date();

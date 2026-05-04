@@ -12,8 +12,8 @@ RUN npm install --omit=dev
 # Copia resto do código
 COPY . .
 
-# Porta do express
-EXPOSE 8080
+# Porta do microsserviço
+EXPOSE 9090
 
-# Em prod/stage roda normal. Em docker-compose de dev vamos sobrescrever o command para npm run dev.
+# Command padrão
 CMD ["npm", "start"]

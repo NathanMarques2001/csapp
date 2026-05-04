@@ -1,7 +1,37 @@
 const passport = require('passport');
 const OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
 const Usuario = require('../models/Usuario');
-const microsoftConfig = require('/var/www/scrt/secret.json').microsoft;
+const fs = require('fs');
+require('dotenv').config();
+
+let microsoftConfig = {};
+try {
+  // 1. Tenta carregar do Podman/Docker Secrets
+  if (fs.existsSync('/run/secrets/secret.json')) {
+    const parsed = JSON.parse(fs.readFileSync('/run/secrets/secret.json', 'utf8'));
+    if (parsed && parsed.microsoft) microsoftConfig = parsed.microsoft;
+  } 
+  // 2. Tenta o caminho estático (produção legada)
+  else if (fs.existsSync('/var/www/scrt/secret.json')) {
+    const parsed = JSON.parse(fs.readFileSync('/var/www/scrt/secret.json', 'utf8'));
+    if (parsed && parsed.microsoft) microsoftConfig = parsed.microsoft;
+  }
+} catch (e) {
+  console.warn("Aviso: Falha ao ler secrets em passportConfig", e.message);
+}
+
+// 3. Fallback para variáveis de ambiente (para o docker-compose local)
+if (!microsoftConfig.clientID) {
+    microsoftConfig = {
+        identityMetadata: process.env.MS_IDENTITY_METADATA || 'https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration',
+        clientID: process.env.MS_CLIENT_ID || 'dummy-client-id',
+        responseType: process.env.MS_RESPONSE_TYPE || 'id_token code',
+        responseMode: process.env.MS_RESPONSE_MODE || 'form_post',
+        redirectUrl: process.env.MS_REDIRECT_URL || 'http://localhost:8080/api/auth/callback',
+        clientSecret: process.env.MS_CLIENT_SECRET || 'dummy-client-secret',
+        scope: process.env.MS_SCOPE ? process.env.MS_SCOPE.split(' ') : ['profile', 'email', 'openid']
+    };
+}
 
 passport.use(new OIDCStrategy({
     identityMetadata: microsoftConfig.identityMetadata,

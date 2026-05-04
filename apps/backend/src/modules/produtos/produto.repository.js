@@ -1,4 +1,4 @@
-const Produto = require('../../../models/Produto');
+const Produto = require('../../models/Produto');
 
 class ProdutoRepository {
     async findAllPaginated({ page = 1, limit = 10 }) {

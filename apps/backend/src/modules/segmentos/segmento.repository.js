@@ -1,4 +1,4 @@
-const Segmento = require('../../../models/Segmento');
+const Segmento = require('../../models/Segmento');
 
 class SegmentoRepository {
     async findAllPaginated({ page = 1, limit = 10 }) {

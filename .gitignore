@@ -1,10 +1,8 @@
 node_modules
 
 # Variaveis de Ambiente (Evitar vazamento de secrets)
-.env
-.env.*
-!.env.example
-
-*/.env
-*/.env.*
-*/!.env.example
+**/.env
+**/.env.*
+dist
+.next
+.turbo

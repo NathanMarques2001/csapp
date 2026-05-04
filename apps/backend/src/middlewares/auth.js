@@ -1,6 +1,20 @@
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
+require('dotenv').config();
 
-const authConfig = require('/var/www/scrt/secret.json');
+let authConfig = {};
+try {
+  if (fs.existsSync('/run/secrets/secret.json')) {
+    authConfig = JSON.parse(fs.readFileSync('/run/secrets/secret.json', 'utf8'));
+  } else if (fs.existsSync('/var/www/scrt/secret.json')) {
+    authConfig = JSON.parse(fs.readFileSync('/var/www/scrt/secret.json', 'utf8'));
+  }
+} catch (e) {
+  console.warn("Aviso: Falha ao ler secrets em auth.js", e.message);
+}
+if (!authConfig.secret) {
+    authConfig.secret = process.env.SESSION_SECRET || 'secret_de_desenvolvimento_local';
+}
 
 module.exports = (req, res, next) => {
   const authHeader = req.headers.authorization;
