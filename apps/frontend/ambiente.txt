@@ -1,3 +1,0 @@
-/src/utils/api.js
-/src/utils/auth.js
-/src/utils/email.js
