@@ -1,8 +1,33 @@
 import { Menu, ChevronRight, Bell } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 const Header = ({ sidebarOpen, setSidebarOpen, selectedItem }) => {
     const location = useLocation();
+    const [cookies] = useCookies(['nomeUsuario', 'tipo']);
+
+    const nome = cookies.nomeUsuario || 'Usuário';
+    const tipo = cookies.tipo || 'User';
+
+    // Get initials for avatar
+    const getInitials = (name) => {
+        if (!name) return '??';
+        const parts = name.split(' ');
+        if (parts.length >= 2) {
+            return (parts[0][0] + parts[1][0]).toUpperCase();
+        }
+        return name.slice(0, 2).toUpperCase();
+    };
+
+    // Map type to friendly label
+    const getTipoLabel = (t) => {
+        const map = {
+            'admin': 'Administrador',
+            'user': 'Usuário',
+            'dev': 'Desenvolvedor'
+        };
+        return map[t.toLowerCase()] || t;
+    };
 
     // Derive title from path
     const getPageTitle = (pathname) => {
@@ -42,10 +67,12 @@ const Header = ({ sidebarOpen, setSidebarOpen, selectedItem }) => {
                 </button>
                 <div className="h-8 w-px bg-slate-200 mx-1"></div>
                 <div className="flex items-center gap-3 cursor-pointer hover:bg-slate-50 p-1.5 rounded-full pr-3 transition-colors">
-                    <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs">AG</div>
+                    <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs">
+                        {getInitials(nome)}
+                    </div>
                     <div className="hidden md:block text-sm">
-                        <p className="font-medium text-slate-900 leading-none">Ana Gerente</p>
-                        <p className="text-xs text-slate-500 mt-0.5">Administrador</p>
+                        <p className="font-medium text-slate-900 leading-none">{nome}</p>
+                        <p className="text-xs text-slate-500 mt-0.5">{getTipoLabel(tipo)}</p>
                     </div>
                 </div>
             </div>
