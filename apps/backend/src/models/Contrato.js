@@ -11,10 +11,6 @@ class Contrato extends Model {
         type: DataTypes.INTEGER,
         allowNull: false
       },
-      faturado: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
-      },
       id_faturado: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -70,6 +66,22 @@ class Contrato extends Model {
       descricao: DataTypes.TEXT,
       data_inicio: {
         type: DataTypes.DATE,
+        allowNull: true
+      },
+      tipo_faturamento: {
+        type: DataTypes.ENUM,
+        values: ['mensal', 'anual']
+      },
+      valor_antigo: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: true
+      },
+      link_contrato: {
+        type: DataTypes.TEXT,
+        allowNull: true
+      },
+      renovacao_automatica: {
+        type: DataTypes.BOOLEAN,
         allowNull: true
       }
     }, {

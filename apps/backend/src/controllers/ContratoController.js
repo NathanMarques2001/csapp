@@ -27,10 +27,6 @@ module.exports = {
 
       const contratos = await Contrato.findAll({ where: { id_cliente: id } });
 
-      if (contratos.length == 0) {
-        return res.status(404).send({ message: 'Nenhum contrato cadastrado!' });
-      }
-
       return res.status(200).send({ contratos });
     } catch (error) {
       console.error(error);
@@ -49,10 +45,6 @@ module.exports = {
         contratos = contratos.concat(contratosCliente);
       }
 
-      if (contratos.length == 0) {
-        return res.status(404).send({ message: 'Nenhum contrato cadastrado!' });
-      }
-
       return res.status(200).send({ contratos });
     } catch (error) {
       console.error(error);
@@ -64,10 +56,6 @@ module.exports = {
     try {
       const contratos = await Contrato.findAll();
 
-      if (contratos.length == 0) {
-        return res.status(404).send({ message: 'Nenhum contrato cadastrado!' });
-      }
-
       return res.status(200).send({ contratos });
     } catch (error) {
       console.error(error);
@@ -77,7 +65,7 @@ module.exports = {
 
   async store(req, res) {
     try {
-      const { id_cliente, id_produto, faturado, id_faturado, dia_vencimento, indice_reajuste, nome_indice, proximo_reajuste, status, duracao, valor_mensal, quantidade, descricao, data_inicio } = req.body;
+      const { id_cliente, id_produto, id_faturado, dia_vencimento, indice_reajuste, nome_indice, proximo_reajuste, status, duracao, valor_mensal, quantidade, descricao, data_inicio } = req.body;
 
       // const containsLetters = /[a-zA-Z]/;
 
@@ -88,7 +76,7 @@ module.exports = {
       // }
 
 
-      const contrato = await Contrato.create({ id_cliente, id_produto, faturado, id_faturado, dia_vencimento, indice_reajuste, nome_indice, proximo_reajuste, status, duracao, valor_mensal, quantidade, descricao, data_inicio });
+      const contrato = await Contrato.create({ id_cliente, id_produto, id_faturado, dia_vencimento, indice_reajuste, nome_indice, proximo_reajuste, status, duracao, valor_mensal, quantidade, descricao, data_inicio });
 
       await classifyCustomers();
 
@@ -108,7 +96,7 @@ module.exports = {
 
   async update(req, res) {
     try {
-      const { id_cliente, id_produto, faturado, id_faturado, dia_vencimento, indice_reajuste, nome_indice, proximo_reajuste, status, duracao, valor_mensal, quantidade, descricao, data_inicio } = req.body;
+      const { id_cliente, id_produto, id_faturado, dia_vencimento, indice_reajuste, nome_indice, proximo_reajuste, status, duracao, valor_mensal, quantidade, descricao, data_inicio } = req.body;
       const { id } = req.params;
       //const containsLetters = /[a-zA-Z]/;
 
@@ -122,7 +110,7 @@ module.exports = {
       //   return res.status(400).send({ message: 'O campo quantidade só aceita números!' });
       // }
 
-      await Contrato.update({ id_cliente, id_produto, faturado, id_faturado, dia_vencimento, indice_reajuste, nome_indice, proximo_reajuste, status, duracao, valor_mensal, quantidade, descricao, data_inicio }, { where: { id: id } });
+      await Contrato.update({ id_cliente, id_produto, id_faturado, dia_vencimento, indice_reajuste, nome_indice, proximo_reajuste, status, duracao, valor_mensal, quantidade, descricao, data_inicio }, { where: { id: id } });
 
       await classifyCustomers();
 

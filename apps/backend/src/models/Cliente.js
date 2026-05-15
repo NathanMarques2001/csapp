@@ -54,7 +54,22 @@ class Cliente extends Model {
         type: DataTypes.ENUM,
         values: ['ativo', 'inativo']
       },
-      tipo: DataTypes.STRING,
+      id_grupo_economico: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+      },
+      tipo_unidade: {
+        type: DataTypes.ENUM,
+        values: ['pai', 'filha']
+      },
+      id_classificacao_cliente: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+      },
+      vp: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+      },
       data_criacao: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -106,6 +121,8 @@ class Cliente extends Model {
     this.hasMany(models.FatosImportantes, { foreignKey: 'id_cliente', as: 'fatos_importantes' });
     this.belongsTo(models.Usuario, { foreignKey: 'id_usuario', as: 'usuarios' });
     this.belongsTo(models.Segmento, { foreignKey: 'id_segmento', as: 'segmentos' });
+    this.belongsTo(models.GrupoEconomico, { foreignKey: 'id_grupo_economico', as: 'grupo_economico' });
+    this.belongsTo(models.ClassificacaoClientes, { foreignKey: 'id_classificacao_cliente', as: 'classificacao' });
   }
 
 }

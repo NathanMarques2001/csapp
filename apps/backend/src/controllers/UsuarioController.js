@@ -135,10 +135,6 @@ module.exports = {
         order: [['nome', 'ASC']]
       });
 
-      if (usuarios.length == 0) {
-        return res.status(404).send({ message: 'Nenhum usuário cadastrado!' });
-      }
-
       return res.status(200).send({ usuarios });
     } catch (error) {
       console.error(error);
