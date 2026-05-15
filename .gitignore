@@ -6,4 +6,4 @@ node_modules
 dist
 .next
 .turbo
-mysql-init/backup.sql
+*/backup.sql
