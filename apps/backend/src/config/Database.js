@@ -19,7 +19,6 @@ module.exports = {
   database: dbSecrets.DB_NAME || process.env.DB_NAME || 'csapp_db',
   timezone: '-03:00',
   dialectOptions: {
-    useUTC: false,
     dateStrings: true,
     typeCast: true,
   },
