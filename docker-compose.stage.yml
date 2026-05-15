@@ -1,6 +1,24 @@
 version: '3.8'
 
 services:
+  mysql_stage:
+    image: mysql:8.0
+    container_name: csapp_mysql_stage
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASS:-root}
+      MYSQL_DATABASE: ${DB_NAME:-csapp_db_stage}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data_stage:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    networks:
+      - csapp_network_stage
+
   email_service:
     build:
       context: ./apps/email
@@ -10,8 +28,9 @@ services:
       - "127.0.0.1:9091:9090"
     env_file:
       - .env
-
     restart: unless-stopped
+    networks:
+      - csapp_network_stage
 
   backend:
     build:
@@ -23,9 +42,19 @@ services:
     env_file:
       - .env
     environment:
-      # O backend enxerga o email service via rede docker (usando o hostname do container)
+      DB_HOST: mysql_stage
+      DB_NAME: ${DB_NAME:-csapp_db_stage}
       EMAIL_API_URL: http://email_service:9090
-
+    depends_on:
+      mysql_stage:
+        condition: service_healthy
     restart: unless-stopped
+    networks:
+      - csapp_network_stage
 
-# A rede é criada por padrão pelo compose. O MySQL está no HOST. O Backend conectará no mysql pelo IP da gateway local ou network do podman.
+networks:
+  csapp_network_stage:
+    driver: bridge
+
+volumes:
+  mysql_data_stage:
