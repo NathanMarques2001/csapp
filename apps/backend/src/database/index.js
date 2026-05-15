@@ -16,10 +16,12 @@ const ContratoErroReajuste = require('../models/ContratoErroReajuste');
 const ReprocessamentoContrato = require('../models/ReprocessamentoContrato');
 const ResetSenha = require('../models/ResetSenha');
 const VencimentoContratos = require('../models/VencimentoContratos');
+const ClassificacaoClientes = require('../models/ClassificacaoCliente');
+const GrupoEconomico = require('../models/GrupoEconomico');
 
 const connection = new sequelize(dbConfig);
 
-const tables = [Usuario, Produto, Log, FatosImportantes, Fabricante, Contrato, ContatoTecnico, ContatoComercial, Cliente, Segmento, CategoriaProduto, Faturado, ContratoErroReajuste, ReprocessamentoContrato, ResetSenha, VencimentoContratos];
+const tables = [Usuario, Produto, Log, FatosImportantes, Fabricante, Contrato, ContatoTecnico, ContatoComercial, Cliente, Segmento, CategoriaProduto, Faturado, ContratoErroReajuste, ReprocessamentoContrato, ResetSenha, VencimentoContratos, ClassificacaoClientes, GrupoEconomico];
 
 tables.forEach(table => {
   table.init(connection);
