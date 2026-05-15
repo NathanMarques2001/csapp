@@ -20,7 +20,8 @@ module.exports = {
   timezone: '-03:00',
   dialectOptions: {
     useUTC: false,
-    timezone: 'America/Sao_Paulo',
+    dateStrings: true,
+    typeCast: true,
   },
   define: {
     timestamps: true,
