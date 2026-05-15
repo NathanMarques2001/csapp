@@ -1,8 +1,18 @@
 import axios from "axios";
 
+const getBaseUrl = () => {
+    if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+    
+    const hostname = window.location.hostname;
+    if (hostname === 'csapp.prolinx.com.br') return 'https://csapp.prolinx.com.br/api';
+    if (hostname === '20.186.19.140' || hostname === 'stage.csapp.prolinx.com.br') return `http://${hostname}/api`;
+    
+    return 'http://localhost:8080/api'; // Local dev
+};
+
 class Api {
-    // Configuração via variável de ambiente (Padrão Vite)
-    static baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8080/api";
+    // Configuração dinâmica com base na URL acessada
+    static baseUrl = getBaseUrl();
 
     constructor() {
         this.api = axios.create({

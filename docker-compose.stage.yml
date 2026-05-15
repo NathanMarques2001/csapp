@@ -10,8 +10,7 @@ services:
       - "127.0.0.1:9091:9090"
     env_file:
       - .env
-    volumes:
-      - ./secrets:/run/secrets:ro,z
+
     restart: unless-stopped
 
   backend:
@@ -26,8 +25,7 @@ services:
     environment:
       # O backend enxerga o email service via rede docker (usando o hostname do container)
       EMAIL_API_URL: http://email_service:9090
-    volumes:
-      - ./secrets:/run/secrets:ro,z
+
     restart: unless-stopped
 
 # A rede é criada por padrão pelo compose. O MySQL está no HOST. O Backend conectará no mysql pelo IP da gateway local ou network do podman.

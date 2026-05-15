@@ -42,7 +42,7 @@ export default function Login() {
     const [error, setError] = useState("");
 
     // Note: Assuming dev environment logic is desired as per legacy code
-    const isDev = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+    const isDev = ["localhost", "127.0.0.1", "20.186.19.140", "stage.csapp.prolinx.com.br"].includes(window.location.hostname);
     const [, setCookie] = useCookies(["jwtToken", "nomeUsuario", "id", "tipo"]);
     const navigate = useNavigate();
 
