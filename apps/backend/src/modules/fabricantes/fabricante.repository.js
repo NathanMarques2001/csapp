@@ -1,6 +1,10 @@
 const Fabricante = require('../../models/Fabricante');
 
 class FabricanteRepository {
+    async findAll() {
+        return await Fabricante.findAll({ order: [['nome', 'ASC']] });
+    }
+
     async findAllPaginated({ page = 1, limit = 10 }) {
         const offset = (page - 1) * limit;
 

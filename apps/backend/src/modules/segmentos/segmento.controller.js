@@ -3,50 +3,30 @@ const catchAsync = require('../../common/utils/catchAsync');
 
 class SegmentoController {
     indexAll = catchAsync(async (req, res) => {
-        const { page, limit } = req.query;
-
-        const result = await segmentoService.getAllSegmentos({ page, limit });
-
-        return res.status(200).json({
-            status: 'success',
-            ...result
-        });
+        const segmentos = await segmentoService.getAllSegmentos();
+        return res.status(200).send({ segmentos });
     });
 
     index = catchAsync(async (req, res) => {
         const { id } = req.params;
-
         const segmento = await segmentoService.getSegmentoById(id);
-
-        return res.status(200).json({
-            status: 'success',
-            data: { segmento }
-        });
+        return res.status(200).send({ segmento });
     });
 
     store = catchAsync(async (req, res) => {
-        const data = req.body;
-
-        const segmento = await segmentoService.createSegmento(data);
-
-        return res.status(201).json({
-            status: 'success',
+        const { nome } = req.body;
+        const segmento = await segmentoService.createSegmento({ nome });
+        return res.status(201).send({
             message: 'Segmento criado com sucesso!',
-            data: { segmento }
+            segmento,
         });
     });
 
     update = catchAsync(async (req, res) => {
         const { id } = req.params;
-        const data = req.body;
-
-        const segmento = await segmentoService.updateSegmento(id, data);
-
-        return res.status(200).json({
-            status: 'success',
-            message: 'Segmento atualizado com sucesso!',
-            data: { segmento }
-        });
+        const { nome, status } = req.body;
+        await segmentoService.updateSegmento(id, { nome, status });
+        return res.status(200).send({ message: 'Segmento atualizado com sucesso!' });
     });
 }
 

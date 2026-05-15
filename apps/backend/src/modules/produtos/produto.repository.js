@@ -1,6 +1,10 @@
 const Produto = require('../../models/Produto');
 
 class ProdutoRepository {
+    async findAll() {
+        return await Produto.findAll({ order: [['nome', 'ASC']] });
+    }
+
     async findAllPaginated({ page = 1, limit = 10 }) {
         const offset = (page - 1) * limit;
 

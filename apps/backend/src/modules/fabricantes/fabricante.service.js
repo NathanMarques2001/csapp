@@ -2,14 +2,8 @@ const fabricanteRepository = require('./fabricante.repository');
 const AppError = require('../../common/exceptions/AppError');
 
 class FabricanteService {
-    async getAllFabricantes({ page, limit }) {
-        const result = await fabricanteRepository.findAllPaginated({ page, limit });
-
-        if (result.data.length === 0) {
-            throw new AppError('Nenhum fabricante cadastrado!', 404);
-        }
-
-        return result;
+    async getAllFabricantes() {
+        return await fabricanteRepository.findAll();
     }
 
     async getFabricanteById(id) {

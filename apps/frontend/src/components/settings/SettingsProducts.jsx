@@ -24,6 +24,7 @@ const SettingsProducts = () => {
         try {
             const res = await api.get('/produtos');
             setProducts(res.produtos || []);
+            console.log(res.data[0])
         } catch (error) {
             console.error("Error loading products:", error);
         } finally {

@@ -1,6 +1,10 @@
 const Segmento = require('../../models/Segmento');
 
 class SegmentoRepository {
+    async findAll() {
+        return await Segmento.findAll({ order: [['nome', 'ASC']] });
+    }
+
     async findAllPaginated({ page = 1, limit = 10 }) {
         const offset = (page - 1) * limit;
 

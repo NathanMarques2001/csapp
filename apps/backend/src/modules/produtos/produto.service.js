@@ -2,15 +2,8 @@ const produtoRepository = require('./produto.repository');
 const AppError = require('../../common/exceptions/AppError');
 
 class ProdutoService {
-    async getAllProdutos({ page, limit }) {
-        const result = await produtoRepository.findAllPaginated({ page, limit });
-
-        // Como existia uma regra onde "se length == 0" retornava 404
-        if (result.data.length === 0) {
-            throw new AppError('Nenhum produto cadastrado!', 404);
-        }
-
-        return result;
+    async getAllProdutos() {
+        return await produtoRepository.findAll();
     }
 
     async getProdutoById(id) {

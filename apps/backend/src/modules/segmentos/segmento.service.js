@@ -2,14 +2,8 @@ const segmentoRepository = require('./segmento.repository');
 const AppError = require('../../common/exceptions/AppError');
 
 class SegmentoService {
-    async getAllSegmentos({ page, limit }) {
-        const result = await segmentoRepository.findAllPaginated({ page, limit });
-
-        if (result.data.length === 0) {
-            throw new AppError('Nenhum segmento cadastrado!', 404);
-        }
-
-        return result;
+    async getAllSegmentos() {
+        return await segmentoRepository.findAll();
     }
 
     async getSegmentoById(id) {

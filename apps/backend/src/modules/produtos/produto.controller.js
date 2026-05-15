@@ -3,52 +3,30 @@ const catchAsync = require('../../common/utils/catchAsync');
 
 class ProdutoController {
     indexAll = catchAsync(async (req, res) => {
-        // page e limit já validados no req.query pelo Zod
-        const { page, limit } = req.query;
-
-        const result = await produtoService.getAllProdutos({ page, limit });
-
-        return res.status(200).json({
-            status: 'success',
-            ...result
-            // result contém { data: rows, meta: { total, page, limit, totalPages } }
-        });
+        const produtos = await produtoService.getAllProdutos();
+        return res.status(200).send({ produtos });
     });
 
     index = catchAsync(async (req, res) => {
         const { id } = req.params;
-
         const produto = await produtoService.getProdutoById(id);
-
-        return res.status(200).json({
-            status: 'success',
-            data: { produto }
-        });
+        return res.status(200).send({ produto });
     });
 
     store = catchAsync(async (req, res) => {
-        const data = req.body;
-
-        const produto = await produtoService.createProduto(data);
-
-        return res.status(201).json({
-            status: 'success',
+        const { nome, id_fabricante, id_categoria_produto } = req.body;
+        const produto = await produtoService.createProduto({ nome, id_fabricante, id_categoria_produto });
+        return res.status(201).send({
             message: 'Produto criado com sucesso!',
-            data: { produto }
+            produto,
         });
     });
 
     update = catchAsync(async (req, res) => {
         const { id } = req.params;
-        const data = req.body;
-
-        const produto = await produtoService.updateProduto(id, data);
-
-        return res.status(200).json({
-            status: 'success',
-            message: 'Produto atualizado com sucesso!',
-            data: { produto }
-        });
+        const { nome, id_fabricante, id_categoria_produto, status } = req.body;
+        const produto = await produtoService.updateProduto(id, { nome, id_fabricante, id_categoria_produto, status });
+        return res.status(200).send({ message: 'Produto atualizado com sucesso!' });
     });
 }
 
