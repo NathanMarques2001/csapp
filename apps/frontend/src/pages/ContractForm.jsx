@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Save, FileText, History } from 'lucide-react';
+import { useParams } from 'react-router-dom';
+import { Save, FileText, History } from 'lucide-react';
 import Api from '../utils/api';
+import BackButton from '../components/ui/BackButton';
+import { useGoBack } from '../context/NavigationContext';
+import { useConfirm } from '../context/ConfirmContext';
+import { useFormGuard } from '../hooks/useFormGuard';
+import { confirmPresets } from '../utils/confirmPresets';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Skeleton from '../components/ui/Skeleton';
@@ -25,14 +30,35 @@ const removeAcentos = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 };
 
+const EMPTY_CONTRACT_FORM = {
+    id_cliente: "",
+    id_produto: "",
+    id_faturado: "",
+    dia_vencimento: "",
+    nome_indice: "",
+    proximo_reajuste: "",
+    duracao: "",
+    valor_mensal: "",
+    quantidade: "",
+    data_inicio: "",
+    email_envio: "",
+    descricao: "",
+    link_contrato: "",
+    tipo_faturamento: "",
+    renovacao_automatica: false,
+    status: "ativo",
+};
+
 const ContractForm = () => {
     const api = new Api();
-    const navigate = useNavigate();
+    const goBack = useGoBack('/contratos');
+    const { confirm } = useConfirm();
     const { id } = useParams();
     const mode = id ? 'edicao' : 'cadastro';
 
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [baseline, setBaseline] = useState(null);
 
     // Dropdown Data
     const [clients, setClients] = useState([]);
@@ -44,24 +70,15 @@ const ContractForm = () => {
     // Logic State
     const [isQuantidadeDisabled, setIsQuantidadeDisabled] = useState(true);
 
-    // Form State
-    const [formData, setFormData] = useState({
-        id_cliente: "",
-        id_produto: "",
-        id_faturado: "",
-        dia_vencimento: "",
-        nome_indice: "",
-        proximo_reajuste: "",
-        duracao: "",
-        valor_mensal: "",
-        quantidade: "",
-        data_inicio: "",
-        email_envio: "",
-        descricao: "",
-        link_contrato: "",
-        tipo_faturamento: "",
-        renovacao_automatica: false,
-        status: "ativo"
+    const [formData, setFormData] = useState(EMPTY_CONTRACT_FORM);
+
+    const { confirmSave, requestLeave, onSaveSuccess } = useFormGuard({
+        formData,
+        baseline,
+        enabled: !loading,
+        fallback: '/contratos',
+        entityLabel: 'o contrato',
+        isCreate: mode === 'cadastro',
     });
 
     useEffect(() => {
@@ -93,7 +110,7 @@ const ContractForm = () => {
 
                     if (contractRes.contrato) {
                         const data = contractRes.contrato;
-                        setFormData({
+                        const loaded = {
                             id_cliente: data.id_cliente,
                             id_produto: data.id_produto,
                             id_faturado: data.id_faturado,
@@ -109,10 +126,14 @@ const ContractForm = () => {
                             link_contrato: data.link_contrato || "",
                             tipo_faturamento: data.tipo_faturamento || "",
                             renovacao_automatica: data.renovacao_automatica || false,
-                            status: data.status || "ativo"
-                        });
+                            status: data.status || "ativo",
+                        };
+                        setFormData(loaded);
+                        setBaseline(loaded);
                     }
                     setLogs(logsRes.logs || []);
+                } else {
+                    setBaseline(EMPTY_CONTRACT_FORM);
                 }
             } catch (error) {
                 console.error("Error loading form data", error);
@@ -157,6 +178,8 @@ const ContractForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!(await confirmSave())) return;
+
         setSaving(true);
         try {
             const payload = {
@@ -176,7 +199,8 @@ const ContractForm = () => {
             } else {
                 await api.put(`/contratos/${id}`, payload);
             }
-            navigate('/contratos');
+            onSaveSuccess();
+            goBack();
         } catch (error) {
             console.error("Error saving contract", error);
             alert("Erro ao salvar contrato. Verifique o console.");
@@ -188,13 +212,16 @@ const ContractForm = () => {
     const toggleStatus = async () => {
         if (!id) return;
         const newStatus = formData.status === 'ativo' ? 'inativo' : 'ativo';
-        if (window.confirm(`Deseja realmente alterar o status para ${newStatus}?`)) {
-            try {
-                await api.put(`/contratos/${id}`, { status: newStatus });
-                setFormData(prev => ({ ...prev, status: newStatus }));
-            } catch (error) {
-                console.error("Error changing status", error);
-            }
+        const confirmed = await confirm(confirmPresets.toggleStatus('o contrato', newStatus));
+        if (!confirmed) return;
+
+        try {
+            await api.put(`/contratos/${id}`, { status: newStatus });
+            const updated = { ...formData, status: newStatus };
+            setFormData(updated);
+            setBaseline(updated);
+        } catch (error) {
+            console.error("Error changing status", error);
         }
     };
 
@@ -237,9 +264,7 @@ const ContractForm = () => {
         <div className="max-w-5xl mx-auto space-y-6 pb-20">
             <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
-                    <button onClick={() => navigate('/contratos')} className="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
-                        <ArrowLeft className="w-5 h-5" />
-                    </button>
+                    <BackButton fallback="/contratos" onClick={requestLeave} className="p-2 hover:bg-slate-100 rounded-full" />
                     <div>
                         <h1 className="text-2xl font-bold text-slate-900">
                             {mode === 'cadastro' ? 'Novo Contrato' : 'Editar Contrato'}
@@ -401,7 +426,7 @@ const ContractForm = () => {
                             <Button type="submit" form="contract-form" icon={Save} loading={saving} fullWidth>
                                 {mode === 'cadastro' ? 'Salvar Contrato' : 'Salvar Alterações'}
                             </Button>
-                            <Button variant="secondary" onClick={() => navigate('/contratos')} fullWidth>
+                            <Button variant="secondary" onClick={requestLeave} fullWidth>
                                 Cancelar
                             </Button>
                         </div>

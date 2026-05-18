@@ -7,9 +7,12 @@ import Skeleton from '../ui/Skeleton';
 import Input from '../ui/Input';
 import Card from '../ui/Card';
 import { UserFormModal } from './SettingsModals';
+import { useConfirm } from '../../context/ConfirmContext';
+import { confirmPresets } from '../../utils/confirmPresets';
 
 const SettingsUsers = () => {
     const api = new Api();
+    const { confirm } = useConfirm();
     const [loading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -60,7 +63,8 @@ const SettingsUsers = () => {
     };
 
     const handleDelete = async (user) => {
-        if (!confirm(`Confirmar exclusão do usuário ${user.nome}?`)) return;
+        const confirmed = await confirm(confirmPresets.delete(`o usuário ${user.nome}`));
+        if (!confirmed) return;
         try {
             //await api.delete(`/usuarios/${user.id}`);
             fetchUsers();

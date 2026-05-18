@@ -7,6 +7,8 @@ import Button from '../ui/Button';
 import Badge from '../ui/Badge';
 import Skeleton from '../ui/Skeleton';
 import { GenericFormModal } from './SettingsModals';
+import { useConfirm } from '../../context/ConfirmContext';
+import { confirmPresets } from '../../utils/confirmPresets';
 
 const SettingsGeneralList = ({ title, endpoint, dataKey, columns = [{ key: 'nome', label: 'Nome' }] }) => {
     const api = new Api();
@@ -47,14 +49,15 @@ const SettingsGeneralList = ({ title, endpoint, dataKey, columns = [{ key: 'nome
     };
 
     const toggleStatus = async (item) => {
-        if (window.confirm("Deseja alterar o status?")) {
-            try {
-                const newStatus = item.status === 'inativo' ? 'ativo' : 'inativo';
-                await api.put(`${endpoint}/${item.id}`, { status: newStatus });
-                fetchData();
-            } catch (error) {
-                console.error(error);
-            }
+        const newStatus = item.status === 'inativo' ? 'ativo' : 'inativo';
+        const confirmed = await confirm(confirmPresets.toggleStatus(item.nome, newStatus));
+        if (!confirmed) return;
+
+        try {
+            await api.put(`${endpoint}/${item.id}`, { status: newStatus });
+            fetchData();
+        } catch (error) {
+            console.error(error);
         }
     };
 

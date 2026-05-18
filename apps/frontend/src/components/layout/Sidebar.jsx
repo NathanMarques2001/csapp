@@ -1,12 +1,18 @@
 import { Shield, LayoutDashboard, Users, Briefcase, Database, FileText, Settings, LogOut } from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { useConfirm } from '../../context/ConfirmContext';
+import { confirmPresets } from '../../utils/confirmPresets';
 
 const Sidebar = ({ isOpen }) => {
     const navigate = useNavigate();
+    const { confirm } = useConfirm();
     const [, , removeCookie] = useCookies(['jwtToken', 'nomeUsuario', 'id', 'tipo']);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        const confirmed = await confirm(confirmPresets.logout());
+        if (!confirmed) return;
+
         removeCookie('jwtToken');
         removeCookie('nomeUsuario');
         removeCookie('id');

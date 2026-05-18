@@ -7,9 +7,12 @@ import Skeleton from '../ui/Skeleton';
 import Input from '../ui/Input';
 import Card from '../ui/Card';
 import { ClientClassificationFormModal } from './SettingsModals';
+import { useConfirm } from '../../context/ConfirmContext';
+import { confirmPresets } from '../../utils/confirmPresets';
 
 const SettingsClientClassifications = () => {
     const api = new Api();
+    const { confirm } = useConfirm();
     const [loading, setLoading] = useState(true);
     const [classifications, setClassifications] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -47,14 +50,15 @@ const SettingsClientClassifications = () => {
     };
 
     const toggleStatus = async (classification) => {
-        if (window.confirm("Deseja alterar o status desta classificação?")) {
-            try {
-                const newStatus = classification.status === 'ativo' ? 'inativo' : 'ativo';
-                await api.put(`/classificacoes-clientes/${classification.id}`, { status: newStatus });
-                fetchClassifications();
-            } catch (error) {
-                console.error(error);
-            }
+        const newStatus = classification.status === 'ativo' ? 'inativo' : 'ativo';
+        const confirmed = await confirm(confirmPresets.toggleStatus(classification.nome, newStatus));
+        if (!confirmed) return;
+
+        try {
+            await api.put(`/classificacoes-clientes/${classification.id}`, { status: newStatus });
+            fetchClassifications();
+        } catch (error) {
+            console.error(error);
         }
     };
 

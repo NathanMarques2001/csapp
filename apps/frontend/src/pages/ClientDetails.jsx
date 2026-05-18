@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Edit2, Plus, Sparkles, ChevronRight, Check, FileText, CheckCircle, XCircle, Package, Factory } from 'lucide-react';
+import { Edit2, Plus, Sparkles, ChevronRight, Check, FileText, CheckCircle, XCircle, Package, Factory } from 'lucide-react';
+import BackButton from '../components/ui/BackButton';
+import { useConfirm } from '../context/ConfirmContext';
+import { confirmPresets } from '../utils/confirmPresets';
 import Api from '../utils/api';
 import { formatCurrency, formatDate } from '../utils/formatters';
 import Button from '../components/ui/Button';
@@ -13,6 +16,7 @@ const ClientDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const api = new Api();
+    const { confirm } = useConfirm();
     const [activeTab, setActiveTab] = useState('overview');
 
     const [loading, setLoading] = useState(true);
@@ -147,7 +151,7 @@ const ClientDetails = () => {
             <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div className="flex items-center gap-4">
-                        <Button variant="ghost" onClick={() => navigate('/clientes')} className="p-2"><ArrowLeft className="w-5 h-5" /></Button>
+                        <BackButton fallback="/clientes" />
                         <div className="w-16 h-16 bg-teal-100 rounded-lg flex items-center justify-center text-teal-700 text-xl font-bold">
                             {(client.nome_fantasia || client.nomeFantasia || 'CL').substring(0, 2).toUpperCase()}
                         </div>
@@ -191,9 +195,6 @@ const ClientDetails = () => {
                         <Card className="p-6">
                             <h3 className="text-sm font-medium text-slate-500 mb-2">Receita Anual Recorrente (ARR)</h3>
                             <p className="text-2xl font-bold text-slate-900">{formatCurrency(totalARR)}</p>
-                            <div className="mt-2 text-xs text-emerald-600 flex items-center gap-1">
-                                <span className="bg-emerald-100 px-1.5 py-0.5 rounded">+12%</span> vs ano anterior
-                            </div>
                         </Card>
                         <Card className="p-6">
                             <h3 className="text-sm font-medium text-slate-500 mb-2">Contratos Ativos</h3>
@@ -396,7 +397,7 @@ const ClientDetails = () => {
                                         const manufacturerName = product ? manufacturers[product.id_fabricante] : '-';
 
                                         return (
-                                            <tr key={contract.id} className="hover:bg-slate-50 transition-colors cursor-pointer" onClick={() => navigate(`/contratos/${contract.id}`)}>
+                                            <tr key={contract.id} className="hover:bg-slate-50 transition-colors cursor-pointer" onClick={() => navigate(`/contratos/${contract.id}/editar`)}>
                                                 <td className="px-6 py-4">
                                                     {contract.status === 'ativo'
                                                         ? <span className="flex items-center gap-1.5 text-emerald-600 font-medium"><CheckCircle size={16} /> Ativo</span>
@@ -478,9 +479,15 @@ const ClientDetails = () => {
                     </div>
                     <Button
                         className="bg-red-600 text-white hover:bg-red-700 border-transparent shadow-sm"
-                        onClick={() => {
-                            if (window.confirm("FATAL: Tem certeza? Isso inativará todos os contratos deste cliente.")) {
-                                alert("Cliente inativado (Mock)");
+                        onClick={async () => {
+                            const confirmed = await confirm(
+                                confirmPresets.deactivate(
+                                    'o cliente',
+                                    'Ao inativar o cliente, todos os contratos ativos serão automaticamente suspensos.'
+                                )
+                            );
+                            if (confirmed) {
+                                alert('Cliente inativado (Mock)');
                             }
                         }}
                     >

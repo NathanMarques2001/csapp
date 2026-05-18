@@ -128,6 +128,21 @@ module.exports = {
     }
   },
 
+  async indexByGrupoEconomico(req, res) {
+    try {
+      const { id } = req.params;
+      const clientes = await Cliente.findAll({
+        where: { id_grupo_economico: id },
+        order: [['tipo_unidade', 'ASC'], ['nome_fantasia', 'ASC']],
+      });
+
+      return res.status(200).send({ clientes });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send({ message: 'Ocorreu um erro ao buscar os clientes do grupo econômico.' });
+    }
+  },
+
   async indexAll(req, res) {
     try {
       const clientes = await Cliente.findAll({

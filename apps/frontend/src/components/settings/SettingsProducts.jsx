@@ -7,9 +7,12 @@ import Button from '../ui/Button';
 import Badge from '../ui/Badge';
 import Skeleton from '../ui/Skeleton';
 import { ProductFormModal } from './SettingsModals';
+import { useConfirm } from '../../context/ConfirmContext';
+import { confirmPresets } from '../../utils/confirmPresets';
 
 const SettingsProducts = () => {
     const api = new Api();
+    const { confirm } = useConfirm();
     const [loading, setLoading] = useState(true);
     const [products, setProducts] = useState([]);
     const [manufacturer, setManufacturer] = useState([]);
@@ -99,14 +102,15 @@ const SettingsProducts = () => {
     };
 
     const toggleStatus = async (product) => {
-        if (window.confirm("Deseja alterar o status deste produto?")) {
-            try {
-                const newStatus = product.status === 'ativo' ? 'inativo' : 'ativo';
-                await api.put(`/produtos/${product.id}`, { status: newStatus });
-                fetchProducts();
-            } catch (error) {
-                console.error(error);
-            }
+        const newStatus = product.status === 'ativo' ? 'inativo' : 'ativo';
+        const confirmed = await confirm(confirmPresets.toggleStatus(product.nome, newStatus));
+        if (!confirmed) return;
+
+        try {
+            await api.put(`/produtos/${product.id}`, { status: newStatus });
+            fetchProducts();
+        } catch (error) {
+            console.error(error);
         }
     };
 

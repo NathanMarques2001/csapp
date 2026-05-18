@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Save, AlertCircle } from 'lucide-react';
+import { useParams } from 'react-router-dom';
+import { Save, AlertCircle } from 'lucide-react';
 import Api from '../utils/api';
+import BackButton from '../components/ui/BackButton';
+import { useGoBack } from '../context/NavigationContext';
+import { useFormGuard } from '../hooks/useFormGuard';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Skeleton from '../components/ui/Skeleton';
@@ -14,49 +17,55 @@ const formatDateForInput = (dateString) => {
     return date.toISOString().split('T')[0];
 };
 
+const EMPTY_CLIENT_FORM = {
+    razao_social: "",
+    nome_fantasia: "",
+    cpf_cnpj: "",
+    id_usuario: "",
+    vp: "",
+    id_segmento: "",
+    id_grupo_economico: "",
+    tipo_unidade: "",
+    nps: "",
+    gestor_contratos_nome: "",
+    gestor_contratos_email: "",
+    gestor_contratos_nascimento: "",
+    gestor_contratos_telefone_1: "",
+    gestor_contratos_telefone_2: "",
+    gestor_chamados_nome: "",
+    gestor_chamados_email: "",
+    gestor_chamados_nascimento: "",
+    gestor_chamados_telefone_1: "",
+    gestor_chamados_telefone_2: "",
+    gestor_financeiro_nome: "",
+    gestor_financeiro_email: "",
+    gestor_financeiro_nascimento: "",
+    gestor_financeiro_telefone_1: "",
+    gestor_financeiro_telefone_2: "",
+};
+
 const ClientForm = () => {
     const api = new Api();
-    const navigate = useNavigate();
     const { id } = useParams();
     const mode = id ? 'edicao' : 'cadastro';
 
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [baseline, setBaseline] = useState(null);
 
-    // Dropdown Data
     const [users, setUsers] = useState([]);
     const [segments, setSegments] = useState([]);
     const [groups, setGroups] = useState([]);
+    const [formData, setFormData] = useState(EMPTY_CLIENT_FORM);
 
-    // Form State
-    const [formData, setFormData] = useState({
-        razao_social: "",
-        nome_fantasia: "",
-        cpf_cnpj: "",
-        id_usuario: "",
-        vp: "",
-        id_segmento: "",
-        id_grupo_economico: "",
-        tipo_unidade: "",
-        nps: "",
-        // Gestor Contratos
-        gestor_contratos_nome: "",
-        gestor_contratos_email: "",
-        gestor_contratos_nascimento: "",
-        gestor_contratos_telefone_1: "",
-        gestor_contratos_telefone_2: "",
-        // Gestor Chamados
-        gestor_chamados_nome: "",
-        gestor_chamados_email: "",
-        gestor_chamados_nascimento: "",
-        gestor_chamados_telefone_1: "",
-        gestor_chamados_telefone_2: "",
-        // Gestor Financeiro
-        gestor_financeiro_nome: "",
-        gestor_financeiro_email: "",
-        gestor_financeiro_nascimento: "",
-        gestor_financeiro_telefone_1: "",
-        gestor_financeiro_telefone_2: "",
+    const goBack = useGoBack('/clientes');
+    const { confirmSave, requestLeave, onSaveSuccess } = useFormGuard({
+        formData,
+        baseline,
+        enabled: !loading,
+        fallback: '/clientes',
+        entityLabel: 'o cliente',
+        isCreate: mode === 'cadastro',
     });
 
     useEffect(() => {
@@ -82,8 +91,12 @@ const ClientForm = () => {
                         data.gestor_chamados_nascimento = formatDateForInput(data.gestor_chamados_nascimento);
                         data.gestor_financeiro_nascimento = formatDateForInput(data.gestor_financeiro_nascimento);
 
-                        setFormData(prev => ({ ...prev, ...data }));
+                        const loaded = { ...EMPTY_CLIENT_FORM, ...data };
+                        setFormData(loaded);
+                        setBaseline(loaded);
                     }
+                } else {
+                    setBaseline(EMPTY_CLIENT_FORM);
                 }
             } catch (error) {
                 console.error("Error loading form data", error);
@@ -101,6 +114,8 @@ const ClientForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!(await confirmSave())) return;
+
         setSaving(true);
         try {
             const payload = {
@@ -115,7 +130,8 @@ const ClientForm = () => {
             } else {
                 await api.put(`/clientes/${id}`, payload);
             }
-            navigate('/clientes');
+            onSaveSuccess();
+            goBack();
         } catch (error) {
             console.error("Error saving client", error);
             alert("Erro ao salvar cliente. Verifique o console.");
@@ -162,9 +178,7 @@ const ClientForm = () => {
     return (
         <div className="max-w-4xl mx-auto space-y-6 pb-20">
             <div className="flex items-center gap-4">
-                <button onClick={() => navigate('/clientes')} className="p-2 hover:bg-slate-100 rounded-full text-slate-500 transition-colors">
-                    <ArrowLeft className="w-5 h-5" />
-                </button>
+                <BackButton fallback="/clientes" onClick={requestLeave} className="p-2 hover:bg-slate-100 rounded-full" />
                 <div>
                     <h1 className="text-2xl font-bold text-slate-900">
                         {mode === 'cadastro' ? 'Novo Cliente' : 'Editar Cliente'}
@@ -281,7 +295,7 @@ const ClientForm = () => {
                 </Card>
 
                 <div className="flex justify-end gap-3 sticky bottom-4">
-                    <Button type="button" variant="secondary" onClick={() => navigate('/clientes')}>
+                    <Button type="button" variant="secondary" onClick={requestLeave}>
                         Cancelar
                     </Button>
                     <Button type="submit" icon={Save} loading={saving}>

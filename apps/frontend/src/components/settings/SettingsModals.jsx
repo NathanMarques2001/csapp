@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { X } from 'lucide-react';
 import Api from '../../utils/api';
 import Button from '../ui/Button';
+import { useModalGuard } from '../../hooks/useFormGuard';
 
 const ModalBase = ({ title, onClose, children }) => (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
@@ -20,15 +21,26 @@ const ModalBase = ({ title, onClose, children }) => (
 export const UserFormModal = ({ user, onClose, onSuccess }) => {
     const api = new Api();
     const [loading, setLoading] = useState(false);
-    const [formData, setFormData] = useState({
+    const isEditing = !!user;
+
+    const buildInitial = () => ({
         nome: user?.nome || '',
         email: user?.email || '',
         tipo: user?.tipo || 'usuario',
         senha: '',
-        confirmarSenha: ''
+        confirmarSenha: '',
     });
 
-    const isEditing = !!user;
+    const [formData, setFormData] = useState(buildInitial);
+    const baseline = useMemo(() => buildInitial(), [user]);
+
+    const { handleClose, confirmSave } = useModalGuard({
+        formData,
+        baseline,
+        onClose,
+        entityLabel: 'o usuário',
+        isCreate: !isEditing,
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,6 +48,7 @@ export const UserFormModal = ({ user, onClose, onSuccess }) => {
             alert("Senhas não conferem");
             return;
         }
+        if (!(await confirmSave())) return;
 
         setLoading(true);
         try {
@@ -57,7 +70,7 @@ export const UserFormModal = ({ user, onClose, onSuccess }) => {
     };
 
     return (
-        <ModalBase title={isEditing ? 'Editar Usuário' : 'Novo Usuário'} onClose={onClose}>
+        <ModalBase title={isEditing ? 'Editar Usuário' : 'Novo Usuário'} onClose={handleClose}>
             <form onSubmit={handleSubmit} className="p-4 space-y-4">
                 <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">Nome</label>
@@ -116,7 +129,7 @@ export const UserFormModal = ({ user, onClose, onSuccess }) => {
                     </>
                 )}
                 <div className="flex justify-end gap-2 pt-2">
-                    <Button type="button" variant="secondary" onClick={onClose}>Cancelar</Button>
+                    <Button type="button" variant="secondary" onClick={handleClose}>Cancelar</Button>
                     <Button type="submit" loading={loading}>Salvar</Button>
                 </div>
             </form>
@@ -130,10 +143,21 @@ export const ProductFormModal = ({ product, onClose, onSuccess }) => {
     const [manufacturers, setManufacturers] = useState([]);
     const [categories, setCategories] = useState([]);
 
-    const [formData, setFormData] = useState({
+    const buildInitial = () => ({
         nome: product?.nome || '',
         id_fabricante: product?.id_fabricante || '',
-        id_categoria_produto: product?.id_categoria_produto || ''
+        id_categoria_produto: product?.id_categoria_produto || '',
+    });
+
+    const [formData, setFormData] = useState(buildInitial);
+    const baseline = useMemo(() => buildInitial(), [product]);
+
+    const { handleClose, confirmSave } = useModalGuard({
+        formData,
+        baseline,
+        onClose,
+        entityLabel: 'o produto',
+        isCreate: !product,
     });
 
     useEffect(() => {
@@ -150,6 +174,8 @@ export const ProductFormModal = ({ product, onClose, onSuccess }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!(await confirmSave())) return;
+
         setLoading(true);
         try {
             if (product) {
@@ -167,7 +193,7 @@ export const ProductFormModal = ({ product, onClose, onSuccess }) => {
     };
 
     return (
-        <ModalBase title={product ? 'Editar Produto' : 'Novo Produto'} onClose={onClose}>
+        <ModalBase title={product ? 'Editar Produto' : 'Novo Produto'} onClose={handleClose}>
             <form onSubmit={handleSubmit} className="p-4 space-y-4">
                 <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">Nome</label>
@@ -204,7 +230,7 @@ export const ProductFormModal = ({ product, onClose, onSuccess }) => {
                     </select>
                 </div>
                 <div className="flex justify-end gap-2 pt-2">
-                    <Button type="button" variant="secondary" onClick={onClose}>Cancelar</Button>
+                    <Button type="button" variant="secondary" onClick={handleClose}>Cancelar</Button>
                     <Button type="submit" loading={loading}>Salvar</Button>
                 </div>
             </form>
@@ -215,10 +241,23 @@ export const ProductFormModal = ({ product, onClose, onSuccess }) => {
 export const GenericFormModal = ({ title, endpoint, item, onClose, onSuccess }) => {
     const api = new Api();
     const [loading, setLoading] = useState(false);
-    const [formData, setFormData] = useState({ nome: item?.nome || '' });
+
+    const buildInitial = () => ({ nome: item?.nome || '' });
+    const [formData, setFormData] = useState(buildInitial);
+    const baseline = useMemo(() => buildInitial(), [item]);
+
+    const { handleClose, confirmSave } = useModalGuard({
+        formData,
+        baseline,
+        onClose,
+        entityLabel: title?.toLowerCase() || 'o registro',
+        isCreate: !item,
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!(await confirmSave())) return;
+
         setLoading(true);
         try {
             if (item) {
@@ -236,7 +275,7 @@ export const GenericFormModal = ({ title, endpoint, item, onClose, onSuccess }) 
     };
 
     return (
-        <ModalBase title={`${item ? 'Editar' : 'Novo'} ${title}`} onClose={onClose}>
+        <ModalBase title={`${item ? 'Editar' : 'Novo'} ${title}`} onClose={handleClose}>
             <form onSubmit={handleSubmit} className="p-4 space-y-4">
                 <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">Nome</label>
@@ -249,7 +288,7 @@ export const GenericFormModal = ({ title, endpoint, item, onClose, onSuccess }) 
                     />
                 </div>
                 <div className="flex justify-end gap-2 pt-2">
-                    <Button type="button" variant="secondary" onClick={onClose}>Cancelar</Button>
+                    <Button type="button" variant="secondary" onClick={handleClose}>Cancelar</Button>
                     <Button type="submit" loading={loading}>Salvar</Button>
                 </div>
             </form>
@@ -260,18 +299,40 @@ export const GenericFormModal = ({ title, endpoint, item, onClose, onSuccess }) 
 export const ClientClassificationFormModal = ({ classification, onClose, onSuccess }) => {
     const api = new Api();
     const [loading, setLoading] = useState(false);
-    const [tipoCategoria, setTipoCategoria] = useState(classification?.tipo_categoria || 'quantidade');
+    const isEditing = !!classification;
 
-    const [formData, setFormData] = useState({
+    const buildInitial = () => ({
         nome: classification?.nome || '',
         quantidade: classification?.quantidade || '',
-        valor: classification?.valor || ''
+        valor: classification?.valor || '',
+        tipoCategoria: classification?.tipo_categoria || 'quantidade',
     });
 
-    const isEditing = !!classification;
+    const [tipoCategoria, setTipoCategoria] = useState(buildInitial().tipoCategoria);
+    const [formData, setFormData] = useState({
+        nome: buildInitial().nome,
+        quantidade: buildInitial().quantidade,
+        valor: buildInitial().valor,
+    });
+
+    const guardState = useMemo(
+        () => ({ ...formData, tipoCategoria }),
+        [formData, tipoCategoria]
+    );
+    const baseline = useMemo(() => buildInitial(), [classification]);
+
+    const { handleClose, confirmSave } = useModalGuard({
+        formData: guardState,
+        baseline,
+        onClose,
+        entityLabel: 'a classificação',
+        isCreate: !isEditing,
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!(await confirmSave())) return;
+
         setLoading(true);
 
         const payload = {
@@ -297,7 +358,7 @@ export const ClientClassificationFormModal = ({ classification, onClose, onSucce
     };
 
     return (
-        <ModalBase title={isEditing ? 'Editar Classificação' : 'Nova Classificação'} onClose={onClose}>
+        <ModalBase title={isEditing ? 'Editar Classificação' : 'Nova Classificação'} onClose={handleClose}>
             <form onSubmit={handleSubmit} className="p-4 space-y-4">
                 <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">Nome</label>
@@ -381,7 +442,7 @@ export const ClientClassificationFormModal = ({ classification, onClose, onSucce
                 )}
 
                 <div className="flex justify-end gap-2 pt-4 border-t border-slate-100 mt-6">
-                    <Button type="button" variant="secondary" onClick={onClose}>Cancelar</Button>
+                    <Button type="button" variant="secondary" onClick={handleClose}>Cancelar</Button>
                     <Button type="submit" loading={loading}>Salvar</Button>
                 </div>
             </form>
@@ -392,14 +453,24 @@ export const ClientClassificationFormModal = ({ classification, onClose, onSucce
 export const GroupFormModal = ({ group, onClose, onSuccess }) => {
     const api = new Api();
     const [loading, setLoading] = useState(false);
-    const [formData, setFormData] = useState({
-        nome: group?.nome || ''
-    });
-
     const isEditing = !!group;
+
+    const buildInitial = () => ({ nome: group?.nome || '' });
+    const [formData, setFormData] = useState(buildInitial);
+    const baseline = useMemo(() => buildInitial(), [group]);
+
+    const { handleClose, confirmSave } = useModalGuard({
+        formData,
+        baseline,
+        onClose,
+        entityLabel: 'o grupo econômico',
+        isCreate: !isEditing,
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!(await confirmSave())) return;
+
         setLoading(true);
 
         try {
@@ -418,7 +489,7 @@ export const GroupFormModal = ({ group, onClose, onSuccess }) => {
     };
 
     return (
-        <ModalBase title={isEditing ? 'Editar Grupo Econômico' : 'Novo Grupo Econômico'} onClose={onClose}>
+        <ModalBase title={isEditing ? 'Editar Grupo Econômico' : 'Novo Grupo Econômico'} onClose={handleClose}>
             <form onSubmit={handleSubmit} className="p-4 space-y-4">
                 <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">Nome</label>
@@ -432,7 +503,7 @@ export const GroupFormModal = ({ group, onClose, onSuccess }) => {
                     />
                 </div>
                 <div className="flex justify-end gap-2 pt-4 border-t border-slate-100 mt-6">
-                    <Button type="button" variant="secondary" onClick={onClose}>Cancelar</Button>
+                    <Button type="button" variant="secondary" onClick={handleClose}>Cancelar</Button>
                     <Button type="submit" loading={loading}>Salvar</Button>
                 </div>
             </form>
