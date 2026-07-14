@@ -2,6 +2,7 @@ const Contrato = require("../models/Contrato");
 const Cliente = require("../models/Cliente");
 const GrupoEconomico = require("../models/GrupoEconomico");
 const ClassificacaoClientes = require("../models/ClassificacaoCliente");
+const { Op } = require("sequelize");
 
 function calcularValorComReajuste(valor, taxa) {
     return valor + (valor * taxa) / 100;
@@ -62,6 +63,12 @@ async function classificarClientes() {
                     (faturamentoPorCliente[cliente.id] || 0);
             }
         }
+
+        // 4.5. Limpar classificações de clientes pertencentes a um grupo (eles não podem ter classificação própria)
+        await Cliente.update(
+            { id_classificacao_cliente: null },
+            { where: { id_grupo_economico: { [Op.ne]: null } } }
+        );
 
         // 5. Montar lista combinada de entidades para classificação
         const faturamentos = [];

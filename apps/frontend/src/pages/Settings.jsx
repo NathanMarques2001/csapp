@@ -11,14 +11,14 @@ const Settings = () => {
     const [activeTab, setActiveTab] = useState('users');
 
     const tabs = [
-        { id: 'users', label: 'Usuários', icon: Users },
-        { id: 'products', label: 'Produtos/Serviços', icon: Box },
-        { id: 'manufacturers', label: 'Fabricantes', icon: Building },
-        { id: 'segments', label: 'Segmentos', icon: Tag },
-        { id: 'groups', label: 'Grupos Econômicos', icon: Briefcase },
         { id: 'categories', label: 'Categorias de Produtos', icon: List },
         { id: 'classifications', label: 'Classificações de Clientes', icon: Bookmark },
+        { id: 'manufacturers', label: 'Fabricantes', icon: Building },
         { id: 'faturados', label: 'Faturados', icon: FileText },
+        { id: 'groups', label: 'Grupos Econômicos', icon: Briefcase },
+        { id: 'products', label: 'Produtos/Serviços', icon: Box },
+        { id: 'segments', label: 'Segmentos', icon: Tag },
+        { id: 'users', label: 'Usuários', icon: Users },
     ];
 
     const renderContent = () => {

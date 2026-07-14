@@ -89,10 +89,9 @@ export default function Login() {
                 {/* Header */}
                 <div className="bg-slate-900 px-8 py-8 text-center">
                     <h1 className="text-2xl font-bold text-white tracking-tight font-montserrat">CSApp</h1>
-                    <p className="text-slate-400 text-sm mt-2">Plataforma de Gestão Integrada</p>
+                    <p className="text-slate-400 text-sm mt-2">Customer Success Application</p>
                 </div>
 
-                {/* Form Body */}
                 <div className="p-8 space-y-6">
                     <div className="text-center">
                         <h2 className="text-lg font-semibold text-slate-900">Bem-vindo de volta!</h2>
