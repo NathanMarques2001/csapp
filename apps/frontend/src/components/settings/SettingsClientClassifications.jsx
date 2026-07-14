@@ -19,6 +19,8 @@ const SettingsClientClassifications = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [editingClassification, setEditingClassification] = useState(null);
 
+    const hasQuantityClassification = classifications.some(c => c.tipo_categoria === 'quantidade');
+
     const fetchClassifications = async () => {
         try {
             const res = await api.get('/classificacoes-clientes');
@@ -137,6 +139,7 @@ const SettingsClientClassifications = () => {
             {modalOpen && (
                 <ClientClassificationFormModal
                     classification={editingClassification}
+                    hasQuantityClassification={hasQuantityClassification}
                     onClose={() => setModalOpen(false)}
                     onSuccess={handleSuccess}
                 />

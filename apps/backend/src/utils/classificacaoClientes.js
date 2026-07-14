@@ -89,7 +89,7 @@ async function classificarClientes() {
         let indice = 0;
         for (const classificacao of classificacoes) {
             // Classificação por quantidade (ex: top 10)
-            if (classificacao.quantidade) {
+            if (classificacao.tipo_categoria === "quantidade") {
                 for (
                     let i = 0;
                     i < classificacao.quantidade && indice < faturamentos.length;
@@ -121,14 +121,10 @@ async function classificarClientes() {
 
             // Encontrar a primeira classificação com valor compatível
             const classificacaoValor = classificacoes.find(
-                (c) => c.valor && faturamentoTotal >= c.valor,
+                (c) => c.tipo_categoria === "valor" && c.valor !== null && faturamentoTotal >= parseFloat(c.valor)
             );
 
-            const idClassificacao = classificacaoValor
-                ? classificacaoValor.id
-                : classificacoes.find((c) => !c.valor && !c.quantidade)?.id;
-
-            if (!idClassificacao) continue;
+            const idClassificacao = classificacaoValor ? classificacaoValor.id : null;
 
             if (entidade.tipoEntidade === "grupo") {
                 await GrupoEconomico.update(

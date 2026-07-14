@@ -12,6 +12,7 @@ import { confirmPresets } from '../../utils/confirmPresets';
 
 const SettingsGeneralList = ({ title, endpoint, dataKey, columns = [{ key: 'nome', label: 'Nome' }] }) => {
     const api = new Api();
+    const { confirm } = useConfirm();
     const [loading, setLoading] = useState(true);
     const [items, setItems] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
@@ -82,17 +83,18 @@ const SettingsGeneralList = ({ title, endpoint, dataKey, columns = [{ key: 'nome
                 </div>
             </Card>
 
-            <table className="w-full text-sm text-left">
-                <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200">
+            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+                <table className="w-full text-sm text-left">
+                    <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200">
                     <tr>
                         {columns.map(col => (
                             <th key={col.key} className="px-6 py-3">{col.label}</th>
                         ))}
                         <th className="px-6 py-3 text-center">Status</th>
-                        <th className="px-6 py-3 text-center">Ações</th>
+                        <th className="px-6 py-3 text-right">Ações</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y divide-slate-100">
                     {items.filter(item =>
                         columns.some(col =>
                             String(item[col.key] || '').toLowerCase().includes(searchTerm.toLowerCase())
@@ -105,12 +107,12 @@ const SettingsGeneralList = ({ title, endpoint, dataKey, columns = [{ key: 'nome
                             <td className="px-6 py-3 text-center">
                                 <Badge status={item.status === 'inativo' ? 'inativo' : 'ativo'} />
                             </td>
-                            <td className="px-6 py-3 text-center">
-                                <div className="flex items-center justify-center gap-2">
-                                    <button onClick={() => handleEdit(item)} className="text-slate-400 hover:text-teal-600 transition-colors">
+                            <td className="px-6 py-3 text-right">
+                                <div className="flex items-center justify-end gap-2">
+                                    <button onClick={() => handleEdit(item)} className="text-slate-400 hover:text-teal-600 transition-colors" title="Editar">
                                         <Edit2 className="w-4 h-4" />
                                     </button>
-                                    <button onClick={() => toggleStatus(item)} className="text-slate-400 hover:text-indigo-600 transition-colors">
+                                    <button onClick={() => toggleStatus(item)} className="text-slate-400 hover:text-indigo-600 transition-colors" title="Alterar Status">
                                         {item.status === 'inativo' ? <CheckCircle className="w-4 h-4" /> : <Archive className="w-4 h-4" />}
                                     </button>
                                 </div>
@@ -126,6 +128,7 @@ const SettingsGeneralList = ({ title, endpoint, dataKey, columns = [{ key: 'nome
                     )}
                 </tbody>
             </table>
+            </div>
 
             {modalOpen && (
                 <GenericFormModal

@@ -296,16 +296,17 @@ export const GenericFormModal = ({ title, endpoint, item, onClose, onSuccess }) 
     );
 };
 
-export const ClientClassificationFormModal = ({ classification, onClose, onSuccess }) => {
+export const ClientClassificationFormModal = ({ classification, hasQuantityClassification, onClose, onSuccess }) => {
     const api = new Api();
     const [loading, setLoading] = useState(false);
     const isEditing = !!classification;
+    const isQuantidadeDisabled = hasQuantityClassification && classification?.tipo_categoria !== 'quantidade';
 
     const buildInitial = () => ({
         nome: classification?.nome || '',
         quantidade: classification?.quantidade || '',
         valor: classification?.valor || '',
-        tipoCategoria: classification?.tipo_categoria || 'quantidade',
+        tipoCategoria: classification?.tipo_categoria || (isQuantidadeDisabled ? 'valor' : 'quantidade'),
     });
 
     const [tipoCategoria, setTipoCategoria] = useState(buildInitial().tipoCategoria);
@@ -375,11 +376,15 @@ export const ClientClassificationFormModal = ({ classification, onClose, onSucce
                 <div>
                     <label className="block text-sm font-medium text-slate-700 mb-1">Tipo de Critério</label>
                     <div className="flex gap-4 mt-2">
-                        <label className="flex items-center gap-2 cursor-pointer">
+                        <label 
+                            className={`flex items-center gap-2 ${isQuantidadeDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+                            title={isQuantidadeDisabled ? "Já existe uma classificação por quantidade. Só é permitida uma." : ""}
+                        >
                             <input
                                 type="radio"
                                 name="tipo_categoria"
                                 value="quantidade"
+                                disabled={isQuantidadeDisabled}
                                 checked={tipoCategoria === 'quantidade'}
                                 onChange={() => setTipoCategoria('quantidade')}
                                 className="text-teal-600 focus:ring-teal-500"

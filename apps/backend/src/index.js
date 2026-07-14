@@ -36,6 +36,10 @@ const vencimentoContratos = require('./routes/VencimentoContratosRoute.js');
 const categoriasProdutosRoutes = require('./modules/categoria-produto/categoria-produto.routes.js');
 const classificacoesClientesRoutes = require('./routes/ClassificacoesClientesRoutes.js');
 const gruposEconomicosRoutes = require('./routes/GruposEconomicosRoutes.js');
+const notificacoesRoutes = require('./routes/NotificacoesRoutes.js');
+const relatoriosRoutes = require('./routes/RelatoriosRoutes.js');
+const historicoRoutes = require('./routes/historicoRoutes.js');
+const { iniciarCronNotificacoes } = require('./cron/CronNotificacoes.js');
 
 const port = 8080;
 const app = express();
@@ -76,6 +80,14 @@ app.use('/api/vencimento-contratos', vencimentoContratos);
 app.use('/api/categorias-produtos', categoriasProdutosRoutes);
 app.use('/api/classificacoes-clientes', classificacoesClientesRoutes);
 app.use('/api/grupos-economicos', gruposEconomicosRoutes);
+app.use('/api/notificacoes', notificacoesRoutes);
+app.use('/api/relatorios', relatoriosRoutes);
+app.use('/api/historico', historicoRoutes);
+
+if (process.env.NODE_ENV !== 'test') {
+  // require('./cron/CronHistorico.js');
+  // iniciarCronNotificacoes();
+}
 
 app.use(globalErrorHandler);
 

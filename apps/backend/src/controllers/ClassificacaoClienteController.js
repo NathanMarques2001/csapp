@@ -53,10 +53,10 @@ module.exports = {
     try {
       const { nome, status, tipo_categoria, quantidade, valor } = req.body;
 
-      if (valor !== undefined && valor !== null && parseFloat(valor) <= 0) {
+      if (valor !== undefined && valor !== null && parseFloat(valor) < 0) {
         return res
           .status(400)
-          .send({ message: "O valor deve ser maior que zero." });
+          .send({ message: "O valor não pode ser negativo." });
       }
 
       if (tipo_categoria === "quantidade") {
@@ -88,6 +88,9 @@ module.exports = {
       });
     } catch (error) {
       if (error.name === "SequelizeUniqueConstraintError") {
+        if (error.parent && error.parent.code === 'ER_DUP_ENTRY' && error.parent.sqlMessage.includes('idx_unica_classificacao_quantidade')) {
+          return res.status(400).send({ message: "Já existe uma classificação do tipo quantidade. Só é permitida uma." });
+        }
         return res
           .status(400)
           .send({ message: "Já existe uma classificação com esse nome." });
@@ -146,6 +149,14 @@ module.exports = {
         .status(200)
         .send({ message: "Classificação atualizada com sucesso!" });
     } catch (error) {
+      if (error.name === "SequelizeUniqueConstraintError") {
+        if (error.parent && error.parent.code === 'ER_DUP_ENTRY' && error.parent.sqlMessage.includes('idx_unica_classificacao_quantidade')) {
+          return res.status(400).send({ message: "Já existe uma classificação do tipo quantidade. Só é permitida uma." });
+        }
+        return res
+          .status(400)
+          .send({ message: "Já existe uma classificação com esse nome." });
+      }
       console.error("Erro ao atualizar classificação:", error);
       return res.status(500).send({
         message: "Erro interno ao atualizar classificação.",
