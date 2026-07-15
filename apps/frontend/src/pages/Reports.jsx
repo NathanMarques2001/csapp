@@ -7,6 +7,10 @@ import ClientReport from '../components/reports/ClientReport';
 import ContractReport from '../components/reports/ContractReport';
 import ProductReport from '../components/reports/ProductReport';
 import GeneralReport from '../components/reports/GeneralReport';
+import BirthdayReport from '../components/reports/BirthdayReport';
+import HistoryReport from '../components/reports/HistoryReport';
+import NotificationReport from '../components/reports/NotificationReport';
+import LogsReport from '../components/reports/LogsReport';
 
 const Reports = () => {
     const api = new Api();
@@ -22,7 +26,8 @@ const Reports = () => {
         segments: [],
         groups: [],
         manufacturers: [],
-        categories: []
+        categories: [],
+        clientClassifications: []
     });
 
     useEffect(() => {
@@ -31,7 +36,7 @@ const Reports = () => {
             try {
                 const [
                     clientsRes, contractsRes, productsRes, usersRes,
-                    segmentsRes, groupsRes, manuRes, catsRes
+                    segmentsRes, groupsRes, manuRes, catsRes, classRes
                 ] = await Promise.all([
                     api.get("/clientes"),
                     api.get("/contratos"),
@@ -40,7 +45,8 @@ const Reports = () => {
                     api.get("/segmentos"),
                     api.get("/grupos-economicos"),
                     api.get("/fabricantes"),
-                    api.get("/categorias-produtos")
+                    api.get("/categorias-produtos"),
+                    api.get("/classificacoes-clientes")
                 ]);
 
                 setData({
@@ -51,7 +57,8 @@ const Reports = () => {
                     segments: segmentsRes.segmentos || [],
                     groups: groupsRes.grupoEconomico || [],
                     manufacturers: manuRes.fabricantes || [],
-                    categories: catsRes.categorias || []
+                    categories: catsRes.categorias || [],
+                    clientClassifications: classRes.classificacoes || []
                 });
             } catch (error) {
                 console.error("Error loading report data:", error);
@@ -72,6 +79,7 @@ const Reports = () => {
         products: data.products.reduce((acc, p) => ({ ...acc, [p.id]: p }), {}),
         manufacturers: data.manufacturers.reduce((acc, m) => ({ ...acc, [m.id]: m }), {}),
         categories: data.categories.reduce((acc, c) => ({ ...acc, [c.id]: c }), {}),
+        clientClassifications: data.clientClassifications.reduce((acc, c) => ({ ...acc, [c.id]: c }), {}),
     }), [data]);
 
     const reportTypes = [
@@ -79,7 +87,10 @@ const Reports = () => {
         { id: 'contracts', title: 'Relatório de Contratos', icon: FileText, color: 'text-amber-600', bg: 'bg-amber-100', component: ContractReport },
         { id: 'products', title: 'Relatório de Produtos', icon: Box, color: 'text-emerald-600', bg: 'bg-emerald-100', component: ProductReport },
         { id: 'general', title: 'Relatório Geral', icon: BarChart, color: 'text-blue-600', bg: 'bg-blue-100', component: GeneralReport },
-        { id: 'logs', title: 'Logs do Sistema', icon: Activity, color: 'text-slate-600', bg: 'bg-slate-100', component: () => <div className="p-4 text-center text-slate-500">Em desenvolvimento...</div> },
+        { id: 'birthdays', title: 'Aniversariantes', icon: Users, color: 'text-pink-600', bg: 'bg-pink-100', component: BirthdayReport },
+        { id: 'history', title: 'Histórico', icon: ClipboardList, color: 'text-orange-600', bg: 'bg-orange-100', component: HistoryReport },
+        { id: 'notifications', title: 'Notificações', icon: Activity, color: 'text-red-600', bg: 'bg-red-100', component: NotificationReport },
+        { id: 'logs', title: 'Logs do Sistema', icon: Activity, color: 'text-slate-600', bg: 'bg-slate-100', component: LogsReport },
     ];
 
     const renderSelectedReport = () => {
@@ -105,6 +116,7 @@ const Reports = () => {
                     productsMap={maps.products}
                     manufacturersMap={maps.manufacturers}
                     categoriesMap={maps.categories}
+                    clientClassificationsMap={maps.clientClassifications}
                 />
             </div>
         );
