@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Filter, Plus, ChevronDown, ChevronRight, ChevronLeft, Building, MoreVertical, Edit2, Info } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Search, Filter, Plus, ChevronDown, ChevronRight, ChevronLeft, Building, MoreVertical, Edit2, Info, TrendingUp, DollarSign } from 'lucide-react';
 import { FaEye, FaPencilAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { useCookies } from "react-cookie";
 import Api from '../utils/api';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
@@ -15,6 +16,7 @@ import ClientFilterModal from '../components/clients/ClientFilterModal';
 const Clients = () => {
     const api = new Api();
     const navigate = useNavigate();
+    const [cookies] = useCookies(["id", "tipo"]);
     const [loading, setLoading] = useState(true);
     const [clients, setClients] = useState([]);
     const [groups, setGroups] = useState([]);
@@ -56,9 +58,20 @@ const Clients = () => {
                 api.get('/contratos'),
                 api.get('/usuarios')
             ]);
-            setClients(clientsRes.clientes || []);
+            let fetchedClients = clientsRes.clientes || [];
+            if (cookies.tipo === "user") {
+                fetchedClients = fetchedClients.filter(c => String(c.id_usuario) === String(cookies.id));
+            }
+            setClients(fetchedClients);
+            
             setGroups(groupsRes.grupoEconomico || []);
-            setContracts(contractsRes.contratos || []);
+
+            let fetchedContracts = contractsRes.contratos || [];
+            if (cookies.tipo === "user") {
+                const myClientIds = new Set(fetchedClients.map(c => c.id));
+                fetchedContracts = fetchedContracts.filter(c => myClientIds.has(c.id_cliente));
+            }
+            setContracts(fetchedContracts);
 
             const sellersMap = (sellersRes.usuarios || []).reduce((acc, curr) => {
                 acc[curr.id] = curr.nome;
@@ -123,6 +136,10 @@ const Clients = () => {
 
     const filteredGroups = groups.filter(g => {
         const groupChildren = clients.filter(c => c.id_grupo_economico === g.id);
+
+        if (cookies.tipo === "user" && groupChildren.length === 0) {
+            return false;
+        }
 
         // 1. Search filter
         const groupMatchesSearch = searchTerm === '' || (g.nome || '').toLowerCase().includes(searchTerm.toLowerCase());
@@ -202,6 +219,74 @@ const Clients = () => {
         fetchData(); // Reload data to reflect changes
     };
 
+    const StatsCard = ({ title, value, icon: Icon, color }) => (
+        <Card className="border-none shadow-sm h-full">
+            <div className="flex items-center justify-between">
+                <div>
+                    <p className="text-sm text-slate-500 font-medium">{title}</p>
+                    <p className="text-xl font-bold text-slate-900 mt-1">{formatCurrency(value)}</p>
+                </div>
+                <div className={`p-3 rounded-full ${color}`}>
+                    <Icon className="w-5 h-5 text-white" />
+                </div>
+            </div>
+        </Card>
+    );
+
+    const statsByCategory = useMemo(() => {
+        const visibleClientIds = new Set([
+            ...clientsWithoutGroup.map(c => c.id),
+            ...filteredGroups.flatMap(g => clients.filter(c => c.id_grupo_economico === g.id).map(c => c.id))
+        ]);
+
+        let totalAtivos = 0;
+        const categories = {};
+        
+        rawClassifications.forEach(c => {
+            categories[c.nome] = 0;
+        });
+        categories['Não Classificado'] = 0;
+
+        const activeContracts = contracts.filter(c => 
+            (c.status === 'ativo' || c.status === 'Ativo') && 
+            visibleClientIds.has(c.id_cliente)
+        );
+        
+        activeContracts.forEach(contract => {
+            let val = contract.valor_mensal;
+            if (typeof val === 'string') val = val.replace(',', '.');
+            const numVal = parseFloat(val || 0);
+
+            totalAtivos += numVal;
+
+            const client = clients.find(c => c.id === contract.id_cliente);
+            if (client) {
+                let classId = client.id_classificacao_cliente;
+                if (client.id_grupo_economico) {
+                    const group = groups.find(g => g.id === client.id_grupo_economico);
+                    if (group && group.id_classificacao_cliente) {
+                        classId = group.id_classificacao_cliente;
+                    }
+                }
+
+                if (classId && classifications[classId]) {
+                    const className = classifications[classId];
+                    if (categories[className] !== undefined) {
+                        categories[className] += numVal;
+                    } else {
+                        categories[className] = numVal;
+                    }
+                } else {
+                    categories['Não Classificado'] += numVal;
+                }
+            } else {
+                categories['Não Classificado'] += numVal;
+            }
+        });
+
+        return { totalAtivos, categories };
+    }, [contracts, clients, groups, classifications, rawClassifications, clientsWithoutGroup, filteredGroups]);
+
     return (
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -244,6 +329,28 @@ const Clients = () => {
                     <Button variant="outline" icon={Plus} onClick={handleNewGroup}>Novo Grupo</Button>
                     <Button onClick={() => navigate('/clientes/novo')} icon={Plus}>Novo Cliente</Button>
                 </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
+                <StatsCard 
+                    title="Total de Contratos Ativos" 
+                    value={statsByCategory.totalAtivos} 
+                    icon={TrendingUp} 
+                    color="bg-teal-500" 
+                />
+                {Object.entries(statsByCategory.categories).map(([name, value], i) => {
+                    const colors = ['bg-indigo-500', 'bg-blue-500', 'bg-violet-500', 'bg-fuchsia-500', 'bg-rose-500', 'bg-orange-500'];
+                    const color = name === 'Não Classificado' ? 'bg-slate-400' : colors[i % colors.length];
+                    return (
+                        <StatsCard 
+                            key={name}
+                            title={`Categoria: ${name}`}
+                            value={value}
+                            icon={DollarSign}
+                            color={color}
+                        />
+                    );
+                })}
             </div>
 
             <Card className="p-4 border-0 shadow-sm bg-white">

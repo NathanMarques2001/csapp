@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCookies } from "react-cookie";
 import { Search, Plus, ChevronLeft, ChevronRight, Pencil, FileText, TrendingUp, DollarSign, Upload, Filter } from 'lucide-react';
 import Api from '../utils/api';
 import { formatCurrency, formatDate, formatCpfCnpj } from '../utils/formatters';
@@ -14,6 +15,7 @@ import FilterModal from '../components/contracts/FilterModal';
 const Contracts = () => {
     const api = new Api();
     const navigate = useNavigate();
+    const [cookies] = useCookies(["id", "tipo"]);
     const [loading, setLoading] = useState(true);
     const [contracts, setContracts] = useState([]);
     const [filteredContracts, setFilteredContracts] = useState([]);
@@ -50,8 +52,12 @@ const Contracts = () => {
                     api.get('/usuarios')
                 ]);
 
+                let clientsList = clientsRes.clientes || [];
+                if (cookies.tipo === "user") {
+                    clientsList = clientsList.filter(c => String(c.id_usuario) === String(cookies.id));
+                }
                 // Map clients by ID
-                const clientsMap = (clientsRes.clientes || []).reduce((acc, c) => ({ ...acc, [c.id]: c }), {});
+                const clientsMap = clientsList.reduce((acc, c) => ({ ...acc, [c.id]: c }), {});
                 // Map products by ID
                 const productsMap = (productsRes.produtos || []).reduce((acc, p) => ({ ...acc, [p.id]: p }), {});
                 // Map users (sellers) by ID
@@ -62,7 +68,10 @@ const Contracts = () => {
                 setUsers(usersMap);
 
                 // Backend returns snake_case fields: id_cliente, id_produto, valor_mensal, etc.
-                const contractsData = contractsRes.contratos || [];
+                let contractsData = contractsRes.contratos || [];
+                if (cookies.tipo === "user") {
+                    contractsData = contractsData.filter(c => clientsMap[c.id_cliente] !== undefined);
+                }
                 setContracts(contractsData);
                 setFilteredContracts(contractsData);
             } catch (error) {
@@ -209,7 +218,7 @@ const Contracts = () => {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                 <StatsCard title="Total Ativo (Filtro)" value={totalActive} icon={TrendingUp} color="bg-teal-500" />
                 <StatsCard title="Faturamento Mensal" value={totalMonthly} icon={DollarSign} color="bg-indigo-500" />
                 <StatsCard title="Faturamento Anual" value={totalAnnual} icon={FileText} color="bg-blue-500" />
