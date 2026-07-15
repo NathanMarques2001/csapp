@@ -1,4 +1,5 @@
 const AppError = require('../utils/AppError');
+const { ZodError } = require('zod');
 
 // Dicionário global para traduzir os nomes técnicos das colunas do banco para nomes amigáveis
 const mapCampos = {
@@ -117,6 +118,16 @@ const handleSequelizeDatabaseError = (err) => {
   return err; // Caso contrário mantem como 500
 };
 
+const handleZodError = (err) => {
+  const erros = err.errors.map(el => {
+    const campo = mapCampos[el.path[el.path.length - 1]] || el.path[el.path.length - 1];
+    return `${campo}: ${el.message}`;
+  });
+  
+  const message = `Dados inválidos: ${erros.join(' | ')}.`;
+  return new AppError(message, 400);
+};
+
 module.exports = (err, req, res, next) => {
   let error = err;
   
@@ -132,6 +143,8 @@ module.exports = (err, req, res, next) => {
     error = handleSequelizeForeignKeyConstraintError(error);
   } else if (error.name === 'SequelizeDatabaseError') {
     error = handleSequelizeDatabaseError(error);
+  } else if (error instanceof ZodError) {
+    error = handleZodError(error);
   }
 
   if (process.env.NODE_ENV === 'development') {

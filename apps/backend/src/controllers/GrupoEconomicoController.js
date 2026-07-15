@@ -1,135 +1,35 @@
-const Cliente = require("../models/Cliente");
-const GrupoEconomico = require("../models/GrupoEconomico");
-const Contrato = require("../models/Contrato");
-const classificarClientes = require("../utils/classificacaoClientes");
+const catchAsync = require('../utils/catchAsync');
+const GrupoEconomicoService = require('../services/GrupoEconomicoService');
 
 module.exports = {
-  async index(req, res) {
-    try {
-      const { id } = req.params;
-      const grupoEconomico = await GrupoEconomico.findByPk(id);
+  index: catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const grupoEconomico = await GrupoEconomicoService.buscarPorId(id);
+    return res.status(200).send({ grupoEconomico });
+  }),
 
-      if (!grupoEconomico) {
-        return res
-          .status(404)
-          .send({ message: "Grupo econômico não encontrado!" });
-      }
+  indexAll: catchAsync(async (req, res) => {
+    const grupoEconomico = await GrupoEconomicoService.listarTodos();
+    return res.status(200).send({ grupoEconomico });
+  }),
 
-      return res.status(200).send({ grupoEconomico });
-    } catch (error) {
-      console.error(error);
-      return res
-        .status(500)
-        .send({ message: "Ocorreu um erro ao buscar o grupo econômico." });
-    }
-  },
+  inactiveOrActive: catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const response = await GrupoEconomicoService.alternarStatus(id);
+    return res.status(200).send(response);
+  }),
 
-  async indexAll(req, res) {
-    try {
-      const grupoEconomico = await GrupoEconomico.findAll({
-        order: [["nome", "ASC"]],
-      });
+  store: catchAsync(async (req, res) => {
+    const grupoEconomico = await GrupoEconomicoService.criar(req.body);
+    return res.status(201).send({
+      message: "Grupo econômico criado com sucesso!",
+      grupoEconomico,
+    });
+  }),
 
-      return res.status(200).send({ grupoEconomico });
-    } catch (error) {
-      console.error(error);
-      return res
-        .status(500)
-        .send({ message: "Ocorreu um erro ao buscar os grupos econômicos." });
-    }
-  },
-
-  async inactiveOrActive(req, res) {
-    try {
-      const { id } = req.params;
-
-      const grupoEconomico = await GrupoEconomico.findByPk(id);
-
-      if (!grupoEconomico) {
-        return res.status(404).send({ message: "Grupo econômico não encontrado!" });
-      }
-
-      if (grupoEconomico.status === "ativo") {
-        await GrupoEconomico.update(
-          { status: "inativo" },
-          { where: { id: id } },
-        );
-
-        const clientes = await Cliente.findAll({
-          where: { id_grupo_economico: id },
-        });
-
-        for (const cliente of clientes) {
-          if (cliente.status === "ativo") {
-            await Cliente.update(
-              { status: "inativo" },
-              { where: { id: cliente.id } },
-            );
-            await Contrato.update(
-              { status: "inativo" },
-              { where: { id_cliente: cliente.id } },
-            );
-          }
-        }
-        await classificarClientes();
-      } else {
-        await GrupoEconomico.update({ status: "ativo" }, { where: { id: id } });
-      }
-
-      return res.status(200).send({
-        message:
-          "Status alterado com sucesso!",
-      });
-    } catch (error) {
-      console.error(error);
-      return res
-        .status(500)
-        .send({ message: "Ocorreu um erro ao alterar status do grupo econômico." });
-    }
-  },
-
-  async store(req, res) {
-    try {
-      const { nome } = req.body;
-
-      const grupoEconomico = await GrupoEconomico.create({
-        nome,
-        status: 'ativo'
-      });
-
-      return res.status(201).send({
-        message: "Grupo econômico criado com sucesso!",
-        grupoEconomico,
-      });
-    } catch (error) {
-      console.error(error);
-      return res
-        .status(500)
-        .send({ message: "Ocorreu um erro ao criar o grupo econômico." });
-    }
-  },
-
-  async update(req, res) {
-    try {
-      const { nome, status } = req.body;
-      const { id } = req.params;
-
-      const grupoEconomico = await GrupoEconomico.findByPk(id);
-
-      if (!grupoEconomico) {
-        return res
-          .status(404)
-          .send({ message: "Grupo econômico não encontrado!" });
-      }
-
-      await GrupoEconomico.update({ nome, status }, { where: { id: id } });
-
-      return res.status(200).send({ message: "Grupo econômico atualizado com sucesso!" });
-    } catch (error) {
-      console.error(error);
-      return res
-        .status(500)
-        .send({ message: "Ocorreu um erro ao atualizar o grupo econômico." });
-    }
-  },
+  update: catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const response = await GrupoEconomicoService.atualizar(id, req.body);
+    return res.status(200).send(response);
+  }),
 };

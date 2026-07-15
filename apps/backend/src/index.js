@@ -18,7 +18,7 @@ const session = require('express-session');
 const passport = require('passport');
 require('./config/passportConfig.js');
 const cors = require('cors');
-const globalErrorHandler = require('./common/exceptions/GlobalErrorHandlerMiddleware.js');
+const globalErrorHandler = require('./middlewares/errorHandler.js');
 const usuarioRoutes = require('./routes/UsuariosRoutes.js');
 const produtoRoutes = require('./modules/produtos/produto.routes.js');
 const logsRoutes = require('./routes/LogsRoutes.js');
