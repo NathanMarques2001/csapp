@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { Save, FileText, History } from 'lucide-react';
 import Api from '../utils/api';
 import BackButton from '../components/ui/BackButton';
@@ -87,6 +87,7 @@ const ContractForm = () => {
     const goBack = useGoBack('/contratos');
     const { confirm } = useConfirm();
     const { id } = useParams();
+    const location = useLocation();
     const mode = id ? 'edicao' : 'cadastro';
 
     const [loading, setLoading] = useState(false);
@@ -103,7 +104,10 @@ const ContractForm = () => {
     // Logic State
     const [isQuantidadeDisabled, setIsQuantidadeDisabled] = useState(true);
 
-    const [formData, setFormData] = useState(EMPTY_CONTRACT_FORM);
+    const [formData, setFormData] = useState({
+        ...EMPTY_CONTRACT_FORM,
+        id_cliente: location.state?.clientId || ""
+    });
 
     const { confirmSave, requestLeave, onSaveSuccess } = useFormGuard({
         formData,
@@ -167,7 +171,10 @@ const ContractForm = () => {
                     }
                     setLogs(logsRes.logs || []);
                 } else {
-                    setBaseline(EMPTY_CONTRACT_FORM);
+                    setBaseline({
+                        ...EMPTY_CONTRACT_FORM,
+                        id_cliente: location.state?.clientId || ""
+                    });
                 }
             } catch (error) {
                 console.error("Error loading form data", error);

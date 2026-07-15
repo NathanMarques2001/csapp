@@ -332,9 +332,6 @@ const EconomicGroupDetails = () => {
                         <Button variant="outline" icon={Edit2} onClick={() => setEditModalOpen(true)}>
                             Editar Grupo
                         </Button>
-                        <Button icon={Plus} onClick={() => navigate('/contratos/novo')}>
-                            Novo Contrato
-                        </Button>
                     </div>
                 </div>
 

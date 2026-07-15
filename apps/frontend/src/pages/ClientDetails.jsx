@@ -273,7 +273,7 @@ const ClientDetails = () => {
                     </div>
                     <div className="flex gap-2">
                         <Button variant="outline" icon={Edit2} onClick={() => navigate(`/clientes/editar/${id}`)}>Editar Cliente</Button>
-                        <Button icon={Plus} onClick={() => navigate('/contratos/novo')}>Novo Contrato</Button>
+                        <Button icon={Plus} onClick={() => navigate('/contratos/novo', { state: { clientId: Number(id) } })}>Novo Contrato</Button>
                     </div>
                 </div>
 
