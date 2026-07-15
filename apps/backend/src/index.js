@@ -91,6 +91,10 @@ if (process.env.NODE_ENV !== 'test') {
 
 app.use(globalErrorHandler);
 
-app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
+    console.log(`Servidor rodando na porta ${port}`);
+  });
+}
+
+module.exports = app;

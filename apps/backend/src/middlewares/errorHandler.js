@@ -119,13 +119,20 @@ const handleSequelizeDatabaseError = (err) => {
 };
 
 const handleZodError = (err) => {
-  const erros = err.errors.map(el => {
-    const campo = mapCampos[el.path[el.path.length - 1]] || el.path[el.path.length - 1];
-    return `${campo}: ${el.message}`;
-  });
-  
-  const message = `Dados inválidos: ${erros.join(' | ')}.`;
-  return new AppError(message, 400);
+  try {
+    const issues = err.issues || err.errors || (Array.isArray(err) ? err : []);
+    const erros = issues.map(el => {
+      const rawCampo = el.path && el.path.length > 0 ? el.path[el.path.length - 1] : 'campo';
+      const campo = mapCampos[rawCampo] || rawCampo;
+      return `${campo}: ${el.message}`;
+    });
+    
+    const message = `Dados inválidos: ${erros.join(' | ')}.`;
+    return new AppError(message, 400);
+  } catch (e) {
+    console.error("ZOD ERROR HANDLER CRASHED:", e);
+    return new AppError("Erro de validação (fallback)", 400);
+  }
 };
 
 module.exports = (err, req, res, next) => {
@@ -135,6 +142,7 @@ module.exports = (err, req, res, next) => {
   error.status = error.status || 'error';
 
   // Mapeamento global de erros do Sequelize
+  // console.log("ERROR NAME:", error.name, "ERROR IS ZOD?", error instanceof ZodError);
   if (error.name === 'SequelizeUniqueConstraintError') {
     error = handleSequelizeUniqueConstraintError(error);
   } else if (error.name === 'SequelizeValidationError') {
@@ -143,7 +151,7 @@ module.exports = (err, req, res, next) => {
     error = handleSequelizeForeignKeyConstraintError(error);
   } else if (error.name === 'SequelizeDatabaseError') {
     error = handleSequelizeDatabaseError(error);
-  } else if (error instanceof ZodError) {
+  } else if (error.name === 'ZodError') {
     error = handleZodError(error);
   }
 
