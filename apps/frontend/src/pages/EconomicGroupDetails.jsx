@@ -1,8 +1,8 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-    Edit2, Plus, ChevronRight, FileText, CheckCircle, XCircle,
-    Package, Factory, Building, Power, Trash2
+    Edit2, ChevronRight, FileText, CheckCircle, XCircle,
+    Package, Factory, Building, Power, Trash2, AlertTriangle
 } from 'lucide-react';
 import Api from '../utils/api';
 import { formatCurrency, formatDate, formatCpfCnpj } from '../utils/formatters';
@@ -12,66 +12,11 @@ import Badge from '../components/ui/Badge';
 import Skeleton from '../components/ui/Skeleton';
 import ContactCard from '../components/ui/ContactCard';
 import { GroupFormModal } from '../components/settings/SettingsModals';
-import { useModalGuard } from '../hooks/useFormGuard';
-
-const HistoryModalComponent = ({ modalType, modalItemId, initialContent, onClose, onSave, savingModal }) => {
-    const [conteudo, setConteudo] = useState(initialContent || '');
-    
-    const { handleClose, confirmSave } = useModalGuard({
-        formData: conteudo,
-        baseline: initialContent || '',
-        onClose,
-        entityLabel: 'o registro de histórico',
-        isCreate: !modalItemId
-    });
-
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-            <div className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200">
-                <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 className="text-lg font-bold text-slate-800">
-                        {modalType === 'comercial' ? 'Editar Contato Comercial' : modalType === 'tecnico' ? 'Editar Contato Técnico' : 'Editar Fato Importante'}
-                    </h3>
-                    <button onClick={handleClose} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
-                        <XCircle size={20} />
-                    </button>
-                </div>
-                <div className="p-6 space-y-4">
-                    <div className="space-y-2">
-                        <label className="block text-sm font-medium text-slate-700">Conteúdo do Registro</label>
-                        <textarea
-                            autoFocus
-                            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 resize-none"
-                            rows="4"
-                            value={conteudo}
-                            onChange={(e) => setConteudo(e.target.value)}
-                            placeholder="Digite os detalhes..."
-                        />
-                    </div>
-                    <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
-                        <Button variant="outline" onClick={handleClose}>
-                            Cancelar
-                        </Button>
-                        <Button 
-                            className="bg-teal-600 text-white hover:bg-teal-700 shadow-sm"
-                            onClick={async () => {
-                                if (!conteudo.trim()) return;
-                                if (!(await confirmSave())) return;
-                                onSave(conteudo);
-                            }}
-                            disabled={savingModal || !conteudo.trim()}
-                        >
-                            {savingModal ? 'Salvando...' : 'Salvar Registro'}
-                        </Button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
 import BackButton from '../components/ui/BackButton';
 import { useConfirm } from '../context/ConfirmContext';
 import { confirmPresets } from '../utils/confirmPresets';
+import { HistoryModalComponent } from '../components/EconomicGroup/HistoryModalComponent';
+import { useCarregarGrupoEconomico } from '../hooks/useCarregarGrupoEconomico';
 
 const parseDate = (dateStr) => {
     if (!dateStr) return null;
@@ -117,29 +62,32 @@ const EconomicGroupDetails = () => {
     const navigate = useNavigate();
     const api = new Api();
     const { confirm } = useConfirm();
+    
     const [activeTab, setActiveTab] = useState('overview');
     const [editModalOpen, setEditModalOpen] = useState(false);
-
-    const [loading, setLoading] = useState(true);
-    const [group, setGroup] = useState(null);
-    const [clients, setClients] = useState([]);
-    const [contracts, setContracts] = useState([]);
-    const [products, setProducts] = useState({});
-    const [manufacturers, setManufacturers] = useState({});
-    const [classifications, setClassifications] = useState({});
-
-    const [contatosComerciais, setContatosComerciais] = useState([]);
-    const [contatosTecnicos, setContatosTecnicos] = useState([]);
-    const [fatosImportantes, setFatosImportantes] = useState([]);
 
     const [modalType, setModalType] = useState(null); // 'comercial', 'tecnico', 'fato'
     const [modalItemId, setModalItemId] = useState(null);
     const [modalContent, setModalContent] = useState('');
     const [savingModal, setSavingModal] = useState(false);
 
-    const handleEditHistory = (type, id, conteudo) => {
+    const { data, loading, error, refetch: fetchData } = useCarregarGrupoEconomico(id);
+    
+    const { 
+        group = null, 
+        clients = [], 
+        contracts = [], 
+        products = {}, 
+        manufacturers = {}, 
+        classifications = {}, 
+        contatosComerciais = [], 
+        contatosTecnicos = [], 
+        fatosImportantes = [] 
+    } = data || {};
+
+    const handleEditHistory = (type, idItem, conteudo) => {
         setModalType(type);
-        setModalItemId(id);
+        setModalItemId(idItem);
         setModalContent(conteudo);
     };
 
@@ -177,58 +125,6 @@ const EconomicGroupDetails = () => {
         [clients]
     );
 
-    const fetchData = useCallback(async () => {
-        setLoading(true);
-        try {
-            const [groupRes, clientsRes, contractsRes, productsRes, manufacturersRes, classificationsRes] = await Promise.all([
-                api.get(`/grupos-economicos/${id}`),
-                api.get(`/clientes/grupo-economico/${id}`),
-                api.get('/contratos'),
-                api.get('/produtos'),
-                api.get('/fabricantes'),
-                api.get('/classificacoes-clientes'),
-            ]);
-
-            const groupClients = clientsRes.clientes || [];
-            const clientIds = new Set(groupClients.map(c => c.id));
-            const groupContracts = (contractsRes.contratos || []).filter(c => clientIds.has(c.id_cliente));
-
-            setGroup(groupRes.grupoEconomico);
-            setClients(groupClients);
-            setContracts(groupContracts);
-
-            const prodMap = (productsRes.produtos || []).reduce((acc, p) => ({ ...acc, [p.id]: p }), {});
-            setProducts(prodMap);
-
-            const manufMap = (manufacturersRes.fabricantes || []).reduce((acc, m) => ({ ...acc, [m.id]: m.nome }), {});
-            setManufacturers(manufMap);
-
-            const classMap = (classificationsRes.classificacoes || []).reduce((acc, c) => ({ ...acc, [c.id]: c.nome }), {});
-            setClassifications(classMap);
-
-            // Fetch history for all units
-            const comerciaisPromises = groupClients.map(c => api.get(`/contatos-comerciais/${c.id}`).then(res => (res.contatos_comerciais || []).map(item => ({ ...item, cliente_nome: c.nome_fantasia }))).catch(() => []));
-            const tecnicosPromises = groupClients.map(c => api.get(`/contatos-tecnicos/${c.id}`).then(res => (res.contatos_tecnicos || []).map(item => ({ ...item, cliente_nome: c.nome_fantasia }))).catch(() => []));
-            const fatosPromises = groupClients.map(c => api.get(`/fatos-importantes/${c.id}`).then(res => (res.fatos_importantes || []).map(item => ({ ...item, cliente_nome: c.nome_fantasia }))).catch(() => []));
-
-            const comerciaisResults = await Promise.all(comerciaisPromises);
-            const tecnicosResults = await Promise.all(tecnicosPromises);
-            const fatosResults = await Promise.all(fatosPromises);
-
-            setContatosComerciais(comerciaisResults.flat());
-            setContatosTecnicos(tecnicosResults.flat());
-            setFatosImportantes(fatosResults.flat());
-        } catch (e) {
-            console.error(e);
-        } finally {
-            setLoading(false);
-        }
-    }, [id]);
-
-    useEffect(() => {
-        if (id) fetchData();
-    }, [id, fetchData]);
-
     const handleToggleStatus = async () => {
         const newStatus = group.status === 'ativo' ? 'inativo' : 'ativo';
         const confirmed = await confirm(confirmPresets.deactivateGroup(newStatus === 'ativo'));
@@ -252,6 +148,24 @@ const EconomicGroupDetails = () => {
                     <Skeleton className="h-32" />
                     <Skeleton className="h-32" />
                 </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-8 flex flex-col items-center justify-center text-center space-y-4 animate-in fade-in zoom-in-95">
+                <AlertTriangle className="w-12 h-12 text-red-500" />
+                <div>
+                    <h3 className="text-lg font-bold text-red-900">Oops! Algo deu errado.</h3>
+                    <p className="text-red-700 mt-1 max-w-md">{error}</p>
+                </div>
+                <Button 
+                    className="bg-red-600 hover:bg-red-700 text-white border-none mt-2"
+                    onClick={() => fetchData()}
+                >
+                    Tentar Novamente
+                </Button>
             </div>
         );
     }
