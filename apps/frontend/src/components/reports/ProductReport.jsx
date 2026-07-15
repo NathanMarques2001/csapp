@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { CSVLink } from 'react-csv';
-import { Download, Filter, Search, X } from 'lucide-react';
+import { Download, Search, Filter, X } from 'lucide-react';
+import { exportToExcel } from '../../utils/excel';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 import Badge from '../ui/Badge';
@@ -50,6 +50,10 @@ const ProductReport = ({ products, manufacturersMap }) => {
         }));
     }, [filteredProducts, manufacturersMap]);
 
+    const handleExport = () => {
+        exportToExcel(csvData, "relatorio_produtos");
+    };
+
     return (
         <div className="space-y-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-lg border border-slate-200 gap-4">
@@ -66,9 +70,9 @@ const ProductReport = ({ products, manufacturersMap }) => {
                     <Button variant="outline" icon={Filter} onClick={() => setShowFilters(!showFilters)}>
                         Filtros
                     </Button>
-                    <CSVLink data={csvData} filename={"relatorio_produtos.csv"} className="btn-export">
-                        <Button variant="primary" icon={Download}>Exportar CSV</Button>
-                    </CSVLink>
+                    <Button variant="primary" icon={Download} onClick={handleExport}>
+                        Exportar Excel
+                    </Button>
                 </div>
             </div>
 
@@ -106,10 +110,10 @@ const ProductReport = ({ products, manufacturersMap }) => {
                 </div>
             )}
 
-            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-                <div className="overflow-x-auto">
+            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden relative">
+                <div className="overflow-x-auto max-h-[600px]">
                     <table className="w-full text-sm text-left">
-                        <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200">
+                        <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200 sticky top-0">
                             <tr>
                                 <th className="px-6 py-3">Nome do Produto</th>
                                 <th className="px-6 py-3">Fabricante</th>
@@ -122,7 +126,7 @@ const ProductReport = ({ products, manufacturersMap }) => {
                                     <td className="px-6 py-3 font-medium text-slate-900">{p.nome || '-'}</td>
                                     <td className="px-6 py-3 text-slate-500">{manufacturersMap[p.id_fabricante]?.nome || '-'}</td>
                                     <td className="px-6 py-3">
-                                        <Badge variant={(p.status || '').toLowerCase() === 'ativo' ? 'success' : 'secondary'}>{p.status}</Badge>
+                                        <Badge status={p.status} />
                                     </td>
                                 </tr>
                             ))}

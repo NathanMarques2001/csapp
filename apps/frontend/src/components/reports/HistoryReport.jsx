@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { CSVLink } from 'react-csv';
 import { Download, Search, Calendar, Filter, X } from 'lucide-react';
+import { exportToExcel } from '../../utils/excel';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 import Badge from '../ui/Badge';
@@ -179,6 +179,14 @@ const HistoryReport = ({ clients, contracts, products, segmentsMap, groupsMap, c
         });
     }, [contratosFiltrados, clientesMap, produtosMap, groupsMap, usersMap]);
 
+    const handleExportClientes = () => {
+        exportToExcel(csvClientes, "historico_clientes");
+    };
+
+    const handleExportContratos = () => {
+        exportToExcel(csvContratos, "historico_contratos");
+    };
+
     return (
         <div className="space-y-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-lg border border-slate-200 gap-4">
@@ -209,13 +217,9 @@ const HistoryReport = ({ clients, contracts, products, segmentsMap, groupsMap, c
                         Filtros
                     </Button>
                     {abaAtiva === 'clientes' ? (
-                        <CSVLink data={csvClientes} filename={"historico_clientes.csv"} className="btn-export">
-                            <Button variant="outline" icon={Download}>Exportar Clientes</Button>
-                        </CSVLink>
+                        <Button variant="outline" icon={Download} onClick={handleExportClientes}>Exportar Clientes Excel</Button>
                     ) : (
-                        <CSVLink data={csvContratos} filename={"historico_contratos.csv"} className="btn-export">
-                            <Button variant="outline" icon={Download}>Exportar Contratos</Button>
-                        </CSVLink>
+                        <Button variant="outline" icon={Download} onClick={handleExportContratos}>Exportar Contratos Excel</Button>
                     )}
                 </div>
             </div>
@@ -266,7 +270,7 @@ const HistoryReport = ({ clients, contracts, products, segmentsMap, groupsMap, c
                     </button>
                 </div>
 
-                <div className="overflow-x-auto relative min-h-[300px]">
+                <div className="overflow-x-auto relative min-h-[300px] max-h-[600px]">
                     {loading && (
                         <div className="absolute inset-0 bg-white/50 z-10 flex items-center justify-center">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
@@ -275,7 +279,7 @@ const HistoryReport = ({ clients, contracts, products, segmentsMap, groupsMap, c
 
                     {abaAtiva === "clientes" ? (
                         <table className="w-full text-sm text-left">
-                            <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200">
+                            <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200 sticky top-0">
                                 <tr>
                                     <th className="px-6 py-3">Data Ref.</th>
                                     <th className="px-6 py-3">Razão Social</th>
@@ -295,7 +299,7 @@ const HistoryReport = ({ clients, contracts, products, segmentsMap, groupsMap, c
                                         <td className="px-6 py-3 text-slate-500">{segmentsMap[c.id_segmento]?.nome || '-'}</td>
                                         <td className="px-6 py-3 text-slate-500">{groupsMap[c.id_grupo_economico]?.nome || '-'}</td>
                                         <td className="px-6 py-3">
-                                            <Badge variant={(c.status || '').toLowerCase() === 'ativo' ? 'success' : 'secondary'}>{c.status}</Badge>
+                                            <Badge status={c.status} />
                                         </td>
                                         <td className="px-6 py-3 text-right font-medium text-slate-700">
                                             {formatCurrency(valoresContratosPorClienteEData[`${c.id_cliente_original}_${c.data_referencia}`] || 0)}
@@ -313,7 +317,7 @@ const HistoryReport = ({ clients, contracts, products, segmentsMap, groupsMap, c
                         </table>
                     ) : (
                         <table className="w-full text-sm text-left">
-                            <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200">
+                            <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200 sticky top-0">
                                 <tr>
                                     <th className="px-6 py-3">Data Ref.</th>
                                     <th className="px-6 py-3">Cliente</th>
@@ -340,7 +344,7 @@ const HistoryReport = ({ clients, contracts, products, segmentsMap, groupsMap, c
                                             <td className="px-6 py-3 text-slate-500">{formatDate(c.proximo_reajuste_resolvido) || '-'}</td>
                                             <td className="px-6 py-3 text-slate-500">{vencimentoFormatado}</td>
                                             <td className="px-6 py-3">
-                                                <Badge variant={(c.status || '').toLowerCase() === 'ativo' ? 'success' : 'secondary'}>{c.status}</Badge>
+                                                <Badge status={c.status} />
                                             </td>
                                             <td className="px-6 py-3 text-right font-medium text-slate-700">{formatCurrency(c.valor_mensal)}</td>
                                         </tr>

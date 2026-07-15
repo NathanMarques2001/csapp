@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { CSVLink } from 'react-csv';
 import { Download, Calendar } from 'lucide-react';
+import { exportToExcel } from '../../utils/excel';
 import Button from '../ui/Button';
 
 const meses = [
@@ -94,6 +94,10 @@ const BirthdayReport = ({ clients }) => {
         return unicos;
     }, [clients, mesSelecionado]);
 
+    const handleExport = () => {
+        exportToExcel(aniversariantes, `relatorio_aniversariantes_${meses[Number(mesSelecionado) - 1]}`);
+    };
+
     return (
         <div className="space-y-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-lg border border-slate-200 gap-4">
@@ -113,20 +117,14 @@ const BirthdayReport = ({ clients }) => {
                     </select>
                 </div>
                 <div className="flex gap-2">
-                    <CSVLink 
-                        data={aniversariantes} 
-                        filename={`relatorio_aniversariantes_${meses[Number(mesSelecionado) - 1]}.csv`} 
-                        className="btn-export"
-                    >
-                        <Button variant="primary" icon={Download}>Exportar CSV</Button>
-                    </CSVLink>
+                    <Button variant="primary" icon={Download} onClick={handleExport}>Exportar Excel</Button>
                 </div>
             </div>
 
-            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-                <div className="overflow-x-auto">
+            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden relative">
+                <div className="overflow-x-auto max-h-[600px]">
                     <table className="w-full text-sm text-left">
-                        <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200">
+                        <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200 sticky top-0">
                             <tr>
                                 <th className="px-6 py-3">Cliente</th>
                                 <th className="px-6 py-3">CPF/CNPJ</th>

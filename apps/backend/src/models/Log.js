@@ -3,8 +3,8 @@ const { Model, DataTypes } = require('sequelize');
 class Log extends Model {
   static init(sequelize) {
     super.init({
-      id_usuario: {
-        type: DataTypes.INTEGER,
+      nome_usuario: {
+        type: DataTypes.STRING,
         allowNull: false
       },
       id_contrato: {
@@ -22,7 +22,7 @@ class Log extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Usuario, { foreignKey: 'id_usuario', as: 'usuarios' });
+    // No foreign key to Usuario since we store nome_usuario directly
     this.belongsTo(models.Contrato, { foreignKey: 'id_contrato', as: 'contratos' });
   }
 

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
-import { CSVLink } from 'react-csv';
 import { Download, Search, Filter, X } from 'lucide-react';
+import { exportToExcel } from '../../utils/excel';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 import Badge from '../ui/Badge';
@@ -119,6 +119,10 @@ const NotificationReport = ({ usersMap, contracts, clients, products }) => {
         });
     }, [notificacoesFiltradas, usersMap, contratosMap, clientesMap, produtosMap]);
 
+    const handleExport = () => {
+        exportToExcel(csvData, "relatorio_notificacoes");
+    };
+
     return (
         <div className="space-y-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-lg border border-slate-200 gap-4">
@@ -135,11 +139,9 @@ const NotificationReport = ({ usersMap, contracts, clients, products }) => {
                     <Button variant="outline" icon={Filter} onClick={() => setShowFilters(!showFilters)}>
                         Filtros
                     </Button>
-                    <CSVLink data={csvData} filename={"relatorio_notificacoes.csv"} className="btn-export">
-                        <Button variant="primary" icon={Download} disabled={loading}>
-                            {loading ? "Carregando..." : "Exportar CSV"}
-                        </Button>
-                    </CSVLink>
+                    <Button variant="primary" icon={Download} onClick={handleExport} disabled={loading}>
+                        {loading ? "Carregando..." : "Exportar Excel"}
+                    </Button>
                 </div>
             </div>
 
@@ -225,33 +227,33 @@ const NotificationReport = ({ usersMap, contracts, clients, products }) => {
                                 <th className="px-6 py-3">Vendedor</th>
                                 <th className="px-6 py-3">Cliente</th>
                                 <th className="px-6 py-3">Solução</th>
-                                <th className="px-6 py-3">Módulo</th>
                                 <th className="px-6 py-3">Descrição</th>
+                                <th className="px-6 py-3">Módulo</th>
                                 <th className="px-6 py-3">Confirmado</th>
+                                <th className="px-6 py-3">Índice de Reajuste</th>
+                                <th className="px-6 py-3">Renovação Automática</th>
+                                <th className="px-6 py-3">ID Contrato</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
-                            {notificacoesFiltradas.map((n, index) => {
-                                const contrato = contratosMap[n.id_contrato];
-                                const cliente = contrato ? clientesMap[contrato.id_cliente] : null;
-                                const produto = contrato ? produtosMap[contrato.id_produto] : null;
-
-                                return (
-                                    <tr key={index} className="hover:bg-slate-50">
-                                        <td className="px-6 py-3 text-slate-500">{usersMap[n.id_usuario]?.nome || '-'}</td>
-                                        <td className="px-6 py-3 font-medium text-slate-900">{cliente?.razao_social || '-'}</td>
-                                        <td className="px-6 py-3 text-slate-500">{produto?.nome || '-'}</td>
-                                        <td className="px-6 py-3 text-slate-500">{n.modulo || '-'}</td>
-                                        <td className="px-6 py-3 text-slate-500 max-w-xs truncate" title={n.descricao}>{n.descricao || '-'}</td>
-                                        <td className="px-6 py-3">
-                                            <Badge variant={n.confirmado_sn ? 'success' : 'secondary'}>{n.confirmado_sn ? "Sim" : "Não"}</Badge>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                            {!loading && notificacoesFiltradas.length === 0 && (
+                            {csvData.map((c, index) => (
+                                <tr key={index} className="hover:bg-slate-50">
+                                    <td className="px-6 py-3 text-slate-500">{c["Vendedor"]}</td>
+                                    <td className="px-6 py-3 font-medium text-slate-900">{c["Cliente"]}</td>
+                                    <td className="px-6 py-3 text-slate-500">{c["Solucao"]}</td>
+                                    <td className="px-6 py-3 text-slate-500 max-w-xs truncate" title={c["Descricao"]}>{c["Descricao"]}</td>
+                                    <td className="px-6 py-3 text-slate-500">{c["Modulo"]}</td>
+                                    <td className="px-6 py-3">
+                                        <Badge variant={c["Confirmado"] === "Sim" ? 'success' : 'secondary'}>{c["Confirmado"]}</Badge>
+                                    </td>
+                                    <td className="px-6 py-3 text-slate-500">{c["Índice de Reajuste"]}</td>
+                                    <td className="px-6 py-3 text-slate-500">{c["Renovação Automática"]}</td>
+                                    <td className="px-6 py-3 text-slate-500">{c["ID Contrato"]}</td>
+                                </tr>
+                            ))}
+                            {!loading && csvData.length === 0 && (
                                 <tr>
-                                    <td colSpan="6" className="px-6 py-8 text-center text-slate-500">
+                                    <td colSpan="9" className="px-6 py-8 text-center text-slate-500">
                                         Nenhum registro encontrado.
                                     </td>
                                 </tr>

@@ -1,9 +1,10 @@
 import { useState, useMemo } from 'react';
-import { CSVLink } from 'react-csv';
 import { Download, Filter, Search, X } from 'lucide-react';
+import { exportToExcel } from '../../utils/excel';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 import Badge from '../ui/Badge';
+import { formatCurrency } from '../../utils/formatters';
 
 const ClientReport = ({
     clients,
@@ -108,13 +109,17 @@ const ClientReport = ({
         }).sort((a, b) => b["Valor Total dos Contratos"] - a["Valor Total dos Contratos"]);
     }, [filteredClients, contracts, usersMap, segmentsMap, groupsMap, clientClassificationsMap]);
 
+    const handleExport = () => {
+        exportToExcel(csvData, "relatorio_clientes");
+    };
+
     return (
         <div className="space-y-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-lg border border-slate-200 gap-4">
                 <div className="relative w-full md:w-64">
                     <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
                     <Input
-                        placeholder="Buscar cliente..."
+                        placeholder="Buscar cliente, razão social ou documento..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="pl-9 w-full"
@@ -124,9 +129,9 @@ const ClientReport = ({
                     <Button variant="outline" icon={Filter} onClick={() => setShowFilters(!showFilters)}>
                         Filtros
                     </Button>
-                    <CSVLink data={csvData} filename={"relatorio_clientes.csv"} className="btn-export">
-                        <Button variant="primary" icon={Download}>Exportar CSV</Button>
-                    </CSVLink>
+                    <Button variant="primary" icon={Download} onClick={handleExport}>
+                        Exportar Excel
+                    </Button>
                 </div>
             </div>
 
@@ -208,35 +213,45 @@ const ClientReport = ({
                 </div>
             )}
 
-            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-                <div className="overflow-x-auto">
+            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden relative">
+                <div className="overflow-x-auto max-h-[600px]">
                     <table className="w-full text-sm text-left">
-                        <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200">
+                        <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200 sticky top-0">
                             <tr>
-                                <th className="px-6 py-3">Razão Social</th>
                                 <th className="px-6 py-3">Nome Fantasia</th>
                                 <th className="px-6 py-3">CNPJ</th>
-                                <th className="px-6 py-3">Segmento</th>
                                 <th className="px-6 py-3">Grupo Econômico</th>
+                                <th className="px-6 py-3">Tipo</th>
                                 <th className="px-6 py-3">Status</th>
+                                <th className="px-6 py-3">Vendedor</th>
+                                <th className="px-6 py-3">VP</th>
+                                <th className="px-6 py-3">Segmento</th>
+                                <th className="px-6 py-3">Valor dos Contratos</th>
+                                <th className="px-6 py-3">Faturamento</th>
+                                <th className="px-6 py-3">Pertence Grupo</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
-                            {filteredClients.map(c => (
-                                <tr key={c.id} className="hover:bg-slate-50">
-                                    <td className="px-6 py-3 font-medium text-slate-900">{c.razao_social || '-'}</td>
-                                    <td className="px-6 py-3 text-slate-500">{c.nome_fantasia || '-'}</td>
-                                    <td className="px-6 py-3 text-slate-500 font-mono text-xs">{c.cpf_cnpj || '-'}</td>
-                                    <td className="px-6 py-3 text-slate-500">{segmentsMap && c.id_segmento ? segmentsMap[c.id_segmento]?.nome || '-' : '-'}</td>
-                                    <td className="px-6 py-3 text-slate-500">{groupsMap && c.id_grupo_economico ? groupsMap[c.id_grupo_economico]?.nome || '-' : '-'}</td>
+                            {csvData.map((cliente, index) => (
+                                <tr key={index} className="hover:bg-slate-50">
+                                    <td className="px-6 py-3 font-medium text-slate-900">{cliente["Nome Fantasia"] || '-'}</td>
+                                    <td className="px-6 py-3 text-slate-500 font-mono text-xs">{cliente["CPF/CNPJ"] || '-'}</td>
+                                    <td className="px-6 py-3 text-slate-500">{cliente["Grupo Econômico"] || '-'}</td>
+                                    <td className="px-6 py-3 text-slate-500">{cliente["Tipo"] || '-'}</td>
                                     <td className="px-6 py-3">
-                                        <Badge variant={(c.status || '').toLowerCase() === 'ativo' ? 'success' : 'secondary'}>{c.status}</Badge>
+                                        <Badge status={cliente["Status"]} />
                                     </td>
+                                    <td className="px-6 py-3 text-slate-500">{cliente["Usuário Responsável"] || '-'}</td>
+                                    <td className="px-6 py-3 text-slate-500">{cliente["VP"] || '-'}</td>
+                                    <td className="px-6 py-3 text-slate-500">{cliente["Segmento"] || '-'}</td>
+                                    <td className="px-6 py-3 text-slate-500">{formatCurrency(cliente["Valor Total dos Contratos"])}</td>
+                                    <td className="px-6 py-3 text-slate-500 capitalize">{cliente["Faturamento"] || '-'}</td>
+                                    <td className="px-6 py-3 text-slate-500">{cliente["Pertence Grupo Econômico"]}</td>
                                 </tr>
                             ))}
-                            {filteredClients.length === 0 && (
+                            {csvData.length === 0 && (
                                 <tr>
-                                    <td colSpan="6" className="px-6 py-8 text-center text-slate-500">
+                                    <td colSpan="11" className="px-6 py-8 text-center text-slate-500">
                                         Nenhum registro encontrado.
                                     </td>
                                 </tr>

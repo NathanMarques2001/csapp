@@ -93,6 +93,7 @@ const ClientDetails = () => {
     const [modalItemId, setModalItemId] = useState(null);
     const [modalContent, setModalContent] = useState('');
     const [savingModal, setSavingModal] = useState(false);
+    const [generatingInsight, setGeneratingInsight] = useState(false);
 
     const handleEditHistory = (type, id, conteudo) => {
         setModalType(type);

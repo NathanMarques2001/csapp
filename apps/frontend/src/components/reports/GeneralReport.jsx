@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
-import { CSVLink } from 'react-csv';
 import { Download, Filter, Search, X } from 'lucide-react';
+import { exportToExcel } from '../../utils/excel';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 import Badge from '../ui/Badge';
@@ -8,7 +8,7 @@ import Api from '../../utils/api';
 import { formatCurrency } from '../../utils/formatters';
 
 const GeneralReport = ({ clients, products, usersMap }) => {
-    const api = new Api();
+    const api = useMemo(() => new Api(), []);
     const [loading, setLoading] = useState(true);
     const [dados, setDados] = useState([]);
     
@@ -104,6 +104,10 @@ const GeneralReport = ({ clients, products, usersMap }) => {
 
     const totalValor = dadosFiltrados.reduce((acc, curr) => acc + parseFloat(curr.valor_contrato || 0), 0);
 
+    const handleExport = () => {
+        exportToExcel(csvData, "relatorio_geral");
+    };
+
     return (
         <div className="space-y-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-lg border border-slate-200 gap-4">
@@ -120,11 +124,9 @@ const GeneralReport = ({ clients, products, usersMap }) => {
                     <Button variant="outline" icon={Filter} onClick={() => setShowFilters(!showFilters)}>
                         Filtros
                     </Button>
-                    <CSVLink data={csvData} filename={"relatorio_geral.csv"} className="btn-export">
-                        <Button variant="primary" icon={Download} disabled={loading}>
-                            {loading ? "Carregando..." : "Exportar CSV"}
-                        </Button>
-                    </CSVLink>
+                    <Button variant="primary" icon={Download} onClick={handleExport} disabled={loading}>
+                        {loading ? "Carregando..." : "Exportar Excel"}
+                    </Button>
                 </div>
             </div>
 
@@ -143,7 +145,7 @@ const GeneralReport = ({ clients, products, usersMap }) => {
                         <label className="block text-xs font-medium text-slate-700 mb-1">Produto</label>
                         <select name="produto" value={filters.produto} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
                             <option value="">Todos</option>
-                            {produtos.map((p) => (
+                            {products && products.map((p) => (
                                 <option key={p.id} value={p.nome}>{p.nome}</option>
                             ))}
                         </select>
@@ -152,7 +154,7 @@ const GeneralReport = ({ clients, products, usersMap }) => {
                         <label className="block text-xs font-medium text-slate-700 mb-1">Vendedor</label>
                         <select name="vendedor" value={filters.vendedor} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
                             <option value="">Todos</option>
-                            {Object.values(usuariosMap || {}).map((u) => (
+                            {usersMap && Object.values(usersMap).map((u) => (
                                 <option key={u.id} value={u.nome}>{u.nome}</option>
                             ))}
                         </select>
@@ -161,7 +163,7 @@ const GeneralReport = ({ clients, products, usersMap }) => {
                         <label className="block text-xs font-medium text-slate-700 mb-1">VP</label>
                         <select name="vp" value={filters.vp} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
                             <option value="">Todos</option>
-                            {Object.values(usuariosMap || {}).map((u) => (
+                            {usersMap && Object.values(usersMap).map((u) => (
                                 <option key={u.id} value={u.nome}>{u.nome}</option>
                             ))}
                         </select>

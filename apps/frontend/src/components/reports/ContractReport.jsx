@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { CSVLink } from 'react-csv';
-import { Download, Filter, Search, X } from 'lucide-react';
+import { Download, Search, Filter, X } from 'lucide-react';
+import { exportToExcel } from '../../utils/excel';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 import Badge from '../ui/Badge';
@@ -98,17 +98,17 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
             const cliente = clientsMap[contrato.id_cliente];
             const vencimento = contrato.vencimentoCalculado;
 
-            if (filtros.mes_vencimento) {
+            if (filters.mes_vencimento) {
                 if (!vencimento || vencimento === "Indeterminado") return false;
-                if ((vencimento.getMonth() + 1) !== parseInt(filtros.mes_vencimento)) return false;
+                if ((vencimento.getMonth() + 1) !== parseInt(filters.mes_vencimento)) return false;
             }
 
-            if (filtros.ano_vencimento) {
-                if (filtros.ano_vencimento === "Indeterminado") {
+            if (filters.ano_vencimento) {
+                if (filters.ano_vencimento === "Indeterminado") {
                     if (vencimento !== "Indeterminado") return false;
                 } else {
                     if (!vencimento || vencimento === "Indeterminado") return false;
-                    if (vencimento.getFullYear() !== parseInt(filtros.ano_vencimento)) return false;
+                    if (vencimento.getFullYear() !== parseInt(filters.ano_vencimento)) return false;
                 }
             }
 
@@ -140,6 +140,11 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
                 vencimentoFormatado = vencimento.toLocaleDateString("pt-BR");
             }
 
+            let expiracaoFormatada = `${contrato.duracao} MESES`;
+            if (parseInt(contrato.duracao) === 12000) {
+              expiracaoFormatada = "Indeterminado";
+            }
+
             return {
                 "Solução": produto?.nome || "Desconhecido",
                 "Cliente": cliente?.nome_fantasia || "Desconhecido",
@@ -148,15 +153,12 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
                 "Status": contrato.status || "",
                 "Reajuste": formatDate(contrato.proximo_reajuste) || "",
                 "Data de Vencimento": vencimentoFormatado,
-                "Tipo Faturamento": contrato.tipo_faturamento || "",
-                "Renovação Automática": contrato.renovacao_automatica ? "Sim" : "Não",
-                "Vendedor": usersMap[cliente?.id_usuario]?.nome || "Desconhecido",
-                "Moeda": contrato.moeda || "",
-                "Índice Reajuste": contrato.nome_indice || "",
-                "Valor Base": contrato.valor_mensal || 0
+                "Expiração": expiracaoFormatada,
+                "Faturamento": contrato.tipo_faturamento || "",
+                "Valor": formatCurrency(contrato.valor_mensal || 0)
             };
         });
-    }, [filteredContracts, clientsMap, productsMap, usersMap, groupsMap]);
+    }, [filteredContracts, clientsMap, productsMap, groupsMap]);
 
     const totalValor = filteredContracts.reduce((acc, curr) => {
         let val = curr.valor_mensal;
@@ -164,13 +166,17 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
         return acc + parseFloat(val || 0);
     }, 0);
 
+    const handleExport = () => {
+        exportToExcel(csvData, "relatorio_contratos");
+    };
+
     return (
         <div className="space-y-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-lg border border-slate-200 gap-4">
                 <div className="relative w-full md:w-64">
                     <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
                     <Input
-                        placeholder="Buscar cliente ou solução..."
+                        placeholder="Buscar contrato..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="pl-9 w-full"
@@ -180,9 +186,9 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
                     <Button variant="outline" icon={Filter} onClick={() => setShowFilters(!showFilters)}>
                         Filtros
                     </Button>
-                    <CSVLink data={csvData} filename={"relatorio_contratos.csv"} className="btn-export">
-                        <Button variant="primary" icon={Download}>Exportar CSV</Button>
-                    </CSVLink>
+                    <Button variant="primary" icon={Download} onClick={handleExport}>
+                        Exportar Excel
+                    </Button>
                 </div>
             </div>
 
@@ -264,52 +270,51 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
                 </div>
             )}
 
-            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-                <div className="overflow-x-auto">
+            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden relative">
+                <div className="overflow-x-auto max-h-[600px]">
                     <table className="w-full text-sm text-left">
-                        <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200">
+                        <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200 sticky top-0">
                             <tr>
-                                <th className="px-6 py-3">Cliente</th>
                                 <th className="px-6 py-3">Solução</th>
+                                <th className="px-6 py-3">Cliente</th>
+                                <th className="px-6 py-3">Pertence Grupo Econômico</th>
                                 <th className="px-6 py-3">Grupo Econômico</th>
-                                <th className="px-6 py-3">Reajuste</th>
-                                <th className="px-6 py-3">Vencimento</th>
                                 <th className="px-6 py-3">Status</th>
+                                <th className="px-6 py-3">Reajuste</th>
+                                <th className="px-6 py-3">Data de Vencimento</th>
+                                <th className="px-6 py-3">Expiração</th>
+                                <th className="px-6 py-3">Faturamento</th>
                                 <th className="px-6 py-3 text-right">Valor</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
-                            {filteredContracts.map(c => {
-                                let vencimentoFormatado = "Indeterminado";
-                                if (c.vencimentoCalculado instanceof Date) {
-                                    vencimentoFormatado = c.vencimentoCalculado.toLocaleDateString("pt-BR");
-                                }
-
-                                return (
-                                    <tr key={c.id} className="hover:bg-slate-50">
-                                        <td className="px-6 py-3 font-medium text-slate-900">{clientsMap[c.id_cliente]?.nome_fantasia || '-'}</td>
-                                        <td className="px-6 py-3 text-slate-500">{productsMap[c.id_produto]?.nome || '-'}</td>
-                                        <td className="px-6 py-3 text-slate-500">{groupsMap[clientsMap[c.id_cliente]?.id_grupo_economico]?.nome || '-'}</td>
-                                        <td className="px-6 py-3 text-slate-500">{formatDate(c.proximo_reajuste) || '-'}</td>
-                                        <td className="px-6 py-3 text-slate-500">{vencimentoFormatado}</td>
-                                        <td className="px-6 py-3">
-                                            <Badge variant={(c.status || '').toLowerCase() === 'ativo' ? 'success' : 'secondary'}>{c.status}</Badge>
-                                        </td>
-                                        <td className="px-6 py-3 text-right font-medium text-slate-700">{formatCurrency(c.valor_mensal)}</td>
-                                    </tr>
-                                );
-                            })}
-                            {filteredContracts.length === 0 && (
+                            {csvData.map((c, index) => (
+                                <tr key={index} className="hover:bg-slate-50">
+                                    <td className="px-6 py-3 text-slate-500">{c["Solução"]}</td>
+                                    <td className="px-6 py-3 font-medium text-slate-900">{c["Cliente"]}</td>
+                                    <td className="px-6 py-3 text-slate-500">{c["Pertence Grupo Econômico"]}</td>
+                                    <td className="px-6 py-3 text-slate-500">{c["Grupo Econômico"]}</td>
+                                    <td className="px-6 py-3">
+                                        <Badge status={c["Status"]} />
+                                    </td>
+                                    <td className="px-6 py-3 text-slate-500">{c["Reajuste"]}</td>
+                                    <td className="px-6 py-3 text-slate-500">{c["Data de Vencimento"]}</td>
+                                    <td className="px-6 py-3 text-slate-500">{c["Expiração"]}</td>
+                                    <td className="px-6 py-3 text-slate-500 capitalize">{c["Faturamento"]}</td>
+                                    <td className="px-6 py-3 text-right font-medium text-slate-700">{c["Valor"]}</td>
+                                </tr>
+                            ))}
+                            {csvData.length === 0 && (
                                 <tr>
-                                    <td colSpan="7" className="px-6 py-8 text-center text-slate-500">
+                                    <td colSpan="10" className="px-6 py-8 text-center text-slate-500">
                                         Nenhum registro encontrado.
                                     </td>
                                 </tr>
                             )}
                         </tbody>
-                        <tfoot className="bg-slate-50 font-bold text-slate-900">
+                        <tfoot className="bg-slate-50 font-bold text-slate-900 sticky bottom-0 border-t border-slate-200">
                             <tr>
-                                <td colSpan="6" className="px-6 py-3 text-right">Total:</td>
+                                <td colSpan="9" className="px-6 py-3 text-right">Total:</td>
                                 <td className="px-6 py-3 text-right">{formatCurrency(totalValor)}</td>
                             </tr>
                         </tfoot>

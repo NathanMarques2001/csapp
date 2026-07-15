@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const HistoricoController = require("../controllers/HistoricoController");
-const authMiddleware = require("../middlewares/autenticacao");
+const authMiddleware = require("../middlewares/auth");
 
 const routes = new Router();
 

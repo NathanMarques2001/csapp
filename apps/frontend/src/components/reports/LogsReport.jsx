@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
-import { CSVLink } from 'react-csv';
 import { Download, Search, Filter, X } from 'lucide-react';
+import { exportToExcel } from '../../utils/excel';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
 import Api from '../../utils/api';
@@ -146,6 +146,10 @@ const LogsReport = ({ contracts, clients, products }) => {
         return exportData;
     }, [logsFiltrados, contratosMap, clientesMap, produtosMap]);
 
+    const handleExport = () => {
+        exportToExcel(dadosExportacao, "relatorio_logs");
+    };
+
     return (
         <div className="space-y-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-lg border border-slate-200 gap-4">
@@ -162,11 +166,9 @@ const LogsReport = ({ contracts, clients, products }) => {
                     <Button variant="outline" icon={Filter} onClick={() => setShowFilters(!showFilters)}>
                         Filtros
                     </Button>
-                    <CSVLink data={dadosExportacao} filename={"relatorio_logs.csv"} className="btn-export">
-                        <Button variant="primary" icon={Download} disabled={loading}>
-                            {loading ? "Carregando..." : "Exportar CSV"}
-                        </Button>
-                    </CSVLink>
+                    <Button variant="primary" icon={Download} onClick={handleExport} disabled={loading}>
+                        {loading ? "Carregando..." : "Exportar Excel"}
+                    </Button>
                 </div>
             </div>
 

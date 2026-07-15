@@ -29,6 +29,7 @@ const Reports = () => {
         categories: [],
         clientClassifications: []
     });
+    const [generatingReport, setGeneratingReport] = useState(null);
 
     useEffect(() => {
         const fetchAll = async () => {
@@ -93,6 +94,14 @@ const Reports = () => {
         { id: 'logs', title: 'Logs do Sistema', icon: Activity, color: 'text-slate-600', bg: 'bg-slate-100', component: LogsReport },
     ];
 
+    const handleSelectReport = (id) => {
+        setGeneratingReport(id);
+        setTimeout(() => {
+            setSelectedReport(id);
+            setGeneratingReport(null);
+        }, 50); // delay curto para permitir que a UI do "Carregando" renderize
+    };
+
     const renderSelectedReport = () => {
         if (!selectedReport) return null;
 
@@ -135,9 +144,15 @@ const Reports = () => {
                 {reportTypes.map((rep) => (
                     <Card
                         key={rep.id}
-                        className={`p-4 cursor-pointer hover:border-teal-500 transition-all border-l-4 hover:shadow-md group ${selectedReport === rep.id ? 'border-teal-500 ring-2 ring-teal-100' : 'border-l-transparent'}`}
-                        onClick={() => setSelectedReport(rep.id)}
+                        className={`p-4 cursor-pointer hover:border-teal-500 transition-all border-l-4 hover:shadow-md group relative overflow-hidden ${selectedReport === rep.id ? 'border-teal-500 ring-2 ring-teal-100' : 'border-l-transparent'}`}
+                        onClick={() => handleSelectReport(rep.id)}
                     >
+                        {generatingReport === rep.id && (
+                            <div className="absolute inset-0 bg-white/80 z-10 flex flex-col items-center justify-center backdrop-blur-[1px]">
+                                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-teal-600 mb-1"></div>
+                                <span className="text-xs font-medium text-teal-700">Gerando...</span>
+                            </div>
+                        )}
                         <div className="flex items-center gap-3">
                             <div className={`p-2.5 rounded-lg ${rep.bg}`}>
                                 <rep.icon className={`w-5 h-5 ${rep.color}`} />
