@@ -44,7 +44,6 @@ passport.use(new OIDCStrategy({
     scope: microsoftConfig.scope,
     loggingLevel: 'info',
     logger: console,
-    prompt: 'select_account',
     passReqToCallback: false
 },
     async (iss, sub, profile, accessToken, refreshToken, done) => {

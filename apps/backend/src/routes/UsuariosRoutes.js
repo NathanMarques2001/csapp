@@ -10,7 +10,6 @@ router.post('/', UsuarioController.store);
 // 1. Rota de início: O frontend redireciona o usuário para cá
 router.get('/login-microsoft',
     passport.authenticate('azuread-openidconnect', {
-        prompt: 'select_account',
         failureRedirect: '/login-failure'
     })
 );
