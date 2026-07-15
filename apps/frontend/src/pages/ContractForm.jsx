@@ -30,6 +30,39 @@ const removeAcentos = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 };
 
+const SectionTitle = ({ title }) => (
+    <h3 className="text-lg font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4 mt-6 first:mt-0">
+        {title}
+    </h3>
+);
+
+const FormGroup = ({ label, required, children }) => (
+    <div className="space-y-1">
+        <label className="block text-sm font-medium text-slate-700">
+            {label} {required && <span className="text-rose-500">*</span>}
+        </label>
+        {children}
+    </div>
+);
+
+const Input = ({ ...props }) => (
+    <input
+        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+        focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 disabled:text-slate-500 transition-colors"
+        {...props}
+    />
+);
+
+const Select = ({ children, ...props }) => (
+    <select
+        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+        focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 disabled:text-slate-500 transition-colors"
+        {...props}
+    >
+        {children}
+    </select>
+);
+
 const EMPTY_CONTRACT_FORM = {
     id_cliente: "",
     id_produto: "",
@@ -39,9 +72,9 @@ const EMPTY_CONTRACT_FORM = {
     proximo_reajuste: "",
     duracao: "",
     valor_mensal: "",
+    valor_antigo: "",
     quantidade: "",
     data_inicio: "",
-    email_envio: "",
     descricao: "",
     link_contrato: "",
     tipo_faturamento: "",
@@ -119,6 +152,7 @@ const ContractForm = () => {
                             proximo_reajuste: formatDateForInput(data.proximo_reajuste),
                             duracao: data.duracao,
                             valor_mensal: data.valor_mensal,
+                            valor_antigo: data.valor_antigo || "",
                             quantidade: data.quantidade,
                             data_inicio: formatDateForInput(data.data_inicio),
                             email_envio: data.email_envio || "",
@@ -227,38 +261,7 @@ const ContractForm = () => {
 
     if (loading) return <Skeleton className="h-96 w-full" />;
 
-    const SectionTitle = ({ title }) => (
-        <h3 className="text-lg font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4 mt-6 first:mt-0">
-            {title}
-        </h3>
-    );
 
-    const FormGroup = ({ label, required, children }) => (
-        <div className="space-y-1">
-            <label className="block text-sm font-medium text-slate-700">
-                {label} {required && <span className="text-rose-500">*</span>}
-            </label>
-            {children}
-        </div>
-    );
-
-    const Input = ({ ...props }) => (
-        <input
-            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 disabled:text-slate-500 transition-colors"
-            {...props}
-        />
-    );
-
-    const Select = ({ children, ...props }) => (
-        <select
-            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 disabled:text-slate-500 transition-colors"
-            {...props}
-        >
-            {children}
-        </select>
-    );
 
     return (
         <div className="max-w-5xl mx-auto space-y-6 pb-20">
@@ -292,9 +295,9 @@ const ContractForm = () => {
                         <Card className="p-6">
                             <SectionTitle title="Informações Gerais" />
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="md:col-span-2">
+                                <div className="md:col-span-1">
                                     <FormGroup label="Cliente" required>
-                                        <Select name="id_cliente" value={formData.id_cliente} onChange={handleChange} required disabled={mode === 'edicao'}>
+                                        <Select name="id_cliente" value={formData.id_cliente} onChange={handleChange} required>
                                             <option value="">Selecione o cliente...</option>
                                             {clients.map(c => (
                                                 <option key={c.id} value={c.id}>
@@ -302,6 +305,14 @@ const ContractForm = () => {
                                                 </option>
                                             ))}
                                         </Select>
+                                    </FormGroup>
+                                </div>
+                                <div className="md:col-span-1">
+                                    <FormGroup label="CPF/CNPJ">
+                                        <Input
+                                            value={clients.find(c => c.id === Number(formData.id_cliente))?.cpf_cnpj || ''}
+                                            disabled
+                                        />
                                     </FormGroup>
                                 </div>
 
@@ -393,12 +404,21 @@ const ContractForm = () => {
                                         <option value="anual">Anual</option>
                                     </Select>
                                 </FormGroup>
+
+                                <FormGroup label="Valor Anterior">
+                                    <Input
+                                        name="valor_antigo"
+                                        type="number"
+                                        step="0.01"
+                                        value={formData.valor_antigo}
+                                        disabled
+                                        readOnly
+                                        placeholder="0.00"
+                                    />
+                                </FormGroup>
                             </div>
                             <SectionTitle title="Detalhes Adicionais" />
                             <div className="grid grid-cols-1 gap-6">
-                                <FormGroup label="Email de Envio">
-                                    <Input name="email_envio" type="email" value={formData.email_envio} onChange={handleChange} placeholder="email@financeiro.com" />
-                                </FormGroup>
 
                                 <FormGroup label="Link do Contrato (SharePoint)">
                                     <Input name="link_contrato" value={formData.link_contrato} onChange={handleChange} placeholder="https://..." />

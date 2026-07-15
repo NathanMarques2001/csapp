@@ -96,7 +96,7 @@ module.exports = {
 
   async update(req, res) {
     try {
-      const { id_cliente, id_produto, id_faturado, dia_vencimento, indice_reajuste, nome_indice, proximo_reajuste, status, duracao, valor_mensal, quantidade, descricao, data_inicio } = req.body;
+      const { id_cliente, id_produto, id_faturado, dia_vencimento, indice_reajuste, nome_indice, proximo_reajuste, status, duracao, valor_mensal, quantidade, descricao, data_inicio, tipo_faturamento, link_contrato, email_envio, renovacao_automatica } = req.body;
       const { id } = req.params;
       //const containsLetters = /[a-zA-Z]/;
 
@@ -110,7 +110,13 @@ module.exports = {
       //   return res.status(400).send({ message: 'O campo quantidade só aceita números!' });
       // }
 
-      await Contrato.update({ id_cliente, id_produto, id_faturado, dia_vencimento, indice_reajuste, nome_indice, proximo_reajuste, status, duracao, valor_mensal, quantidade, descricao, data_inicio }, { where: { id: id } });
+      let valor_antigo_update = contrato.valor_antigo;
+      
+      if (valor_mensal !== undefined && Number(valor_mensal) !== Number(contrato.valor_mensal)) {
+          valor_antigo_update = contrato.valor_mensal;
+      }
+
+      await Contrato.update({ id_cliente, id_produto, id_faturado, dia_vencimento, indice_reajuste, nome_indice, proximo_reajuste, status, duracao, valor_mensal, quantidade, descricao, data_inicio, tipo_faturamento, link_contrato, email_envio, renovacao_automatica, valor_antigo: valor_antigo_update }, { where: { id: id } });
 
       await classifyCustomers();
 

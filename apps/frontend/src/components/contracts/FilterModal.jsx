@@ -39,6 +39,11 @@ const FilterModal = ({ isOpen, onClose, onApply, initialFilters, clients, produc
 
     if (!isOpen) return null;
 
+    const truncate = (str, n = 50) => {
+        if (!str) return "";
+        return str.length > n ? str.slice(0, n - 1) + '…' : str;
+    };
+
     // 2. Isolamos o JSX do modal numa variável e aumentamos o z-index
     const modalContent = (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
@@ -64,7 +69,7 @@ const FilterModal = ({ isOpen, onClose, onApply, initialFilters, clients, produc
                             <option value="">Selecione...</option>
                             {Object.values(clients).map((client) => (
                                 <option key={client.id} value={client.razao_social}>
-                                    {client.razao_social}
+                                    {truncate(client.razao_social)}
                                 </option>
                             ))}
                         </select>
@@ -81,7 +86,7 @@ const FilterModal = ({ isOpen, onClose, onApply, initialFilters, clients, produc
                             <option value="">Selecione...</option>
                             {Object.values(clients).map((client) => (
                                 <option key={client.id} value={client.nome_fantasia}>
-                                    {client.nome_fantasia}
+                                    {truncate(client.nome_fantasia)}
                                 </option>
                             ))}
                         </select>
