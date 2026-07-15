@@ -58,18 +58,18 @@ export function useFormGuard({
     }, [isDirty]);
 
     const confirmSave = useCallback(async () => {
+        if (!isCreate && !isDirty) return true;
         return confirm(confirmPresets.save(entityLabel, isCreate));
-    }, [confirm, entityLabel, isCreate]);
+    }, [confirm, entityLabel, isCreate, isDirty]);
 
     const confirmLeave = useCallback(async () => {
         if (!isDirty) return true;
         return confirm(confirmPresets.discardChanges());
     }, [confirm, isDirty]);
 
-    const requestLeave = useCallback(async () => {
-        const canLeave = await confirmLeave();
-        if (canLeave) goBack();
-    }, [confirmLeave, goBack]);
+    const requestLeave = useCallback(() => {
+        goBack();
+    }, [goBack]);
 
     const onSaveSuccess = useCallback(() => {
         setIsSaved(true);
@@ -92,8 +92,9 @@ export function useModalGuard({ formData, baseline, onClose, entityLabel = 'este
     }, [isDirty, confirm, onClose]);
 
     const confirmSave = useCallback(async () => {
+        if (!isCreate && !isDirty) return true;
         return confirm(confirmPresets.save(entityLabel, isCreate));
-    }, [confirm, entityLabel, isCreate]);
+    }, [confirm, entityLabel, isCreate, isDirty]);
 
     return { isDirty, handleClose, confirmSave };
 }

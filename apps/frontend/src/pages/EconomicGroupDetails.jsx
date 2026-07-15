@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
     Edit2, Plus, ChevronRight, FileText, CheckCircle, XCircle,
-    Package, Factory, Building, Power
+    Package, Factory, Building, Power, Trash2
 } from 'lucide-react';
 import Api from '../utils/api';
 import { formatCurrency, formatDate, formatCpfCnpj } from '../utils/formatters';
@@ -12,6 +12,63 @@ import Badge from '../components/ui/Badge';
 import Skeleton from '../components/ui/Skeleton';
 import ContactCard from '../components/ui/ContactCard';
 import { GroupFormModal } from '../components/settings/SettingsModals';
+import { useModalGuard } from '../hooks/useFormGuard';
+
+const HistoryModalComponent = ({ modalType, modalItemId, initialContent, onClose, onSave, savingModal }) => {
+    const [conteudo, setConteudo] = useState(initialContent || '');
+    
+    const { handleClose, confirmSave } = useModalGuard({
+        formData: conteudo,
+        baseline: initialContent || '',
+        onClose,
+        entityLabel: 'o registro de histórico',
+        isCreate: !modalItemId
+    });
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+            <div className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200">
+                <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                    <h3 className="text-lg font-bold text-slate-800">
+                        {modalType === 'comercial' ? 'Editar Contato Comercial' : modalType === 'tecnico' ? 'Editar Contato Técnico' : 'Editar Fato Importante'}
+                    </h3>
+                    <button onClick={handleClose} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                        <XCircle size={20} />
+                    </button>
+                </div>
+                <div className="p-6 space-y-4">
+                    <div className="space-y-2">
+                        <label className="block text-sm font-medium text-slate-700">Conteúdo do Registro</label>
+                        <textarea
+                            autoFocus
+                            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 resize-none"
+                            rows="4"
+                            value={conteudo}
+                            onChange={(e) => setConteudo(e.target.value)}
+                            placeholder="Digite os detalhes..."
+                        />
+                    </div>
+                    <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                        <Button variant="outline" onClick={handleClose}>
+                            Cancelar
+                        </Button>
+                        <Button 
+                            className="bg-teal-600 text-white hover:bg-teal-700 shadow-sm"
+                            onClick={async () => {
+                                if (!conteudo.trim()) return;
+                                if (!(await confirmSave())) return;
+                                onSave(conteudo);
+                            }}
+                            disabled={savingModal || !conteudo.trim()}
+                        >
+                            {savingModal ? 'Salvando...' : 'Salvar Registro'}
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 import BackButton from '../components/ui/BackButton';
 import { useConfirm } from '../context/ConfirmContext';
 import { confirmPresets } from '../utils/confirmPresets';
@@ -71,6 +128,45 @@ const EconomicGroupDetails = () => {
     const [manufacturers, setManufacturers] = useState({});
     const [classifications, setClassifications] = useState({});
 
+    const [contatosComerciais, setContatosComerciais] = useState([]);
+    const [contatosTecnicos, setContatosTecnicos] = useState([]);
+    const [fatosImportantes, setFatosImportantes] = useState([]);
+
+    const [modalType, setModalType] = useState(null); // 'comercial', 'tecnico', 'fato'
+    const [modalItemId, setModalItemId] = useState(null);
+    const [modalContent, setModalContent] = useState('');
+    const [savingModal, setSavingModal] = useState(false);
+
+    const handleEditHistory = (type, id, conteudo) => {
+        setModalType(type);
+        setModalItemId(id);
+        setModalContent(conteudo);
+    };
+
+    const handleDeleteHistory = async (type, idItem) => {
+        const endpoint = type === 'comercial' ? '/contatos-comerciais' 
+                       : type === 'tecnico' ? '/contatos-tecnicos' 
+                       : '/fatos-importantes';
+        
+        const confirmed = await confirm({
+            title: 'Excluir registro',
+            message: 'Tem certeza que deseja excluir este registro do histórico?',
+            confirmText: 'Excluir',
+            cancelText: 'Cancelar',
+            variant: 'danger'
+        });
+        
+        if (confirmed) {
+            try {
+                await api.delete(`${endpoint}/${idItem}`);
+                await fetchData();
+            } catch (e) {
+                console.error(e);
+                alert('Erro ao excluir registro.');
+            }
+        }
+    };
+
     const clientsById = useMemo(
         () => clients.reduce((acc, c) => ({ ...acc, [c.id]: c }), {}),
         [clients]
@@ -109,6 +205,19 @@ const EconomicGroupDetails = () => {
 
             const classMap = (classificationsRes.classificacoes || []).reduce((acc, c) => ({ ...acc, [c.id]: c.nome }), {});
             setClassifications(classMap);
+
+            // Fetch history for all units
+            const comerciaisPromises = groupClients.map(c => api.get(`/contatos-comerciais/${c.id}`).then(res => (res.contatos_comerciais || []).map(item => ({ ...item, cliente_nome: c.nome_fantasia }))).catch(() => []));
+            const tecnicosPromises = groupClients.map(c => api.get(`/contatos-tecnicos/${c.id}`).then(res => (res.contatos_tecnicos || []).map(item => ({ ...item, cliente_nome: c.nome_fantasia }))).catch(() => []));
+            const fatosPromises = groupClients.map(c => api.get(`/fatos-importantes/${c.id}`).then(res => (res.fatos_importantes || []).map(item => ({ ...item, cliente_nome: c.nome_fantasia }))).catch(() => []));
+
+            const comerciaisResults = await Promise.all(comerciaisPromises);
+            const tecnicosResults = await Promise.all(tecnicosPromises);
+            const fatosResults = await Promise.all(fatosPromises);
+
+            setContatosComerciais(comerciaisResults.flat());
+            setContatosTecnicos(tecnicosResults.flat());
+            setFatosImportantes(fatosResults.flat());
         } catch (e) {
             console.error(e);
         } finally {
@@ -234,11 +343,10 @@ const EconomicGroupDetails = () => {
                         <button
                             key={tab.key}
                             onClick={() => setActiveTab(tab.key)}
-                            className={`pb-3 text-sm font-medium transition-colors whitespace-nowrap ${
-                                activeTab === tab.key
-                                    ? 'text-teal-600 border-b-2 border-teal-600'
-                                    : 'text-slate-500 hover:text-slate-700'
-                            }`}
+                            className={`pb-3 text-sm font-medium transition-colors whitespace-nowrap ${activeTab === tab.key
+                                ? 'text-teal-600 border-b-2 border-teal-600'
+                                : 'text-slate-500 hover:text-slate-700'
+                                }`}
                         >
                             {tab.label}
                         </button>
@@ -250,7 +358,7 @@ const EconomicGroupDetails = () => {
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <Card className="p-6">
-                            <h3 className="text-sm font-medium text-slate-500 mb-2">Receita Anual Recorrente (ARR)</h3>
+                            <h3 className="text-sm font-medium text-slate-500 mb-2">Receita Anual Recorrente (RAR)</h3>
                             <p className="text-2xl font-bold text-slate-900">{formatCurrency(totalARR)}</p>
                         </Card>
                         <Card className="p-6">
@@ -276,7 +384,7 @@ const EconomicGroupDetails = () => {
                             </div>
                         </Card>
                         <Card className="p-6">
-                            <h3 className="text-sm font-medium text-slate-500 mb-2">Receita Mensal Recorrente (MRR)</h3>
+                            <h3 className="text-sm font-medium text-slate-500 mb-2">Receita Mensal Recorrente (RMR)</h3>
                             <p className="text-2xl font-bold text-slate-900">{formatCurrency(totalMRR)}</p>
                         </Card>
                         <Card className="p-6">
@@ -721,24 +829,125 @@ const EconomicGroupDetails = () => {
             )}
 
             {activeTab === 'histórico' && (
-                <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                        <h3 className="font-bold text-lg text-slate-900">Fatos Relevantes</h3>
-                        <Button variant="outline" size="sm" icon={Plus}>Novo Fato</Button>
-                    </div>
-                    <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
-                        <div className="flex gap-4">
-                            <div className="mt-1">
-                                <div className="w-2 h-2 rounded-full bg-slate-300 mt-2" />
-                            </div>
-                            <div>
-                                <p className="text-sm font-medium text-slate-900">Grupo econômico cadastrado no sistema</p>
-                                <p className="text-xs text-slate-500 mt-1">Registro inicial</p>
-                            </div>
+                <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-300">
+                    {/* Contato Comercial */}
+                    <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                            <h3 className="font-bold text-lg text-slate-900">Contato Comercial</h3>
                         </div>
+                        {contatosComerciais.length === 0 ? (
+                            <div className="bg-slate-50 rounded-lg p-6 text-center text-slate-500 border border-dashed border-slate-300">
+                                Nenhum contato comercial encontrado nas unidades.
+                            </div>
+                        ) : (
+                            <div className="bg-white rounded-lg border border-slate-200 shadow-sm divide-y divide-slate-100">
+                                {contatosComerciais.map((item, index) => (
+                                    <div key={`comercial-${item.id}-${index}`} className="group p-4 flex gap-4 items-start hover:bg-slate-50 transition-colors">
+                                        <div className="mt-1">
+                                            <div className="w-2 h-2 rounded-full bg-teal-500 mt-1.5"></div>
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="flex gap-4 text-xs text-slate-500 mb-2">
+                                                {item.createdAt && <span>Criado: {new Date(item.createdAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
+                                                {item.updatedAt && item.updatedAt !== item.createdAt && <span>Última Alteração: {new Date(item.updatedAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
+                                            </div>
+                                            <p className="text-sm text-slate-900 whitespace-pre-wrap">{item.conteudo}</p>
+                                            {item.cliente_nome && (
+                                                <p className="text-xs text-slate-500 mt-2 font-medium">Unidade: {item.cliente_nome}</p>
+                                            )}
+                                        </div>
+                                        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button onClick={() => handleEditHistory('comercial', item.id, item.conteudo)} className="text-slate-400 hover:text-teal-600 transition-colors p-1" title="Editar">
+                                                <Edit2 size={16} />
+                                            </button>
+                                            <button onClick={() => handleDeleteHistory('comercial', item.id)} className="text-slate-400 hover:text-red-600 transition-colors p-1" title="Excluir">
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
-                    <div className="bg-slate-50 rounded-lg p-8 text-center text-slate-500 border border-dashed border-slate-300">
-                        Nenhum outro registro de histórico encontrado.
+
+                    {/* Contato Técnico */}
+                    <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                            <h3 className="font-bold text-lg text-slate-900">Contato Técnico</h3>
+                        </div>
+                        {contatosTecnicos.length === 0 ? (
+                            <div className="bg-slate-50 rounded-lg p-6 text-center text-slate-500 border border-dashed border-slate-300">
+                                Nenhum contato técnico encontrado nas unidades.
+                            </div>
+                        ) : (
+                            <div className="bg-white rounded-lg border border-slate-200 shadow-sm divide-y divide-slate-100">
+                                {contatosTecnicos.map((item, index) => (
+                                    <div key={`tecnico-${item.id}-${index}`} className="group p-4 flex gap-4 items-start hover:bg-slate-50 transition-colors">
+                                        <div className="mt-1">
+                                            <div className="w-2 h-2 rounded-full bg-teal-500 mt-1.5"></div>
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="flex gap-4 text-xs text-slate-500 mb-2">
+                                                {item.createdAt && <span>Criado: {new Date(item.createdAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
+                                                {item.updatedAt && item.updatedAt !== item.createdAt && <span>Última Alteração: {new Date(item.updatedAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
+                                            </div>
+                                            <p className="text-sm text-slate-900 whitespace-pre-wrap">{item.conteudo}</p>
+                                            {item.cliente_nome && (
+                                                <p className="text-xs text-slate-500 mt-2 font-medium">Unidade: {item.cliente_nome}</p>
+                                            )}
+                                        </div>
+                                        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button onClick={() => handleEditHistory('tecnico', item.id, item.conteudo)} className="text-slate-400 hover:text-teal-600 transition-colors p-1" title="Editar">
+                                                <Edit2 size={16} />
+                                            </button>
+                                            <button onClick={() => handleDeleteHistory('tecnico', item.id)} className="text-slate-400 hover:text-red-600 transition-colors p-1" title="Excluir">
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Fatos Importantes */}
+                    <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                            <h3 className="font-bold text-lg text-slate-900">Fatos Importantes</h3>
+                        </div>
+                        {fatosImportantes.length === 0 ? (
+                            <div className="bg-slate-50 rounded-lg p-6 text-center text-slate-500 border border-dashed border-slate-300">
+                                Nenhum fato importante encontrado nas unidades.
+                            </div>
+                        ) : (
+                            <div className="bg-white rounded-lg border border-slate-200 shadow-sm divide-y divide-slate-100">
+                                {fatosImportantes.map((item, index) => (
+                                    <div key={`fato-${item.id}-${index}`} className="group p-4 flex gap-4 items-start hover:bg-slate-50 transition-colors">
+                                        <div className="mt-1">
+                                            <div className="w-2 h-2 rounded-full bg-teal-500 mt-1.5"></div>
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="flex gap-4 text-xs text-slate-500 mb-2">
+                                                {item.createdAt && <span>Criado: {new Date(item.createdAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
+                                                {item.updatedAt && item.updatedAt !== item.createdAt && <span>Última Alteração: {new Date(item.updatedAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
+                                            </div>
+                                            <p className="text-sm text-slate-900 whitespace-pre-wrap">{item.conteudo}</p>
+                                            {item.cliente_nome && (
+                                                <p className="text-xs text-slate-500 mt-2 font-medium">Unidade: {item.cliente_nome}</p>
+                                            )}
+                                        </div>
+                                        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button onClick={() => handleEditHistory('fato', item.id, item.conteudo)} className="text-slate-400 hover:text-teal-600 transition-colors p-1" title="Editar">
+                                                <Edit2 size={16} />
+                                            </button>
+                                            <button onClick={() => handleDeleteHistory('fato', item.id)} className="text-slate-400 hover:text-red-600 transition-colors p-1" title="Excluir">
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
@@ -767,6 +976,35 @@ const EconomicGroupDetails = () => {
                     </Button>
                 </div>
             </div>
+
+            {/* Modal Histórico (Apenas Edição no Grupo Econômico) */}
+            {modalType && (
+                <HistoryModalComponent
+                    modalType={modalType}
+                    modalItemId={modalItemId}
+                    initialContent={modalContent}
+                    savingModal={savingModal}
+                    onClose={() => { setModalType(null); setModalItemId(null); setModalContent(''); }}
+                    onSave={async (conteudo) => {
+                        setSavingModal(true);
+                        const endpoint = modalType === 'comercial' ? '/contatos-comerciais' 
+                                       : modalType === 'tecnico' ? '/contatos-tecnicos' 
+                                       : '/fatos-importantes';
+                        try {
+                            await api.put(`${endpoint}/${modalItemId}`, { conteudo });
+                            setModalType(null);
+                            setModalItemId(null);
+                            setModalContent('');
+                            await fetchData(); 
+                        } catch (e) {
+                            console.error(e);
+                            alert('Erro ao salvar registro.');
+                        } finally {
+                            setSavingModal(false);
+                        }
+                    }}
+                />
+            )}
 
             {editModalOpen && (
                 <GroupFormModal
