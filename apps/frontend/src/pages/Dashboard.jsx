@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Calendar, ChevronRight, Building2, Users, FileText,
-    RefreshCw, BarChart3, Package
+    RefreshCw, BarChart3, Package, Bell, Activity, AlertTriangle
 } from 'lucide-react';
 import Api from '../utils/api';
 import { formatCurrency, formatDate } from '../utils/formatters';
@@ -30,25 +30,41 @@ const Dashboard = () => {
     const [produtos, setProdutos] = useState([]);
     const [classifications, setClassifications] = useState([]);
     const [groups, setGroups] = useState([]);
+    const [logs, setLogs] = useState([]);
+    const [notificacoes, setNotificacoes] = useState([]);
+    const [errosReajuste, setErrosReajuste] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const api = new Api();
-                const [contratosRes, clientesRes, produtosRes, classificationsRes, groupsRes] = await Promise.all([
+                const [contratosRes, clientesRes, produtosRes, classificationsRes, groupsRes, logsRes, notifRes] = await Promise.all([
                     api.get('/contratos'),
                     api.get('/clientes'),
                     api.get('/produtos'),
                     api.get('/classificacoes-clientes'),
                     api.get('/grupos-economicos'),
+                    api.get('/logs').catch(() => ({ logs: [] })),
+                    api.get('/notificacoes/ativas').catch(() => ({ notificacoes: [] }))
                 ]);
+
+                // Optionally fetch erros de reajuste se o endpoint existir. Se não, pegamos vazio.
+                let errosRes = { erros: [] };
+                try {
+                    errosRes = await api.get('/reajusta-contrato/erros');
+                } catch (e) {
+                    // Ignora se não existir
+                }
 
                 setContratos(contratosRes.contratos || []);
                 setClientes(clientesRes.clientes || []);
                 setProdutos(produtosRes.produtos || []);
                 setClassifications(classificationsRes.classificacoes || []);
                 setGroups(groupsRes.grupoEconomico || []);
+                setLogs((logsRes.logs || logsRes || []).slice(0, 10)); // Top 10 recentes
+                setNotificacoes(notifRes.notificacoes || notifRes || []);
+                setErrosReajuste(errosRes.erros || []);
             } catch (error) {
                 console.error('Erro ao carregar dashboard:', error);
             } finally {
@@ -142,6 +158,106 @@ const Dashboard = () => {
                         </div>
                     </div>
                 ))}
+            </div>
+
+            {/* Alerta de Erros de Reajuste */}
+            {errosReajuste.length > 0 && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3 shadow-sm animate-in fade-in slide-in-from-top-2">
+                    <AlertTriangle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                    <div>
+                        <h3 className="text-sm font-semibold text-red-800">
+                            Atenção: Falha no reajuste automático de {errosReajuste.length} contrato(s)
+                        </h3>
+                        <p className="text-xs text-red-600 mt-1">
+                            Alguns contratos não puderam ser reajustados devido à ausência de índice no sistema para o mês atual. 
+                            Por favor, verifique o módulo de Reajustes.
+                        </p>
+                    </div>
+                </div>
+            )}
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Notificações Pendentes */}
+                <Card
+                    title="Notificações Pendentes"
+                    className="lg:col-span-2 border-l-4 border-l-rose-400"
+                    action={
+                        <Button variant="ghost" className="text-xs" onClick={() => navigate('/relatorios')}>
+                            Ver todas
+                        </Button>
+                    }
+                >
+                    <div className="flex items-center gap-2 text-xs text-slate-400 mb-4">
+                        <Bell className="w-4 h-4" />
+                        Aguardando confirmação
+                    </div>
+                    {notificacoes.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-40 text-slate-400">
+                            <Bell className="w-8 h-8 mb-2 opacity-40" />
+                            <p className="text-sm text-center">Nenhuma notificação pendente.</p>
+                        </div>
+                    ) : (
+                        <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+                            {notificacoes.slice(0, 5).map(n => {
+                                const contrato = contratos.find(c => c.id === n.id_contrato);
+                                const cliente = clientes.find(c => c.id === contrato?.id_cliente);
+                                return (
+                                    <div
+                                        key={n.id}
+                                        className="flex flex-col p-3 rounded-lg bg-slate-50 hover:bg-rose-50/40 cursor-pointer text-sm transition-colors border border-slate-100"
+                                        onClick={() => navigate('/relatorios')}
+                                    >
+                                        <div className="flex justify-between items-start mb-1">
+                                            <span className="font-medium text-slate-900">{cliente?.nome_fantasia || 'Cliente Desconhecido'}</span>
+                                            <span className="text-xs text-slate-500">{formatDate(n.created_at || n.createdAt)}</span>
+                                        </div>
+                                        <p className="text-slate-600 line-clamp-2">{n.descricao}</p>
+                                        <div className="flex items-center gap-2 mt-2">
+                                            <Badge variant="secondary">{n.modulo}</Badge>
+                                            <span className="text-xs text-slate-400">Contrato #{n.id_contrato}</span>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </Card>
+
+                {/* Feed de Atividades Recentes */}
+                <Card
+                    title="Atividades Recentes"
+                    className="lg:col-span-1"
+                >
+                    <div className="flex items-center gap-2 text-xs text-slate-400 mb-4">
+                        <Activity className="w-4 h-4" />
+                        Ações no sistema
+                    </div>
+                    {logs.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-40 text-slate-400">
+                            <Activity className="w-8 h-8 mb-2 opacity-40" />
+                            <p className="text-sm text-center">Nenhum log recente.</p>
+                        </div>
+                    ) : (
+                        <div className="space-y-4 max-h-56 overflow-y-auto pr-2 relative before:absolute before:inset-0 before:ml-2.5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
+                            {logs.map((log, index) => (
+                                <div key={log.id || index} className="relative flex items-start gap-4">
+                                    <div className="absolute left-0 md:left-1/2 w-5 h-5 rounded-full bg-white border-4 border-teal-100 flex items-center justify-center -translate-x-0.5 md:-translate-x-1/2 mt-1.5 z-10">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-teal-500"></div>
+                                    </div>
+                                    <div className="ml-8 md:ml-0 md:w-full bg-slate-50 rounded-lg p-3 border border-slate-100 relative shadow-sm">
+                                        <div className="flex justify-between items-center mb-1">
+                                            <span className="text-xs font-semibold text-slate-900">{log.nome_usuario}</span>
+                                            <span className="text-[10px] text-slate-400">{formatDate(log.created_at || log.createdAt)}</span>
+                                        </div>
+                                        <p className="text-xs text-slate-600 line-clamp-2" title={log.alteracao}>
+                                            {log.alteracao}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </Card>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

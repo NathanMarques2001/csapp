@@ -27,7 +27,9 @@ module.exports = {
 
   async indexAll(req, res) {
     try {
-      const logs = await Log.findAll();
+      const logs = await Log.findAll({
+        order: [['created_at', 'DESC']]
+      });
 
       if (logs.length == 0) {
         return res.status(404).send({ message: 'Nenhum log cadastrado!' });
