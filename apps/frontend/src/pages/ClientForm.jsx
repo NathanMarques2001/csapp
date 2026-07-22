@@ -8,7 +8,7 @@ import { useFormGuard } from '../hooks/useFormGuard';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Skeleton from '../components/ui/Skeleton';
-
+import { fetchCnpjData } from '../utils/cnpj';
 // Simple formatter if not imported or to ensure consistency
 const formatDateForInput = (dateString) => {
     if (!dateString) return '';
@@ -143,6 +143,26 @@ const ClientForm = () => {
         };
         fetchData();
     }, [mode, id]);
+    const [searchingCNPJ, setSearchingCNPJ] = useState(false);
+
+    const handleSearchCNPJ = async () => {
+        setSearchingCNPJ(true);
+        try {
+            const data = await fetchCnpjData(formData.cpf_cnpj);
+
+            setFormData(prev => ({
+                ...prev,
+                razao_social: data.nome || prev.razao_social,
+                nome_fantasia: data.fantasia || data.nome || prev.nome_fantasia,
+                tipo_unidade: data.tipo === "MATRIZ" ? "pai" : data.tipo === "FILIAL" ? "filha" : prev.tipo_unidade,
+            }));
+            
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setSearchingCNPJ(false);
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -202,7 +222,14 @@ const ClientForm = () => {
                             <Input name="nome_fantasia" value={formData.nome_fantasia} onChange={handleChange} required placeholder="Nome popular" />
                         </FormGroup>
                         <FormGroup label="CPF/CNPJ" required>
-                            <Input name="cpf_cnpj" value={formData.cpf_cnpj} onChange={handleChange} required placeholder="00.000.000/0000-00" />
+                            <div className="flex gap-2">
+                                <Input name="cpf_cnpj" value={formData.cpf_cnpj} onChange={handleChange} required placeholder="00.000.000/0000-00" />
+                                {mode === 'cadastro' && (
+                                    <Button type="button" variant="outline" onClick={handleSearchCNPJ} disabled={searchingCNPJ}>
+                                        {searchingCNPJ ? 'Buscando...' : 'Buscar'}
+                                    </Button>
+                                )}
+                            </div>
                         </FormGroup>
                         <FormGroup label="Relacionamento" required>
                             <Select name="id_usuario" value={formData.id_usuario} onChange={handleChange} required>
