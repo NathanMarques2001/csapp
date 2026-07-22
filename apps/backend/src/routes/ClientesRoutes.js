@@ -12,6 +12,5 @@ router.post('/', ClienteController.store);
 router.put('/migrate', ClienteController.migrate);
 router.put('/active-inactive/:id', ClienteController.inactiveOrActive);
 router.put('/:id', ClienteController.update);
-// router.delete('/:id', ClienteController.delete);
 
 module.exports = router;

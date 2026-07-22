@@ -108,24 +108,5 @@ module.exports = {
       }
       return res.status(500).send({ message: 'Ocorreu um erro ao atualizar o contrato.' });
     }
-  },
-
-  // async delete(req, res) {
-  //   try {
-  //     const { id } = req.params;
-
-  //     const contrato = await Contrato.findByPk(id);
-
-  //     if (!contrato) {
-  //       return res.status(404).send({ message: 'Contrato não encontrado!' });
-  //     }
-
-  //     await Contrato.destroy({ where: { id: id } });
-
-  //     return res.status(200).send({ message: 'Contrato deletado com sucesso!' });
-  //   } catch (error) {
-  //     console.error(error);
-  //     return res.status(500).send({ message: 'Ocorreu um erro ao deletar o contrato.' });
-  //   }
-  // }
+  }
 }

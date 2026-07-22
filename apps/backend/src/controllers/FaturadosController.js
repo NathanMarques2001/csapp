@@ -69,24 +69,5 @@ module.exports = {
       console.error(error);
       return res.status(500).send({ message: 'Ocorreu um erro ao atualizar o faturado.' });
     }
-  },
-
-  // async delete(req, res) {
-  //   try {
-  //     const { id } = req.params;
-
-  //     const fabricante = await Fabricante.findByPk(id);
-
-  //     if (!fabricante) {
-  //       return res.status(404).send({ message: 'Fabricante não encontrado!' });
-  //     }
-
-  //     await Fabricante.destroy({ where: { id: id } });
-
-  //     return res.status(200).send({ message: 'Fabricante deletado com sucesso!' });
-  //   } catch (error) {
-  //     console.error(error);
-  //     return res.status(500).send({ message: 'Ocorreu um erro ao deletar o fabricante.' });
-  //   }
-  // }
+  }
 }

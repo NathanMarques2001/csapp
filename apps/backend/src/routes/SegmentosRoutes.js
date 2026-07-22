@@ -8,6 +8,5 @@ router.get('/', SegmentoController.indexAll);
 router.get('/:id', SegmentoController.index);
 router.post('/', SegmentoController.store);
 router.put('/:id', SegmentoController.update);
-// router.delete('/:id', SegmentoController.delete);
 
 module.exports = router;

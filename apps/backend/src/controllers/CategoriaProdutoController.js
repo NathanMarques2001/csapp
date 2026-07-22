@@ -75,25 +75,5 @@ module.exports = {
       console.error("Erro ao atualizar categoria:", err);
       return res.status(500).json({ message: "Erro ao atualizar categoria." });
     }
-  },
-
-  //   async delete(req, res) {
-  //     try {
-  //       const { id } = req.params;
-  //       const categoria = await CategoriaProduto.findByPk(id);
-
-  //       if (!categoria) {
-  //         return res.status(404).json({ message: "Categoria não encontrada." });
-  //       }
-
-  //       await categoria.update({ status: "inativo" });
-
-  //       return res
-  //         .status(200)
-  //         .json({ message: "Categoria inativada com sucesso." });
-  //     } catch (err) {
-  //       console.error("Erro ao inativar categoria:", err);
-  //       return res.status(500).json({ message: "Erro ao inativar categoria." });
-  //     }
-  //   },
+  }
 };

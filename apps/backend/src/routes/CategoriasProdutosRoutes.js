@@ -9,6 +9,5 @@ router.get("/", CategoriaProdutoController.index);
 router.get("/:id", CategoriaProdutoController.show);
 router.post("/", CategoriaProdutoController.store);
 router.put("/:id", CategoriaProdutoController.update);
-// router.delete("/:id", CategoriaProdutoController.delete);
 
 module.exports = router;

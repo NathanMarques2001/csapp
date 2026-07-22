@@ -8,6 +8,5 @@ router.get('/', FaturadosController.indexAll);
 router.get('/:id', FaturadosController.index);
 router.post('/', FaturadosController.store);
 router.put('/:id', FaturadosController.update);
-// router.delete('/:id', FaturadosController.delete);
 
 module.exports = router;
