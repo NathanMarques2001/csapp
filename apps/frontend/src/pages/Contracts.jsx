@@ -10,6 +10,7 @@ import Badge from '../components/ui/Badge';
 import Skeleton from '../components/ui/Skeleton';
 import Input from '../components/ui/Input';
 import ImportContractsModal from '../components/contracts/ImportContractsModal';
+import ImportResultModal from '../components/contracts/ImportResultModal';
 import FilterModal from '../components/contracts/FilterModal';
 
 const Contracts = () => {
@@ -25,6 +26,8 @@ const Contracts = () => {
 
     // Import Modal State
     const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+    const [isResultModalOpen, setIsResultModalOpen] = useState(false);
+    const [importResult, setImportResult] = useState(null);
 
     // Filters State
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -174,14 +177,22 @@ const Contracts = () => {
             const response = await api.post("/contratos/importar-excel", formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
-            alert(response.message || "Importação realizada com sucesso!");
-            window.location.reload();
+            setImportResult(response);
+            setIsResultModalOpen(true);
         } catch (error) {
             console.error("Erro importação:", error);
-            alert("Erro ao importar. Verifique o console para mais detalhes.");
+            setImportResult(error.response?.data || { message: "Erro ao importar. Verifique o console para mais detalhes." });
+            setIsResultModalOpen(true);
         } finally {
             setLoading(false);
             setIsImportModalOpen(false);
+        }
+    };
+
+    const handleCloseResultModal = () => {
+        setIsResultModalOpen(false);
+        if (importResult?.summary?.sucesso > 0) {
+            window.location.reload();
         }
     };
 
@@ -322,64 +333,58 @@ const Contracts = () => {
                                     </tr>
                                 )}
                             </tbody >
-                            <tfoot className="bg-slate-50 dark:bg-slate-800/50 font-semibold text-slate-900 dark:text-slate-100 border-t border-slate-200 dark:border-slate-700">
-                                <tr>
-                                    <td colSpan="3" className="px-6 py-4 text-right">
-                                        Total (Página):
-                                    </td>
-                                    <td className="px-6 py-4 text-teal-700">
-                                        {formatCurrency(paginatedContracts.reduce((acc, c) => acc + calculateContractValue(c.valor_mensal), 0))}
-                                    </td>
-                                    <td colSpan="6"></td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="3" className="px-6 py-4 text-right border-t border-slate-200 dark:border-slate-700">
-                                        Total Geral (Filtro):
-                                    </td>
-                                    <td className="px-6 py-4 text-indigo-700 border-t border-slate-200 dark:border-slate-700">
-                                        {formatCurrency(totalDisplayed)}
-                                    </td>
-                                    <td colSpan="6" className="border-t border-slate-200 dark:border-slate-700"></td>
-                                </tr>
-                                {Object.entries(totalsByBillingType).sort().map(([type, total]) => (
-                                    <tr key={type}>
-                                        <td colSpan="3" className="px-6 py-2 text-right text-slate-500 dark:text-slate-400 font-normal text-xs">
-                                            Total {type}:
-                                        </td>
-                                        <td className="px-6 py-2 text-slate-700 dark:text-slate-300 text-xs">
-                                            {formatCurrency(total)}
-                                        </td>
-                                        <td colSpan="6"></td>
-                                    </tr>
-                                ))}
-                            </tfoot>
+
                         </table >
                     </div >
 
                     {/* Pagination */}
-                    {
-                        totalPages > 1 && (
-                            <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between">
-                                <span className="text-slate-500 dark:text-slate-400 text-sm">
-                                    Página {currentPage} de {totalPages}
-                                </span>
-                                <div className="flex items-center gap-2">
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                                        disabled={currentPage === 1}
-                                    ><ChevronLeft className="w-4 h-4" /></Button>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                                        disabled={currentPage === totalPages}
-                                    ><ChevronRight className="w-4 h-4" /></Button>
-                                </div>
+                    {filteredContracts.length > 0 && (
+                        <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between bg-white dark:bg-slate-900">
+                            <div className="text-sm text-slate-500 dark:text-slate-400">
+                                Mostrando <span className="font-medium text-slate-900 dark:text-slate-100">{(currentPage - 1) * itemsPerPage + 1}</span> a <span className="font-medium text-slate-900 dark:text-slate-100">{Math.min(currentPage * itemsPerPage, filteredContracts.length)}</span> de <span className="font-medium text-slate-900 dark:text-slate-100">{filteredContracts.length}</span> registros
                             </div>
-                        )
-                    }
+                            <div className="flex items-center gap-1">
+                                <button 
+                                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                    disabled={currentPage === 1}
+                                    className="p-1 rounded text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                >
+                                    <ChevronLeft className="w-5 h-5" />
+                                </button>
+                                
+                                {Array.from({ length: totalPages }).map((_, i) => {
+                                    const pageNum = i + 1;
+                                    // Show first, last, current, and adjacent pages
+                                    if (pageNum === 1 || pageNum === totalPages || (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)) {
+                                        return (
+                                            <button
+                                                key={pageNum}
+                                                onClick={() => setCurrentPage(pageNum)}
+                                                className={`w-8 h-8 flex items-center justify-center rounded text-sm font-medium transition-colors ${
+                                                    currentPage === pageNum 
+                                                    ? 'bg-teal-600 text-white' 
+                                                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-slate-800'
+                                                }`}
+                                            >
+                                                {pageNum}
+                                            </button>
+                                        );
+                                    } else if (pageNum === currentPage - 2 || pageNum === currentPage + 2) {
+                                        return <span key={pageNum} className="text-slate-400 px-1">...</span>;
+                                    }
+                                    return null;
+                                })}
+
+                                <button 
+                                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                    disabled={currentPage === totalPages}
+                                    className="p-1 rounded text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                >
+                                    <ChevronRight className="w-5 h-5" />
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div >
             )}
 
@@ -388,6 +393,12 @@ const Contracts = () => {
                 onClose={() => setIsImportModalOpen(false)}
                 onImport={handleImport}
                 onDownloadTemplate={handleDownloadTemplate}
+            />
+
+            <ImportResultModal
+                isOpen={isResultModalOpen}
+                onClose={handleCloseResultModal}
+                result={importResult}
             />
 
             <FilterModal
