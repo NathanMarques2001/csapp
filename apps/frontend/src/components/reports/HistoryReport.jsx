@@ -189,17 +189,17 @@ const HistoryReport = ({ clients, contracts, products, segmentsMap, groupsMap, c
 
     return (
         <div className="space-y-4">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-lg border border-slate-200 gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-700 gap-4">
                 <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
                     <div className="flex items-center gap-2 w-full md:w-auto">
-                        <Calendar className="h-4 w-4 text-slate-500" />
+                        <Calendar className="h-4 w-4 text-slate-500 dark:text-slate-400" />
                         <Input 
                             type="date" 
                             value={dataInicio} 
                             onChange={e => setDataInicio(e.target.value)}
                             className="w-full md:w-40 text-sm"
                         />
-                        <span className="text-slate-500">até</span>
+                        <span className="text-slate-500 dark:text-slate-400">até</span>
                         <Input 
                             type="date" 
                             value={dataFim} 
@@ -225,11 +225,11 @@ const HistoryReport = ({ clients, contracts, products, segmentsMap, groupsMap, c
             </div>
 
             {showFilters && (
-                <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-2">
+                <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700 grid grid-cols-1 sm:grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-2">
                     {abaAtiva === 'clientes' && (
                         <div>
-                            <label className="block text-xs font-medium text-slate-700 mb-1">Status Cliente</label>
-                            <select value={statusCliente} onChange={e => setStatusCliente(e.target.value)} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                            <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Status Cliente</label>
+                            <select value={statusCliente} onChange={e => setStatusCliente(e.target.value)} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                                 <option value="">Todos</option>
                                 <option value="ativo">Ativo</option>
                                 <option value="inativo">Inativo</option>
@@ -238,8 +238,8 @@ const HistoryReport = ({ clients, contracts, products, segmentsMap, groupsMap, c
                     )}
                     {abaAtiva === 'contratos' && (
                         <div>
-                            <label className="block text-xs font-medium text-slate-700 mb-1">Status Contrato</label>
-                            <select value={statusContrato} onChange={e => setStatusContrato(e.target.value)} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                            <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Status Contrato</label>
+                            <select value={statusContrato} onChange={e => setStatusContrato(e.target.value)} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                                 <option value="">Todos</option>
                                 <option value="ativo">Ativo</option>
                                 <option value="inativo">Inativo</option>
@@ -247,23 +247,23 @@ const HistoryReport = ({ clients, contracts, products, segmentsMap, groupsMap, c
                         </div>
                     )}
                     <div className="flex items-end">
-                        <Button variant="ghost" icon={X} onClick={() => { setStatusCliente(''); setStatusContrato(''); }} className="text-slate-500">
+                        <Button variant="ghost" icon={X} onClick={() => { setStatusCliente(''); setStatusContrato(''); }} className="text-slate-500 dark:text-slate-400">
                             Limpar Filtros
                         </Button>
                     </div>
                 </div>
             )}
 
-            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-                <div className="flex border-b border-slate-200 bg-slate-50">
+            <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+                <div className="flex border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
                     <button
-                        className={`flex-1 py-3 px-6 text-sm font-medium transition-colors ${abaAtiva === "clientes" ? "bg-white text-teal-600 border-b-2 border-teal-600" : "text-slate-600 hover:bg-slate-100"}`}
+                        className={`flex-1 py-3 px-6 text-sm font-medium transition-colors ${abaAtiva === "clientes" ? "bg-white dark:bg-slate-900 text-teal-600 border-b-2 border-teal-600" : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-slate-800"}`}
                         onClick={() => setAbaAtiva("clientes")}
                     >
                         Histórico de Clientes
                     </button>
                     <button
-                        className={`flex-1 py-3 px-6 text-sm font-medium transition-colors ${abaAtiva === "contratos" ? "bg-white text-amber-600 border-b-2 border-amber-600" : "text-slate-600 hover:bg-slate-100"}`}
+                        className={`flex-1 py-3 px-6 text-sm font-medium transition-colors ${abaAtiva === "contratos" ? "bg-white dark:bg-slate-900 text-amber-600 border-b-2 border-amber-600" : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-slate-800"}`}
                         onClick={() => setAbaAtiva("contratos")}
                     >
                         Histórico de Contratos
@@ -272,14 +272,14 @@ const HistoryReport = ({ clients, contracts, products, segmentsMap, groupsMap, c
 
                 <div className="overflow-x-auto relative min-h-[300px] max-h-[600px]">
                     {loading && (
-                        <div className="absolute inset-0 bg-white/50 z-10 flex items-center justify-center">
+                        <div className="absolute inset-0 bg-white dark:bg-slate-900/50 z-10 flex items-center justify-center">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
                         </div>
                     )}
 
                     {abaAtiva === "clientes" ? (
                         <table className="w-full text-sm text-left">
-                            <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200 sticky top-0">
+                            <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 font-medium border-b border-slate-200 dark:border-slate-700 sticky top-0">
                                 <tr>
                                     <th className="px-6 py-3">Data Ref.</th>
                                     <th className="px-6 py-3">Razão Social</th>
@@ -292,23 +292,23 @@ const HistoryReport = ({ clients, contracts, products, segmentsMap, groupsMap, c
                             </thead>
                             <tbody className="divide-y divide-slate-100">
                                 {clientesFiltrados.map((c, i) => (
-                                    <tr key={i} className="hover:bg-slate-50">
-                                        <td className="px-6 py-3 text-slate-500 whitespace-nowrap">{formatDate(c.data_referencia)}</td>
-                                        <td className="px-6 py-3 font-medium text-slate-900">{c.razao_social || '-'}</td>
-                                        <td className="px-6 py-3 text-slate-500">{c.nome_fantasia || '-'}</td>
-                                        <td className="px-6 py-3 text-slate-500">{segmentsMap[c.id_segmento]?.nome || '-'}</td>
-                                        <td className="px-6 py-3 text-slate-500">{groupsMap[c.id_grupo_economico]?.nome || '-'}</td>
+                                    <tr key={i} className="hover:bg-slate-50 dark:bg-slate-800/50">
+                                        <td className="px-6 py-3 text-slate-500 dark:text-slate-400 whitespace-nowrap">{formatDate(c.data_referencia)}</td>
+                                        <td className="px-6 py-3 font-medium text-slate-900 dark:text-slate-100">{c.razao_social || '-'}</td>
+                                        <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{c.nome_fantasia || '-'}</td>
+                                        <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{segmentsMap[c.id_segmento]?.nome || '-'}</td>
+                                        <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{groupsMap[c.id_grupo_economico]?.nome || '-'}</td>
                                         <td className="px-6 py-3">
                                             <Badge status={c.status} />
                                         </td>
-                                        <td className="px-6 py-3 text-right font-medium text-slate-700">
+                                        <td className="px-6 py-3 text-right font-medium text-slate-700 dark:text-slate-300">
                                             {formatCurrency(valoresContratosPorClienteEData[`${c.id_cliente_original}_${c.data_referencia}`] || 0)}
                                         </td>
                                     </tr>
                                 ))}
                                 {!loading && clientesFiltrados.length === 0 && (
                                     <tr>
-                                        <td colSpan="7" className="px-6 py-8 text-center text-slate-500">
+                                        <td colSpan="7" className="px-6 py-8 text-center text-slate-500 dark:text-slate-400">
                                             Selecione as datas e busque para ver o histórico.
                                         </td>
                                     </tr>
@@ -317,7 +317,7 @@ const HistoryReport = ({ clients, contracts, products, segmentsMap, groupsMap, c
                         </table>
                     ) : (
                         <table className="w-full text-sm text-left">
-                            <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200 sticky top-0">
+                            <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 font-medium border-b border-slate-200 dark:border-slate-700 sticky top-0">
                                 <tr>
                                     <th className="px-6 py-3">Data Ref.</th>
                                     <th className="px-6 py-3">Cliente</th>
@@ -336,23 +336,23 @@ const HistoryReport = ({ clients, contracts, products, segmentsMap, groupsMap, c
                                         vencimentoFormatado = c.vencimentoCalculado.toLocaleDateString("pt-BR");
                                     }
                                     return (
-                                        <tr key={i} className="hover:bg-slate-50">
-                                            <td className="px-6 py-3 text-slate-500 whitespace-nowrap">{formatDate(c.data_referencia)}</td>
-                                            <td className="px-6 py-3 font-medium text-slate-900">{clientesMap[c.id_cliente]?.nome_fantasia || '-'}</td>
-                                            <td className="px-6 py-3 text-slate-500">{produtosMap[c.id_produto]?.nome || '-'}</td>
-                                            <td className="px-6 py-3 text-slate-500">{groupsMap[clientesMap[c.id_cliente]?.id_grupo_economico]?.nome || '-'}</td>
-                                            <td className="px-6 py-3 text-slate-500">{formatDate(c.proximo_reajuste_resolvido) || '-'}</td>
-                                            <td className="px-6 py-3 text-slate-500">{vencimentoFormatado}</td>
+                                        <tr key={i} className="hover:bg-slate-50 dark:bg-slate-800/50">
+                                            <td className="px-6 py-3 text-slate-500 dark:text-slate-400 whitespace-nowrap">{formatDate(c.data_referencia)}</td>
+                                            <td className="px-6 py-3 font-medium text-slate-900 dark:text-slate-100">{clientesMap[c.id_cliente]?.nome_fantasia || '-'}</td>
+                                            <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{produtosMap[c.id_produto]?.nome || '-'}</td>
+                                            <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{groupsMap[clientesMap[c.id_cliente]?.id_grupo_economico]?.nome || '-'}</td>
+                                            <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{formatDate(c.proximo_reajuste_resolvido) || '-'}</td>
+                                            <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{vencimentoFormatado}</td>
                                             <td className="px-6 py-3">
                                                 <Badge status={c.status} />
                                             </td>
-                                            <td className="px-6 py-3 text-right font-medium text-slate-700">{formatCurrency(c.valor_mensal)}</td>
+                                            <td className="px-6 py-3 text-right font-medium text-slate-700 dark:text-slate-300">{formatCurrency(c.valor_mensal)}</td>
                                         </tr>
                                     );
                                 })}
                                 {!loading && contratosFiltrados.length === 0 && (
                                     <tr>
-                                        <td colSpan="8" className="px-6 py-8 text-center text-slate-500">
+                                        <td colSpan="8" className="px-6 py-8 text-center text-slate-500 dark:text-slate-400">
                                             Selecione as datas e busque para ver o histórico.
                                         </td>
                                     </tr>

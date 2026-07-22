@@ -62,7 +62,7 @@ const EconomicGroupDetails = () => {
     const navigate = useNavigate();
     const api = new Api();
     const { confirm } = useConfirm();
-    
+
     const [activeTab, setActiveTab] = useState('overview');
     const [editModalOpen, setEditModalOpen] = useState(false);
 
@@ -72,17 +72,17 @@ const EconomicGroupDetails = () => {
     const [savingModal, setSavingModal] = useState(false);
 
     const { data, loading, error, refetch: fetchData } = useCarregarGrupoEconomico(id);
-    
-    const { 
-        group = null, 
-        clients = [], 
-        contracts = [], 
-        products = {}, 
-        manufacturers = {}, 
-        classifications = {}, 
-        contatosComerciais = [], 
-        contatosTecnicos = [], 
-        fatosImportantes = [] 
+
+    const {
+        group = null,
+        clients = [],
+        contracts = [],
+        products = {},
+        manufacturers = {},
+        classifications = {},
+        contatosComerciais = [],
+        contatosTecnicos = [],
+        fatosImportantes = []
     } = data || {};
 
     const handleEditHistory = (type, idItem, conteudo) => {
@@ -92,10 +92,10 @@ const EconomicGroupDetails = () => {
     };
 
     const handleDeleteHistory = async (type, idItem) => {
-        const endpoint = type === 'comercial' ? '/contatos-comerciais' 
-                       : type === 'tecnico' ? '/contatos-tecnicos' 
-                       : '/fatos-importantes';
-        
+        const endpoint = type === 'comercial' ? '/contatos-comerciais'
+            : type === 'tecnico' ? '/contatos-tecnicos'
+                : '/fatos-importantes';
+
         const confirmed = await confirm({
             title: 'Excluir registro',
             message: 'Tem certeza que deseja excluir este registro do histórico?',
@@ -103,7 +103,7 @@ const EconomicGroupDetails = () => {
             cancelText: 'Cancelar',
             variant: 'danger'
         });
-        
+
         if (confirmed) {
             try {
                 await api.delete(`${endpoint}/${idItem}`);
@@ -160,7 +160,7 @@ const EconomicGroupDetails = () => {
                     <h3 className="text-lg font-bold text-red-900">Oops! Algo deu errado.</h3>
                     <p className="text-red-700 mt-1 max-w-md">{error}</p>
                 </div>
-                <Button 
+                <Button
                     className="bg-red-600 hover:bg-red-700 text-white border-none mt-2"
                     onClick={() => fetchData()}
                 >
@@ -219,7 +219,7 @@ const EconomicGroupDetails = () => {
 
     return (
         <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+            <div className="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div className="flex items-center gap-4">
                         <BackButton fallback="/clientes" />
@@ -227,8 +227,8 @@ const EconomicGroupDetails = () => {
                             <Building className="w-8 h-8" />
                         </div>
                         <div>
-                            <h1 className="text-2xl font-bold text-slate-900">{group.nome}</h1>
-                            <div className="flex items-center gap-3 text-sm text-slate-500 mt-1 flex-wrap">
+                            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{group.nome}</h1>
+                            <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400 mt-1 flex-wrap">
                                 <span>Grupo Econômico</span>
                                 <span className="w-1 h-1 bg-slate-400 rounded-full" />
                                 <span>{clients.length} {clients.length === 1 ? 'unidade' : 'unidades'}</span>
@@ -249,14 +249,14 @@ const EconomicGroupDetails = () => {
                     </div>
                 </div>
 
-                <div className="flex gap-6 mt-8 border-b border-slate-200 overflow-x-auto">
+                <div className="flex gap-6 mt-8 border-b border-slate-200 dark:border-slate-700 overflow-x-auto">
                     {tabs.map(tab => (
                         <button
                             key={tab.key}
                             onClick={() => setActiveTab(tab.key)}
                             className={`pb-3 text-sm font-medium transition-colors whitespace-nowrap ${activeTab === tab.key
                                 ? 'text-teal-600 border-b-2 border-teal-600'
-                                : 'text-slate-500 hover:text-slate-700'
+                                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300'
                                 }`}
                         >
                             {tab.label}
@@ -269,17 +269,17 @@ const EconomicGroupDetails = () => {
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <Card className="p-6">
-                            <h3 className="text-sm font-medium text-slate-500 mb-2">Receita Anual Recorrente (RAR)</h3>
-                            <p className="text-2xl font-bold text-slate-900">{formatCurrency(totalARR)}</p>
+                            <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Receita Anual Recorrente (ARR)</h3>
+                            <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{formatCurrency(totalARR)}</p>
                         </Card>
                         <Card className="p-6">
-                            <h3 className="text-sm font-medium text-slate-500 mb-2">Contratos Ativos</h3>
-                            <p className="text-2xl font-bold text-slate-900">{activeContracts.length}</p>
+                            <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Contratos Ativos</h3>
+                            <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{activeContracts.length}</p>
                         </Card>
                         <Card className="p-6">
-                            <h3 className="text-sm font-medium text-slate-500 mb-2">Próxima Renovação</h3>
+                            <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Próxima Renovação</h3>
                             <div className="flex flex-col">
-                                <p className="text-2xl font-bold text-slate-900">
+                                <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                                     {nextRenewal ? (
                                         <>
                                             <span className="text-lg font-normal text-slate-400">#{nextRenewal.id} - </span>
@@ -295,17 +295,17 @@ const EconomicGroupDetails = () => {
                             </div>
                         </Card>
                         <Card className="p-6">
-                            <h3 className="text-sm font-medium text-slate-500 mb-2">Receita Mensal Recorrente (RMR)</h3>
-                            <p className="text-2xl font-bold text-slate-900">{formatCurrency(totalMRR)}</p>
+                            <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Receita Mensal Recorrente (MRR)</h3>
+                            <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{formatCurrency(totalMRR)}</p>
                         </Card>
                         <Card className="p-6">
-                            <h3 className="text-sm font-medium text-slate-500 mb-2">Contratos Inativos</h3>
-                            <p className="text-2xl font-bold text-slate-900">{inactiveContracts.length}</p>
+                            <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Contratos Inativos</h3>
+                            <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{inactiveContracts.length}</p>
                         </Card>
                         <Card className="p-6">
-                            <h3 className="text-sm font-medium text-slate-500 mb-2">Próximo Reajuste</h3>
+                            <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Próximo Reajuste</h3>
                             <div className="flex flex-col">
-                                <p className="text-2xl font-bold text-slate-900">
+                                <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                                     {nextReadjustment ? (
                                         <>
                                             <span className="text-lg font-normal text-slate-400">#{nextReadjustment.id} - </span>
@@ -314,7 +314,7 @@ const EconomicGroupDetails = () => {
                                     ) : '-'}
                                 </p>
                                 {nextReadjustment && (
-                                    <p className="text-sm text-slate-500 mt-1">
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                                         Faltam {Math.ceil((nextReadjustment.parsedReadjustment - new Date()) / (1000 * 60 * 60 * 24))} dias
                                     </p>
                                 )}
@@ -324,10 +324,10 @@ const EconomicGroupDetails = () => {
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <Card className="p-6">
-                            <h3 className="font-bold mb-4 text-slate-900">
+                            <h3 className="font-bold mb-4 text-slate-900 dark:text-slate-100">
                                 Principais Contatos
                                 {matrizClient && (
-                                    <span className="text-sm font-normal text-slate-500 ml-2">
+                                    <span className="text-sm font-normal text-slate-500 dark:text-slate-400 ml-2">
                                         ({matrizClient.nome_fantasia})
                                     </span>
                                 )}
@@ -341,7 +341,7 @@ const EconomicGroupDetails = () => {
                                     .map((contact, idx) => (
                                         <div
                                             key={idx}
-                                            className="flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-slate-100 cursor-pointer"
+                                            className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg hover:bg-slate-100 dark:bg-slate-800 cursor-pointer"
                                             onClick={() => setActiveTab('contatos')}
                                         >
                                             <div className="flex items-center gap-3">
@@ -349,26 +349,26 @@ const EconomicGroupDetails = () => {
                                                     {contact.name.substring(0, 2).toUpperCase()}
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm font-medium text-slate-900">{contact.name}</p>
-                                                    <p className="text-xs text-slate-500">{contact.role}</p>
+                                                    <p className="text-sm font-medium text-slate-900 dark:text-slate-100">{contact.name}</p>
+                                                    <p className="text-xs text-slate-500 dark:text-slate-400">{contact.role}</p>
                                                 </div>
                                             </div>
                                             <ChevronRight className="w-4 h-4 text-slate-400" />
                                         </div>
                                     ))}
                                 {!contactSource?.gestor_contratos_nome && !contactSource?.gestor_financeiro_nome && (
-                                    <p className="text-slate-500 text-sm">Nenhum contato cadastrado na matriz.</p>
+                                    <p className="text-slate-500 dark:text-slate-400 text-sm">Nenhum contato cadastrado na matriz.</p>
                                 )}
                             </div>
                         </Card>
 
                         <Card className="p-6">
-                            <h3 className="font-bold mb-4 text-slate-900">Últimos Contratos</h3>
+                            <h3 className="font-bold mb-4 text-slate-900 dark:text-slate-100">Últimos Contratos</h3>
                             <div className="space-y-3">
                                 {recentContracts.map(c => (
                                     <div
                                         key={c.id}
-                                        className="flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-slate-100 cursor-pointer transition-colors"
+                                        className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg hover:bg-slate-100 dark:bg-slate-800 cursor-pointer transition-colors"
                                         onClick={() => navigate(`/contratos/${c.id}/editar`)}
                                     >
                                         <div className="flex items-center gap-3">
@@ -376,10 +376,10 @@ const EconomicGroupDetails = () => {
                                                 <FileText className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <p className="text-sm font-medium text-slate-900">
+                                                <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
                                                     Contrato #{c.id} - {products[c.id_produto]?.nome || `Produto ${c.id_produto}`}
                                                 </p>
-                                                <p className="text-xs text-slate-500 capitalize">
+                                                <p className="text-xs text-slate-500 dark:text-slate-400 capitalize">
                                                     {clientsById[c.id_cliente]?.nome_fantasia || 'Unidade'} · {formatCurrency(c.valor_mensal)} - {c.tipo_faturamento}
                                                 </p>
                                             </div>
@@ -391,19 +391,19 @@ const EconomicGroupDetails = () => {
                                     </div>
                                 ))}
                                 {contracts.length === 0 && (
-                                    <p className="text-sm text-slate-500">Nenhum contrato encontrado.</p>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400">Nenhum contrato encontrado.</p>
                                 )}
                             </div>
                         </Card>
                     </div>
 
                     <Card className="p-6">
-                        <h3 className="font-bold mb-4 text-slate-900">Unidades do Grupo</h3>
+                        <h3 className="font-bold mb-4 text-slate-900 dark:text-slate-100">Unidades do Grupo</h3>
                         <div className="space-y-3">
                             {clients.map(client => (
                                 <div
                                     key={client.id}
-                                    className="flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-slate-100 cursor-pointer transition-colors"
+                                    className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg hover:bg-slate-100 dark:bg-slate-800 cursor-pointer transition-colors"
                                     onClick={() => navigate(`/clientes/${client.id}`)}
                                 >
                                     <div className="flex items-center gap-3">
@@ -411,8 +411,8 @@ const EconomicGroupDetails = () => {
                                             {(client.nome_fantasia || 'CL').substring(0, 2).toUpperCase()}
                                         </div>
                                         <div>
-                                            <p className="text-sm font-medium text-slate-900">{client.nome_fantasia}</p>
-                                            <p className="text-xs text-slate-500">
+                                            <p className="text-sm font-medium text-slate-900 dark:text-slate-100">{client.nome_fantasia}</p>
+                                            <p className="text-xs text-slate-500 dark:text-slate-400">
                                                 {formatCpfCnpj(client.cpf_cnpj)}
                                                 {client.tipo_unidade && ` · ${client.tipo_unidade === 'pai' ? 'Matriz' : 'Filial'}`}
                                             </p>
@@ -425,7 +425,7 @@ const EconomicGroupDetails = () => {
                                 </div>
                             ))}
                             {clients.length === 0 && (
-                                <p className="text-sm text-slate-500">Nenhuma unidade vinculada a este grupo.</p>
+                                <p className="text-sm text-slate-500 dark:text-slate-400">Nenhuma unidade vinculada a este grupo.</p>
                             )}
                         </div>
                     </Card>
@@ -440,38 +440,38 @@ const EconomicGroupDetails = () => {
                         const annualTotal = calculateClientTotal(client.id, 'anual');
 
                         return (
-                            <Card key={client.id} className="overflow-hidden border-slate-200">
+                            <Card key={client.id} className="overflow-hidden border-slate-200 dark:border-slate-700">
                                 <div
-                                    className="bg-slate-50 p-4 border-b border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer hover:bg-slate-100 transition-colors"
+                                    className="bg-slate-50 dark:bg-slate-800/50 p-4 border-b border-slate-200 dark:border-slate-700 flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer hover:bg-slate-100 dark:bg-slate-800 transition-colors"
                                     onClick={() => navigate(`/clientes/${client.id}`)}
                                 >
                                     <div>
                                         <div className="flex items-center gap-2 flex-wrap">
-                                            <h3 className="font-bold text-lg text-slate-800">{client.nome_fantasia}</h3>
+                                            <h3 className="font-bold text-lg text-slate-800 dark:text-slate-200">{client.nome_fantasia}</h3>
                                             <Badge status={client.status} size="sm" />
                                             {client.tipo_unidade && (
-                                                <span className="text-xs font-medium text-slate-600 bg-slate-200 px-2 py-0.5 rounded capitalize">
+                                                <span className="text-xs font-medium text-slate-600 dark:text-slate-400 bg-slate-200 px-2 py-0.5 rounded capitalize">
                                                     {client.tipo_unidade === 'pai' ? 'Matriz' : 'Filial'}
                                                 </span>
                                             )}
                                         </div>
-                                        <p className="text-slate-500 text-sm">{formatCpfCnpj(client.cpf_cnpj)}</p>
+                                        <p className="text-slate-500 dark:text-slate-400 text-sm">{formatCpfCnpj(client.cpf_cnpj)}</p>
                                     </div>
                                     <div className="flex gap-6 text-sm">
                                         <div className="text-right">
-                                            <p className="text-slate-500">Faturamento Mensal</p>
-                                            <p className="font-bold text-slate-700">{formatCurrency(monthlyTotal)}</p>
+                                            <p className="text-slate-500 dark:text-slate-400">Faturamento Mensal</p>
+                                            <p className="font-bold text-slate-700 dark:text-slate-300">{formatCurrency(monthlyTotal)}</p>
                                         </div>
                                         <div className="text-right">
-                                            <p className="text-slate-500">Faturamento Anual</p>
-                                            <p className="font-bold text-slate-700">{formatCurrency(annualTotal)}</p>
+                                            <p className="text-slate-500 dark:text-slate-400">Faturamento Anual</p>
+                                            <p className="font-bold text-slate-700 dark:text-slate-300">{formatCurrency(annualTotal)}</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-sm text-left">
-                                        <thead className="bg-white text-slate-500 font-medium border-b border-slate-100">
+                                        <thead className="bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 font-medium border-b border-slate-100 dark:border-slate-700/50">
                                             <tr>
                                                 <th className="px-6 py-3">Status</th>
                                                 <th className="px-6 py-3">Solução</th>
@@ -497,7 +497,7 @@ const EconomicGroupDetails = () => {
                                                     return (
                                                         <tr
                                                             key={contract.id}
-                                                            className="hover:bg-slate-50 transition-colors cursor-pointer"
+                                                            className="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors cursor-pointer"
                                                             onClick={() => navigate(`/contratos/${contract.id}/editar`)}
                                                         >
                                                             <td className="px-6 py-4">
@@ -511,22 +511,22 @@ const EconomicGroupDetails = () => {
                                                                     </span>
                                                                 )}
                                                             </td>
-                                                            <td className="px-6 py-4 font-medium text-slate-700">
+                                                            <td className="px-6 py-4 font-medium text-slate-700 dark:text-slate-300">
                                                                 <div className="flex items-center gap-2">
                                                                     <Package size={16} className="text-indigo-400" />
                                                                     {product?.nome || contract.id_produto}
                                                                 </div>
                                                             </td>
-                                                            <td className="px-6 py-4 text-slate-500">
+                                                            <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
                                                                 {formatDate(contract.data_inicio)}
                                                             </td>
-                                                            <td className="px-6 py-4 font-mono text-slate-600">
+                                                            <td className="px-6 py-4 font-mono text-slate-600 dark:text-slate-400">
                                                                 {formatCurrency(contract.valor_mensal)}
                                                             </td>
-                                                            <td className="px-6 py-4 text-slate-600">
+                                                            <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
                                                                 {contract.duracao === 12000 ? 'Indeterminado' : `${contract.duracao} Meses`}
                                                             </td>
-                                                            <td className="px-6 py-4 text-slate-500">
+                                                            <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
                                                                 <div className="flex items-center gap-2">
                                                                     <Factory size={16} className="text-slate-400" />
                                                                     {manufacturerName}
@@ -555,7 +555,7 @@ const EconomicGroupDetails = () => {
                         );
                     })}
                     {clients.length === 0 && (
-                        <Card className="p-8 text-center text-slate-500">
+                        <Card className="p-8 text-center text-slate-500 dark:text-slate-400">
                             Nenhuma unidade vinculada a este grupo.
                         </Card>
                     )}
@@ -565,8 +565,8 @@ const EconomicGroupDetails = () => {
             {activeTab === 'contatos' && contactSource && (
                 <div className="space-y-8">
                     <div>
-                        <h3 className="font-bold text-lg text-slate-900 mb-1">Gestores Principais</h3>
-                        <p className="text-sm text-slate-500 mb-4">
+                        <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100 mb-1">Gestores Principais</h3>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
                             Contatos da unidade matriz: <span className="font-medium">{contactSource.nome_fantasia}</span>
                         </p>
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -593,19 +593,19 @@ const EconomicGroupDetails = () => {
 
                     {clients.filter(c => c.id !== contactSource.id).length > 0 && (
                         <div>
-                            <h3 className="font-bold text-lg text-slate-900 mb-4">Outras Unidades</h3>
+                            <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100 mb-4">Outras Unidades</h3>
                             <div className="space-y-2">
                                 {clients
                                     .filter(c => c.id !== contactSource.id)
                                     .map(client => (
                                         <div
                                             key={client.id}
-                                            className="flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-slate-100 cursor-pointer"
+                                            className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg hover:bg-slate-100 dark:bg-slate-800 cursor-pointer"
                                             onClick={() => navigate(`/clientes/${client.id}`)}
                                         >
                                             <div>
-                                                <p className="text-sm font-medium text-slate-900">{client.nome_fantasia}</p>
-                                                <p className="text-xs text-slate-500">
+                                                <p className="text-sm font-medium text-slate-900 dark:text-slate-100">{client.nome_fantasia}</p>
+                                                <p className="text-xs text-slate-500 dark:text-slate-400">
                                                     Ver contatos na página da unidade
                                                 </p>
                                             </div>
@@ -619,17 +619,17 @@ const EconomicGroupDetails = () => {
             )}
 
             {activeTab === 'contatos' && !contactSource && (
-                <Card className="p-8 text-center text-slate-500">
+                <Card className="p-8 text-center text-slate-500 dark:text-slate-400">
                     Nenhuma unidade vinculada para exibir contatos.
                 </Card>
             )}
 
             {activeTab === 'contratos' && (
-                <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
-                    <div className="bg-slate-50 p-4 border-b border-slate-200 flex justify-end gap-6 text-sm">
+                <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                    <div className="bg-slate-50 dark:bg-slate-800/50 p-4 border-b border-slate-200 dark:border-slate-700 flex justify-end gap-6 text-sm">
                         <div className="text-right">
-                            <p className="text-slate-500 uppercase tracking-wider text-xs mb-1">Faturamento Mensal</p>
-                            <p className="font-bold text-slate-700 text-lg">
+                            <p className="text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs mb-1">Faturamento Mensal</p>
+                            <p className="font-bold text-slate-700 dark:text-slate-300 text-lg">
                                 {formatCurrency(
                                     contracts
                                         .filter(c => c.status === 'ativo' && c.tipo_faturamento === 'mensal')
@@ -637,9 +637,9 @@ const EconomicGroupDetails = () => {
                                 )}
                             </p>
                         </div>
-                        <div className="text-right pl-6 border-l border-slate-200">
-                            <p className="text-slate-500 uppercase tracking-wider text-xs mb-1">Faturamento Anual</p>
-                            <p className="font-bold text-slate-700 text-lg">
+                        <div className="text-right pl-6 border-l border-slate-200 dark:border-slate-700">
+                            <p className="text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs mb-1">Faturamento Anual</p>
+                            <p className="font-bold text-slate-700 dark:text-slate-300 text-lg">
                                 {formatCurrency(
                                     contracts
                                         .filter(c => c.status === 'ativo' && c.tipo_faturamento === 'anual')
@@ -651,7 +651,7 @@ const EconomicGroupDetails = () => {
 
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
-                            <thead className="bg-white text-slate-500 font-medium border-b border-slate-100">
+                            <thead className="bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 font-medium border-b border-slate-100 dark:border-slate-700/50">
                                 <tr>
                                     <th className="px-6 py-3">Status</th>
                                     <th className="px-6 py-3">Unidade</th>
@@ -679,7 +679,7 @@ const EconomicGroupDetails = () => {
                                         return (
                                             <tr
                                                 key={contract.id}
-                                                className="hover:bg-slate-50 transition-colors cursor-pointer"
+                                                className="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors cursor-pointer"
                                                 onClick={() => navigate(`/contratos/${contract.id}/editar`)}
                                             >
                                                 <td className="px-6 py-4">
@@ -693,25 +693,25 @@ const EconomicGroupDetails = () => {
                                                         </span>
                                                     )}
                                                 </td>
-                                                <td className="px-6 py-4 text-slate-600">
+                                                <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
                                                     {client?.nome_fantasia || '-'}
                                                 </td>
-                                                <td className="px-6 py-4 font-medium text-slate-700">
+                                                <td className="px-6 py-4 font-medium text-slate-700 dark:text-slate-300">
                                                     <div className="flex items-center gap-2">
                                                         <Package size={16} className="text-indigo-400" />
                                                         {product?.nome || contract.id_produto}
                                                     </div>
                                                 </td>
-                                                <td className="px-6 py-4 text-slate-500">
+                                                <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
                                                     {formatDate(contract.data_inicio)}
                                                 </td>
-                                                <td className="px-6 py-4 font-mono text-slate-600">
+                                                <td className="px-6 py-4 font-mono text-slate-600 dark:text-slate-400">
                                                     {formatCurrency(contract.valor_mensal)}
                                                 </td>
-                                                <td className="px-6 py-4 text-slate-600">
+                                                <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
                                                     {contract.duracao === 12000 ? 'Indeterminado' : `${contract.duracao} Meses`}
                                                 </td>
-                                                <td className="px-6 py-4 text-slate-500">
+                                                <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
                                                     <div className="flex items-center gap-2">
                                                         <Factory size={16} className="text-slate-400" />
                                                         {manufacturerName}
@@ -744,27 +744,27 @@ const EconomicGroupDetails = () => {
                     {/* Contato Comercial */}
                     <div className="space-y-4">
                         <div className="flex justify-between items-center">
-                            <h3 className="font-bold text-lg text-slate-900">Contato Comercial</h3>
+                            <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100">Contato Comercial</h3>
                         </div>
                         {contatosComerciais.length === 0 ? (
-                            <div className="bg-slate-50 rounded-lg p-6 text-center text-slate-500 border border-dashed border-slate-300">
+                            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-6 text-center text-slate-500 dark:text-slate-400 border border-dashed border-slate-300">
                                 Nenhum contato comercial encontrado nas unidades.
                             </div>
                         ) : (
-                            <div className="bg-white rounded-lg border border-slate-200 shadow-sm divide-y divide-slate-100">
+                            <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm divide-y divide-slate-100">
                                 {contatosComerciais.map((item, index) => (
-                                    <div key={`comercial-${item.id}-${index}`} className="group p-4 flex gap-4 items-start hover:bg-slate-50 transition-colors">
+                                    <div key={`comercial-${item.id}-${index}`} className="group p-4 flex gap-4 items-start hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
                                         <div className="mt-1">
                                             <div className="w-2 h-2 rounded-full bg-teal-500 mt-1.5"></div>
                                         </div>
                                         <div className="flex-1">
-                                            <div className="flex gap-4 text-xs text-slate-500 mb-2">
+                                            <div className="flex gap-4 text-xs text-slate-500 dark:text-slate-400 mb-2">
                                                 {item.createdAt && <span>Criado: {new Date(item.createdAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
                                                 {item.updatedAt && item.updatedAt !== item.createdAt && <span>Última Alteração: {new Date(item.updatedAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
                                             </div>
-                                            <p className="text-sm text-slate-900 whitespace-pre-wrap">{item.conteudo}</p>
+                                            <p className="text-sm text-slate-900 dark:text-slate-100 whitespace-pre-wrap">{item.conteudo}</p>
                                             {item.cliente_nome && (
-                                                <p className="text-xs text-slate-500 mt-2 font-medium">Unidade: {item.cliente_nome}</p>
+                                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 font-medium">Unidade: {item.cliente_nome}</p>
                                             )}
                                         </div>
                                         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -784,27 +784,27 @@ const EconomicGroupDetails = () => {
                     {/* Contato Técnico */}
                     <div className="space-y-4">
                         <div className="flex justify-between items-center">
-                            <h3 className="font-bold text-lg text-slate-900">Contato Técnico</h3>
+                            <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100">Contato Técnico</h3>
                         </div>
                         {contatosTecnicos.length === 0 ? (
-                            <div className="bg-slate-50 rounded-lg p-6 text-center text-slate-500 border border-dashed border-slate-300">
+                            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-6 text-center text-slate-500 dark:text-slate-400 border border-dashed border-slate-300">
                                 Nenhum contato técnico encontrado nas unidades.
                             </div>
                         ) : (
-                            <div className="bg-white rounded-lg border border-slate-200 shadow-sm divide-y divide-slate-100">
+                            <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm divide-y divide-slate-100">
                                 {contatosTecnicos.map((item, index) => (
-                                    <div key={`tecnico-${item.id}-${index}`} className="group p-4 flex gap-4 items-start hover:bg-slate-50 transition-colors">
+                                    <div key={`tecnico-${item.id}-${index}`} className="group p-4 flex gap-4 items-start hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
                                         <div className="mt-1">
                                             <div className="w-2 h-2 rounded-full bg-teal-500 mt-1.5"></div>
                                         </div>
                                         <div className="flex-1">
-                                            <div className="flex gap-4 text-xs text-slate-500 mb-2">
+                                            <div className="flex gap-4 text-xs text-slate-500 dark:text-slate-400 mb-2">
                                                 {item.createdAt && <span>Criado: {new Date(item.createdAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
                                                 {item.updatedAt && item.updatedAt !== item.createdAt && <span>Última Alteração: {new Date(item.updatedAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
                                             </div>
-                                            <p className="text-sm text-slate-900 whitespace-pre-wrap">{item.conteudo}</p>
+                                            <p className="text-sm text-slate-900 dark:text-slate-100 whitespace-pre-wrap">{item.conteudo}</p>
                                             {item.cliente_nome && (
-                                                <p className="text-xs text-slate-500 mt-2 font-medium">Unidade: {item.cliente_nome}</p>
+                                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 font-medium">Unidade: {item.cliente_nome}</p>
                                             )}
                                         </div>
                                         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -824,27 +824,27 @@ const EconomicGroupDetails = () => {
                     {/* Fatos Importantes */}
                     <div className="space-y-4">
                         <div className="flex justify-between items-center">
-                            <h3 className="font-bold text-lg text-slate-900">Fatos Importantes</h3>
+                            <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100">Fatos Importantes</h3>
                         </div>
                         {fatosImportantes.length === 0 ? (
-                            <div className="bg-slate-50 rounded-lg p-6 text-center text-slate-500 border border-dashed border-slate-300">
+                            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-6 text-center text-slate-500 dark:text-slate-400 border border-dashed border-slate-300">
                                 Nenhum fato importante encontrado nas unidades.
                             </div>
                         ) : (
-                            <div className="bg-white rounded-lg border border-slate-200 shadow-sm divide-y divide-slate-100">
+                            <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm divide-y divide-slate-100">
                                 {fatosImportantes.map((item, index) => (
-                                    <div key={`fato-${item.id}-${index}`} className="group p-4 flex gap-4 items-start hover:bg-slate-50 transition-colors">
+                                    <div key={`fato-${item.id}-${index}`} className="group p-4 flex gap-4 items-start hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
                                         <div className="mt-1">
                                             <div className="w-2 h-2 rounded-full bg-teal-500 mt-1.5"></div>
                                         </div>
                                         <div className="flex-1">
-                                            <div className="flex gap-4 text-xs text-slate-500 mb-2">
+                                            <div className="flex gap-4 text-xs text-slate-500 dark:text-slate-400 mb-2">
                                                 {item.createdAt && <span>Criado: {new Date(item.createdAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
                                                 {item.updatedAt && item.updatedAt !== item.createdAt && <span>Última Alteração: {new Date(item.updatedAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
                                             </div>
-                                            <p className="text-sm text-slate-900 whitespace-pre-wrap">{item.conteudo}</p>
+                                            <p className="text-sm text-slate-900 dark:text-slate-100 whitespace-pre-wrap">{item.conteudo}</p>
                                             {item.cliente_nome && (
-                                                <p className="text-xs text-slate-500 mt-2 font-medium">Unidade: {item.cliente_nome}</p>
+                                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 font-medium">Unidade: {item.cliente_nome}</p>
                                             )}
                                         </div>
                                         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -863,8 +863,8 @@ const EconomicGroupDetails = () => {
                 </div>
             )}
 
-            <div className="mt-12 pt-6 border-t border-slate-200">
-                <h3 className="text-lg font-bold text-slate-900 mb-2">Zona de Perigo</h3>
+            <div className="mt-12 pt-6 border-t border-slate-200 dark:border-slate-700">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">Zona de Perigo</h3>
                 <div className="bg-red-50 border border-red-200 rounded-lg p-6 flex flex-col md:flex-row justify-between items-center gap-4">
                     <div>
                         <p className="font-medium text-red-900">
@@ -898,15 +898,15 @@ const EconomicGroupDetails = () => {
                     onClose={() => { setModalType(null); setModalItemId(null); setModalContent(''); }}
                     onSave={async (conteudo) => {
                         setSavingModal(true);
-                        const endpoint = modalType === 'comercial' ? '/contatos-comerciais' 
-                                       : modalType === 'tecnico' ? '/contatos-tecnicos' 
-                                       : '/fatos-importantes';
+                        const endpoint = modalType === 'comercial' ? '/contatos-comerciais'
+                            : modalType === 'tecnico' ? '/contatos-tecnicos'
+                                : '/fatos-importantes';
                         try {
                             await api.put(`${endpoint}/${modalItemId}`, { conteudo });
                             setModalType(null);
                             setModalItemId(null);
                             setModalContent('');
-                            await fetchData(); 
+                            await fetchData();
                         } catch (e) {
                             console.error(e);
                             alert('Erro ao salvar registro.');

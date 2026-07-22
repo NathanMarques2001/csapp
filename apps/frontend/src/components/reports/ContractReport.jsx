@@ -18,6 +18,8 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
         ano_vencimento: '',
         grupo_economico: '',
         pertence_grupo: '',
+        vendedor: '',
+        vp: '',
     });
 
     const handleFilterChange = (e) => {
@@ -34,6 +36,8 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
             ano_vencimento: '',
             grupo_economico: '',
             pertence_grupo: '',
+            vendedor: '',
+            vp: '',
         });
         setSearchTerm('');
     };
@@ -124,8 +128,10 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
             const matchesGrupo = !filters.grupo_economico || (groupsMap[cliente?.id_grupo_economico]?.nome || '') === filters.grupo_economico;
             const pertenceGrupo = cliente?.id_grupo_economico && groupsMap[cliente?.id_grupo_economico] ? 'sim' : 'não';
             const matchesPertenceGrupo = !filters.pertence_grupo || pertenceGrupo === filters.pertence_grupo;
+            const matchesVendedor = !filters.vendedor || (usersMap[cliente?.id_usuario]?.nome || '') === filters.vendedor;
+            const matchesVp = !filters.vp || (usersMap[cliente?.vp]?.nome || '') === filters.vp;
 
-            return matchesSearch && matchesSolucao && matchesCliente && matchesStatus && matchesFaturamento && matchesGrupo && matchesPertenceGrupo;
+            return matchesSearch && matchesSolucao && matchesCliente && matchesStatus && matchesFaturamento && matchesGrupo && matchesPertenceGrupo && matchesVendedor && matchesVp;
         }).sort((a, b) => parseFloat(b.valor_mensal || 0) - parseFloat(a.valor_mensal || 0));
     }, [dadosProcessados, filters, searchTerm, productsMap, clientsMap, groupsMap]);
 
@@ -148,6 +154,8 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
             return {
                 "Solução": produto?.nome || "Desconhecido",
                 "Cliente": cliente?.nome_fantasia || "Desconhecido",
+                "Vendedor": usersMap[cliente?.id_usuario]?.nome || "Desconhecido",
+                "VP": usersMap[cliente?.vp]?.nome || "Desconhecido",
                 "Pertence Grupo Econômico": cliente?.id_grupo_economico && groupsMap[cliente.id_grupo_economico] ? "sim" : "não",
                 "Grupo Econômico": groupsMap[cliente?.id_grupo_economico]?.nome || "",
                 "Status": contrato.status || "",
@@ -172,7 +180,7 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
 
     return (
         <div className="space-y-4">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-lg border border-slate-200 gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-700 gap-4">
                 <div className="relative w-full md:w-64">
                     <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
                     <Input
@@ -193,10 +201,10 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
             </div>
 
             {showFilters && (
-                <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 animate-in fade-in slide-in-from-top-2">
+                <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 animate-in fade-in slide-in-from-top-2">
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Solução</label>
-                        <select name="solucao" value={filters.solucao} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Solução</label>
+                        <select name="solucao" value={filters.solucao} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todas</option>
                             {products.map(p => (
                                 <option key={p.id} value={p.nome}>{p.nome}</option>
@@ -204,8 +212,8 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Cliente</label>
-                        <select name="cliente" value={filters.cliente} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Cliente</label>
+                        <select name="cliente" value={filters.cliente} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             {clients.map(c => (
                                 <option key={c.id} value={c.nome_fantasia}>{c.nome_fantasia}</option>
@@ -213,24 +221,42 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Status</label>
-                        <select name="status" value={filters.status} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Vendedor</label>
+                        <select name="vendedor" value={filters.vendedor} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                            <option value="">Todos</option>
+                            {Object.values(usersMap || {}).map((u) => (
+                                <option key={u.id} value={u.nome}>{u.nome}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">VP</label>
+                        <select name="vp" value={filters.vp} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                            <option value="">Todos</option>
+                            {Object.values(usersMap || {}).map((u) => (
+                                <option key={u.id} value={u.nome}>{u.nome}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Status</label>
+                        <select name="status" value={filters.status} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             <option value="ativo">Ativo</option>
                             <option value="inativo">Inativo</option>
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Tipo Faturamento</label>
-                        <select name="tipo_faturamento" value={filters.tipo_faturamento} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Tipo Faturamento</label>
+                        <select name="tipo_faturamento" value={filters.tipo_faturamento} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             <option value="mensal">Mensal</option>
                             <option value="anual">Anual</option>
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Mês Vencimento</label>
-                        <select name="mes_vencimento" value={filters.mes_vencimento} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Mês Vencimento</label>
+                        <select name="mes_vencimento" value={filters.mes_vencimento} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             {Array.from({length: 12}, (_, i) => i + 1).map(m => (
                                 <option key={m} value={m}>{m.toString().padStart(2, '0')}</option>
@@ -238,8 +264,8 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Ano Vencimento</label>
-                        <select name="ano_vencimento" value={filters.ano_vencimento} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Ano Vencimento</label>
+                        <select name="ano_vencimento" value={filters.ano_vencimento} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             {anosDisponiveis.map(a => (
                                 <option key={a} value={a}>{a}</option>
@@ -248,8 +274,8 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Grupo Econômico</label>
-                        <select name="grupo_economico" value={filters.grupo_economico} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Grupo Econômico</label>
+                        <select name="grupo_economico" value={filters.grupo_economico} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             {Object.values(groupsMap || {}).map((g) => (
                                 <option key={g.id} value={g.nome}>{g.nome}</option>
@@ -257,26 +283,28 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Pertence a Grupo?</label>
-                        <select name="pertence_grupo" value={filters.pertence_grupo} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Pertence a Grupo?</label>
+                        <select name="pertence_grupo" value={filters.pertence_grupo} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             <option value="sim">Sim</option>
                             <option value="não">Não</option>
                         </select>
                     </div>
                     <div className="md:col-span-4 flex justify-end">
-                        <Button variant="ghost" icon={X} onClick={clearFilters} className="text-slate-500">Limpar Filtros</Button>
+                        <Button variant="ghost" icon={X} onClick={clearFilters} className="text-slate-500 dark:text-slate-400">Limpar Filtros</Button>
                     </div>
                 </div>
             )}
 
-            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden relative">
+            <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden relative">
                 <div className="overflow-x-auto max-h-[600px]">
                     <table className="w-full text-sm text-left">
-                        <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200 sticky top-0">
+                        <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 font-medium border-b border-slate-200 dark:border-slate-700 sticky top-0">
                             <tr>
                                 <th className="px-6 py-3">Solução</th>
                                 <th className="px-6 py-3">Cliente</th>
+                                <th className="px-6 py-3">Vendedor</th>
+                                <th className="px-6 py-3">VP</th>
                                 <th className="px-6 py-3">Pertence Grupo Econômico</th>
                                 <th className="px-6 py-3">Grupo Econômico</th>
                                 <th className="px-6 py-3">Status</th>
@@ -289,38 +317,40 @@ const ContractReport = ({ contracts, clients, products, clientsMap, productsMap,
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {csvData.map((c, index) => (
-                                <tr key={index} className="hover:bg-slate-50">
-                                    <td className="px-6 py-3 text-slate-500">{c["Solução"]}</td>
-                                    <td className="px-6 py-3 font-medium text-slate-900">{c["Cliente"]}</td>
-                                    <td className="px-6 py-3 text-slate-500">{c["Pertence Grupo Econômico"]}</td>
-                                    <td className="px-6 py-3 text-slate-500">{c["Grupo Econômico"]}</td>
+                                <tr key={index} className="hover:bg-slate-50 dark:bg-slate-800/50">
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{c["Solução"]}</td>
+                                    <td className="px-6 py-3 font-medium text-slate-900 dark:text-slate-100">{c["Cliente"]}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{c["Vendedor"]}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{c["VP"]}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{c["Pertence Grupo Econômico"]}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{c["Grupo Econômico"]}</td>
                                     <td className="px-6 py-3">
                                         <Badge status={c["Status"]} />
                                     </td>
-                                    <td className="px-6 py-3 text-slate-500">{c["Reajuste"]}</td>
-                                    <td className="px-6 py-3 text-slate-500">{c["Data de Vencimento"]}</td>
-                                    <td className="px-6 py-3 text-slate-500">{c["Expiração"]}</td>
-                                    <td className="px-6 py-3 text-slate-500 capitalize">{c["Faturamento"]}</td>
-                                    <td className="px-6 py-3 text-right font-medium text-slate-700">{c["Valor"]}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{c["Reajuste"]}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{c["Data de Vencimento"]}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{c["Expiração"]}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400 capitalize">{c["Faturamento"]}</td>
+                                    <td className="px-6 py-3 text-right font-medium text-slate-700 dark:text-slate-300">{c["Valor"]}</td>
                                 </tr>
                             ))}
                             {csvData.length === 0 && (
                                 <tr>
-                                    <td colSpan="10" className="px-6 py-8 text-center text-slate-500">
+                                    <td colSpan="12" className="px-6 py-8 text-center text-slate-500 dark:text-slate-400">
                                         Nenhum registro encontrado.
                                     </td>
                                 </tr>
                             )}
                         </tbody>
-                        <tfoot className="bg-slate-50 font-bold text-slate-900 sticky bottom-0 border-t border-slate-200">
+                        <tfoot className="bg-slate-50 dark:bg-slate-800/50 font-bold text-slate-900 dark:text-slate-100 sticky bottom-0 border-t border-slate-200 dark:border-slate-700">
                             <tr>
-                                <td colSpan="9" className="px-6 py-3 text-right">Total:</td>
+                                <td colSpan="11" className="px-6 py-3 text-right">Total:</td>
                                 <td className="px-6 py-3 text-right">{formatCurrency(totalValor)}</td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
-                <div className="bg-slate-50 px-6 py-3 border-t border-slate-200 text-xs text-slate-500">
+                <div className="bg-slate-50 dark:bg-slate-800/50 px-6 py-3 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400">
                     Mostrando {filteredContracts.length} registro(s)
                 </div>
             </div>

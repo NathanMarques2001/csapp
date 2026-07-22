@@ -15,7 +15,7 @@ import { useModalGuard } from '../hooks/useFormGuard';
 
 const HistoryModalComponent = ({ modalType, modalItemId, initialContent, onClose, onSave, savingModal }) => {
     const [conteudo, setConteudo] = useState(initialContent || '');
-    
+
     const { handleClose, confirmSave } = useModalGuard({
         formData: conteudo,
         baseline: initialContent || '',
@@ -26,34 +26,34 @@ const HistoryModalComponent = ({ modalType, modalItemId, initialContent, onClose
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-            <div className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200">
-                <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 className="text-lg font-bold text-slate-800">
-                        {modalType === 'comercial' ? (modalItemId ? 'Editar Contato Comercial' : 'Novo Contato Comercial') 
-                       : modalType === 'tecnico' ? (modalItemId ? 'Editar Contato Técnico' : 'Novo Contato Técnico') 
-                       : (modalItemId ? 'Editar Fato Importante' : 'Novo Fato Importante')}
+            <div className="bg-white dark:bg-slate-900 rounded-xl shadow-xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200">
+                <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-700/50 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+                    <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200">
+                        {modalType === 'comercial' ? (modalItemId ? 'Editar Contato Comercial' : 'Novo Contato Comercial')
+                            : modalType === 'tecnico' ? (modalItemId ? 'Editar Contato Técnico' : 'Novo Contato Técnico')
+                                : (modalItemId ? 'Editar Fato Importante' : 'Novo Fato Importante')}
                     </h3>
-                    <button onClick={handleClose} className="text-slate-400 hover:text-slate-600 transition-colors p-1">
+                    <button onClick={handleClose} className="text-slate-400 hover:text-slate-600 dark:text-slate-400 transition-colors p-1">
                         <XCircle size={20} />
                     </button>
                 </div>
                 <div className="p-6 space-y-4">
                     <div className="space-y-2">
-                        <label className="block text-sm font-medium text-slate-700">Conteúdo do Registro</label>
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Conteúdo do Registro</label>
                         <textarea
                             autoFocus
-                            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 resize-none"
+                            className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 resize-none"
                             rows="4"
                             value={conteudo}
                             onChange={(e) => setConteudo(e.target.value)}
                             placeholder="Digite os detalhes..."
                         />
                     </div>
-                    <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                    <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-700/50">
                         <Button variant="outline" onClick={handleClose}>
                             Cancelar
                         </Button>
-                        <Button 
+                        <Button
                             className="bg-teal-600 text-white hover:bg-teal-700 shadow-sm"
                             onClick={async () => {
                                 if (!conteudo.trim()) return;
@@ -102,10 +102,10 @@ const ClientDetails = () => {
     };
 
     const handleDeleteHistory = async (type, idItem) => {
-        const endpoint = type === 'comercial' ? '/contatos-comerciais' 
-                       : type === 'tecnico' ? '/contatos-tecnicos' 
-                       : '/fatos-importantes';
-        
+        const endpoint = type === 'comercial' ? '/contatos-comerciais'
+            : type === 'tecnico' ? '/contatos-tecnicos'
+                : '/fatos-importantes';
+
         const confirmed = await confirm({
             title: 'Excluir registro',
             message: 'Tem certeza que deseja excluir este registro do histórico?',
@@ -113,7 +113,7 @@ const ClientDetails = () => {
             cancelText: 'Cancelar',
             variant: 'danger'
         });
-        
+
         if (confirmed) {
             try {
                 await api.delete(`${endpoint}/${idItem}`);
@@ -255,7 +255,7 @@ const ClientDetails = () => {
     return (
         <div className="space-y-6 animate-in slide-in-from-right-4 duration-300">
             {/* Header */}
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+            <div className="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div className="flex items-center gap-4">
                         <BackButton fallback="/clientes" />
@@ -263,8 +263,8 @@ const ClientDetails = () => {
                             {(client.nome_fantasia || client.nomeFantasia || 'CL').substring(0, 2).toUpperCase()}
                         </div>
                         <div>
-                            <h1 className="text-2xl font-bold text-slate-900">{client.nome_fantasia || client.nomeFantasia}</h1>
-                            <div className="flex items-center gap-3 text-sm text-slate-500 mt-1">
+                            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">{client.nome_fantasia || client.nomeFantasia}</h1>
+                            <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400 mt-1">
                                 <span>CNPJ: {client.cpf_cnpj || client.cnpj}</span>
                                 <span className="w-1 h-1 bg-slate-400 rounded-full"></span>
                                 <span>{client.segmento}</span>
@@ -279,14 +279,14 @@ const ClientDetails = () => {
                 </div>
 
                 {/* Tabs */}
-                <div className="flex gap-6 mt-8 border-b border-slate-200">
+                <div className="flex gap-6 mt-8 border-b border-slate-200 dark:border-slate-700">
                     {['Overview', 'Contatos', 'Contratos', 'Histórico'].map(tab => (
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab.toLowerCase())}
                             className={`pb-3 text-sm font-medium transition-colors ${activeTab === tab.toLowerCase()
                                 ? 'text-teal-600 border-b-2 border-teal-600'
-                                : 'text-slate-500 hover:text-slate-700'
+                                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:text-slate-300'
                                 }`}
                         >
                             {tab === 'Overview' ? 'Visão Geral' : tab}
@@ -300,17 +300,17 @@ const ClientDetails = () => {
                 <>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <Card className="p-6">
-                            <h3 className="text-sm font-medium text-slate-500 mb-2">Receita Anual Recorrente (RAR)</h3>
-                            <p className="text-2xl font-bold text-slate-900">{formatCurrency(totalARR)}</p>
+                            <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Receita Anual Recorrente (ARR)</h3>
+                            <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{formatCurrency(totalARR)}</p>
                         </Card>
                         <Card className="p-6">
-                            <h3 className="text-sm font-medium text-slate-500 mb-2">Contratos Ativos</h3>
-                            <p className="text-2xl font-bold text-slate-900">{activeContracts.length}</p>
+                            <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Contratos Ativos</h3>
+                            <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{activeContracts.length}</p>
                         </Card>
                         <Card className="p-6">
-                            <h3 className="text-sm font-medium text-slate-500 mb-2">Próxima Renovação</h3>
+                            <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Próxima Renovação</h3>
                             <div className="flex flex-col">
-                                <p className="text-2xl font-bold text-slate-900">
+                                <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                                     {nextRenewalClient ? (
                                         <>
                                             <span className="text-lg font-normal text-slate-400">#{nextRenewalClient.id} - </span>
@@ -326,17 +326,17 @@ const ClientDetails = () => {
                             </div>
                         </Card>
                         <Card className="p-6">
-                            <h3 className="text-sm font-medium text-slate-500 mb-2">Receita Mensal Recorrente (RMR)</h3>
-                            <p className="text-2xl font-bold text-slate-900">{formatCurrency(totalMRR)}</p>
+                            <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Receita Mensal Recorrente (MRR)</h3>
+                            <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{formatCurrency(totalMRR)}</p>
                         </Card>
                         <Card className="p-6">
-                            <h3 className="text-sm font-medium text-slate-500 mb-2">Contratos Inativos</h3>
-                            <p className="text-2xl font-bold text-slate-900">{inactiveContracts.length}</p>
+                            <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Contratos Inativos</h3>
+                            <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">{inactiveContracts.length}</p>
                         </Card>
                         <Card className="p-6">
-                            <h3 className="text-sm font-medium text-slate-500 mb-2">Próximo Reajuste</h3>
+                            <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-2">Próximo Reajuste</h3>
                             <div className="flex flex-col">
-                                <p className="text-2xl font-bold text-slate-900">
+                                <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                                     {nextReadjustment ? (
                                         <>
                                             <span className="text-lg font-normal text-slate-400">#{nextReadjustment.id} - </span>
@@ -345,7 +345,7 @@ const ClientDetails = () => {
                                     ) : '-'}
                                 </p>
                                 {nextReadjustment && (
-                                    <p className="text-sm text-slate-500 mt-1">
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                                         Faltam {Math.ceil((nextReadjustment.parsedReadjustment - new Date()) / (1000 * 60 * 60 * 24))} dias
                                     </p>
                                 )}
@@ -355,7 +355,7 @@ const ClientDetails = () => {
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <Card className="p-6">
-                            <h3 className="font-bold mb-4 text-slate-900">Principais Contatos</h3>
+                            <h3 className="font-bold mb-4 text-slate-900 dark:text-slate-100">Principais Contatos</h3>
                             <div className="space-y-4">
                                 {/* Simplified List for Overview */}
                                 {[
@@ -363,38 +363,38 @@ const ClientDetails = () => {
                                     { role: 'Gestor Financeiro', name: client.gestor_financeiro_nome, email: client.gestor_financeiro_email }
                                 ].filter(Boolean).map((contact, idx) => (
                                     contact.name ? (
-                                        <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-slate-100 cursor-pointer" onClick={() => setActiveTab('contatos')}>
+                                        <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg hover:bg-slate-100 dark:bg-slate-800 cursor-pointer" onClick={() => setActiveTab('contatos')}>
                                             <div className="flex items-center gap-3">
                                                 <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-xs font-bold text-teal-700">
                                                     {contact.name.substring(0, 2).toUpperCase()}
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm font-medium text-slate-900">{contact.name}</p>
-                                                    <p className="text-xs text-slate-500">{contact.role}</p>
+                                                    <p className="text-sm font-medium text-slate-900 dark:text-slate-100">{contact.name}</p>
+                                                    <p className="text-xs text-slate-500 dark:text-slate-400">{contact.role}</p>
                                                 </div>
                                             </div>
                                             <ChevronRight className="w-4 h-4 text-slate-400" />
                                         </div>
                                     ) : null
                                 ))}
-                                {(!client.gestor_contratos_nome && !client.gestor_financeiro_nome) && <p className="text-slate-500 text-sm">Nenhum contato cadastrado.</p>}
+                                {(!client.gestor_contratos_nome && !client.gestor_financeiro_nome) && <p className="text-slate-500 dark:text-slate-400 text-sm">Nenhum contato cadastrado.</p>}
                             </div>
                         </Card>
 
                         <Card className="p-6">
-                            <h3 className="font-bold mb-4 text-slate-900">Últimos Contratos</h3>
+                            <h3 className="font-bold mb-4 text-slate-900 dark:text-slate-100">Últimos Contratos</h3>
                             <div className="space-y-3">
                                 {contracts.slice(0, 4).map(c => (
-                                    <div key={c.id} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-slate-100 cursor-pointer transition-colors" onClick={() => navigate(`/contratos/${c.id}/editar`)}>
+                                    <div key={c.id} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg hover:bg-slate-100 dark:bg-slate-800 cursor-pointer transition-colors" onClick={() => navigate(`/contratos/${c.id}/editar`)}>
                                         <div className="flex items-center gap-3">
                                             <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600">
                                                 <FileText className="w-5 h-5" />
                                             </div>
                                             <div>
-                                                <p className="text-sm font-medium text-slate-900">
+                                                <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
                                                     Contrato #{c.id} - {products[c.id_produto]?.nome || `Produto ${c.id_produto}`}
                                                 </p>
-                                                <p className="text-xs text-slate-500 capitalize">
+                                                <p className="text-xs text-slate-500 dark:text-slate-400 capitalize">
                                                     {formatCurrency(c.valor_mensal)} - {c.tipo_faturamento}
                                                 </p>
                                             </div>
@@ -405,7 +405,7 @@ const ClientDetails = () => {
                                         </div>
                                     </div>
                                 ))}
-                                {contracts.length === 0 && <p className="text-sm text-slate-500">Nenhum contrato encontrado.</p>}
+                                {contracts.length === 0 && <p className="text-sm text-slate-500 dark:text-slate-400">Nenhum contrato encontrado.</p>}
                             </div>
                         </Card>
                     </div>
@@ -415,7 +415,7 @@ const ClientDetails = () => {
             {activeTab === 'contatos' && (
                 <div className="space-y-8">
                     <div>
-                        <h3 className="font-bold text-lg text-slate-900 mb-4">Gestores Principais</h3>
+                        <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100 mb-4">Gestores Principais</h3>
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <ContactCard title="Gestor de Contratos"
                                 name={client.gestor_contratos_nome}
@@ -437,20 +437,20 @@ const ClientDetails = () => {
 
                     <div>
                         <div className="flex justify-between items-center mb-4">
-                            <h3 className="font-bold text-lg text-slate-900">Contatos Comerciais</h3>
+                            <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100">Contatos Comerciais</h3>
                             <Button variant="ghost" size="sm" icon={Plus}>Adicionar</Button>
                         </div>
-                        <div className="bg-slate-50 rounded-lg p-8 text-center text-slate-500 border border-dashed border-slate-300">
+                        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-8 text-center text-slate-500 dark:text-slate-400 border border-dashed border-slate-300">
                             Nenhum contato comercial adicional cadastrado.
                         </div>
                     </div>
 
                     <div>
                         <div className="flex justify-between items-center mb-4">
-                            <h3 className="font-bold text-lg text-slate-900">Contatos Técnicos</h3>
+                            <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100">Contatos Técnicos</h3>
                             <Button variant="ghost" size="sm" icon={Plus}>Adicionar</Button>
                         </div>
-                        <div className="bg-slate-50 rounded-lg p-8 text-center text-slate-500 border border-dashed border-slate-300">
+                        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-8 text-center text-slate-500 dark:text-slate-400 border border-dashed border-slate-300">
                             Nenhum contato técnico adicional cadastrado.
                         </div>
                     </div>
@@ -458,21 +458,21 @@ const ClientDetails = () => {
             )}
 
             {activeTab === 'contratos' && (
-                <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
+                <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
                     {/* Totals Header */}
-                    <div className="bg-slate-50 p-4 border-b border-slate-200 flex justify-end gap-6 text-sm">
+                    <div className="bg-slate-50 dark:bg-slate-800/50 p-4 border-b border-slate-200 dark:border-slate-700 flex justify-end gap-6 text-sm">
                         <div className="text-right">
-                            <p className="text-slate-500 uppercase tracking-wider text-xs mb-1">Faturamento Mensal</p>
-                            <p className="font-bold text-slate-700 text-lg">
+                            <p className="text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs mb-1">Faturamento Mensal</p>
+                            <p className="font-bold text-slate-700 dark:text-slate-300 text-lg">
                                 {formatCurrency(contracts
                                     .filter(c => c.status === 'ativo' && c.tipo_faturamento === 'mensal')
                                     .reduce((acc, c) => acc + Number(c.valor_mensal || 0), 0)
                                 )}
                             </p>
                         </div>
-                        <div className="text-right pl-6 border-l border-slate-200">
-                            <p className="text-slate-500 uppercase tracking-wider text-xs mb-1">Faturamento Anual</p>
-                            <p className="font-bold text-slate-700 text-lg">
+                        <div className="text-right pl-6 border-l border-slate-200 dark:border-slate-700">
+                            <p className="text-slate-500 dark:text-slate-400 uppercase tracking-wider text-xs mb-1">Faturamento Anual</p>
+                            <p className="font-bold text-slate-700 dark:text-slate-300 text-lg">
                                 {formatCurrency(contracts
                                     .filter(c => c.status === 'ativo' && c.tipo_faturamento === 'anual')
                                     .reduce((acc, c) => acc + Number(c.valor_mensal || 0), 0)
@@ -484,7 +484,7 @@ const ClientDetails = () => {
                     {/* Table */}
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
-                            <thead className="bg-white text-slate-500 font-medium border-b border-slate-100">
+                            <thead className="bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 font-medium border-b border-slate-100 dark:border-slate-700/50">
                                 <tr>
                                     <th className="px-6 py-3">Status</th>
                                     <th className="px-6 py-3">Solução</th>
@@ -504,29 +504,29 @@ const ClientDetails = () => {
                                         const manufacturerName = product ? manufacturers[product.id_fabricante] : '-';
 
                                         return (
-                                            <tr key={contract.id} className="hover:bg-slate-50 transition-colors cursor-pointer" onClick={() => navigate(`/contratos/${contract.id}/editar`)}>
+                                            <tr key={contract.id} className="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors cursor-pointer" onClick={() => navigate(`/contratos/${contract.id}/editar`)}>
                                                 <td className="px-6 py-4">
                                                     {contract.status === 'ativo'
                                                         ? <span className="flex items-center gap-1.5 text-emerald-600 font-medium"><CheckCircle size={16} /> Ativo</span>
                                                         : <span className="flex items-center gap-1.5 text-slate-400 font-medium"><XCircle size={16} /> Inativo</span>
                                                     }
                                                 </td>
-                                                <td className="px-6 py-4 font-medium text-slate-700">
+                                                <td className="px-6 py-4 font-medium text-slate-700 dark:text-slate-300">
                                                     <div className="flex items-center gap-2">
                                                         <Package size={16} className="text-indigo-400" />
                                                         {product?.nome || contract.id_produto}
                                                     </div>
                                                 </td>
-                                                <td className="px-6 py-4 text-slate-500">
+                                                <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
                                                     {formatDate(contract.data_inicio)}
                                                 </td>
-                                                <td className="px-6 py-4 font-mono text-slate-600">
+                                                <td className="px-6 py-4 font-mono text-slate-600 dark:text-slate-400">
                                                     {formatCurrency(contract.valor_mensal)}
                                                 </td>
-                                                <td className="px-6 py-4 text-slate-600">
+                                                <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
                                                     {contract.duracao === 12000 ? 'Indeterminado' : `${contract.duracao} Meses`}
                                                 </td>
-                                                <td className="px-6 py-4 text-slate-500">
+                                                <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
                                                     <div className="flex items-center gap-2">
                                                         <Factory size={16} className="text-slate-400" />
                                                         {manufacturerName}
@@ -559,26 +559,26 @@ const ClientDetails = () => {
                     {/* Contato Comercial */}
                     <div className="space-y-4">
                         <div className="flex justify-between items-center">
-                            <h3 className="font-bold text-lg text-slate-900">Contato Comercial</h3>
+                            <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100">Contato Comercial</h3>
                             <Button variant="outline" size="sm" icon={Plus} onClick={() => setModalType('comercial')}>Novo</Button>
                         </div>
                         {contatosComerciais.length === 0 ? (
-                            <div className="bg-slate-50 rounded-lg p-6 text-center text-slate-500 border border-dashed border-slate-300">
+                            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-6 text-center text-slate-500 dark:text-slate-400 border border-dashed border-slate-300">
                                 Nenhum contato comercial encontrado.
                             </div>
                         ) : (
-                            <div className="bg-white rounded-lg border border-slate-200 shadow-sm divide-y divide-slate-100">
+                            <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm divide-y divide-slate-100">
                                 {contatosComerciais.map(item => (
-                                    <div key={item.id} className="group p-4 flex gap-4 items-start hover:bg-slate-50 transition-colors">
+                                    <div key={item.id} className="group p-4 flex gap-4 items-start hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
                                         <div className="mt-1">
                                             <div className="w-2 h-2 rounded-full bg-teal-500 mt-1.5"></div>
                                         </div>
                                         <div className="flex-1">
-                                            <div className="flex gap-4 text-xs text-slate-500 mb-2">
+                                            <div className="flex gap-4 text-xs text-slate-500 dark:text-slate-400 mb-2">
                                                 {item.createdAt && <span>Criado: {new Date(item.createdAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
                                                 {item.updatedAt && item.updatedAt !== item.createdAt && <span>Última Alteração: {new Date(item.updatedAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
                                             </div>
-                                            <p className="text-sm text-slate-900 whitespace-pre-wrap">{item.conteudo}</p>
+                                            <p className="text-sm text-slate-900 dark:text-slate-100 whitespace-pre-wrap">{item.conteudo}</p>
                                         </div>
                                         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button onClick={() => handleEditHistory('comercial', item.id, item.conteudo)} className="text-slate-400 hover:text-teal-600 transition-colors p-1" title="Editar">
@@ -597,26 +597,26 @@ const ClientDetails = () => {
                     {/* Contato Técnico */}
                     <div className="space-y-4">
                         <div className="flex justify-between items-center">
-                            <h3 className="font-bold text-lg text-slate-900">Contato Técnico</h3>
+                            <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100">Contato Técnico</h3>
                             <Button variant="outline" size="sm" icon={Plus} onClick={() => setModalType('tecnico')}>Novo</Button>
                         </div>
                         {contatosTecnicos.length === 0 ? (
-                            <div className="bg-slate-50 rounded-lg p-6 text-center text-slate-500 border border-dashed border-slate-300">
+                            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-6 text-center text-slate-500 dark:text-slate-400 border border-dashed border-slate-300">
                                 Nenhum contato técnico encontrado.
                             </div>
                         ) : (
-                            <div className="bg-white rounded-lg border border-slate-200 shadow-sm divide-y divide-slate-100">
+                            <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm divide-y divide-slate-100">
                                 {contatosTecnicos.map(item => (
-                                    <div key={item.id} className="group p-4 flex gap-4 items-start hover:bg-slate-50 transition-colors">
+                                    <div key={item.id} className="group p-4 flex gap-4 items-start hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
                                         <div className="mt-1">
                                             <div className="w-2 h-2 rounded-full bg-teal-500 mt-1.5"></div>
                                         </div>
                                         <div className="flex-1">
-                                            <div className="flex gap-4 text-xs text-slate-500 mb-2">
+                                            <div className="flex gap-4 text-xs text-slate-500 dark:text-slate-400 mb-2">
                                                 {item.createdAt && <span>Criado: {new Date(item.createdAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
                                                 {item.updatedAt && item.updatedAt !== item.createdAt && <span>Última Alteração: {new Date(item.updatedAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
                                             </div>
-                                            <p className="text-sm text-slate-900 whitespace-pre-wrap">{item.conteudo}</p>
+                                            <p className="text-sm text-slate-900 dark:text-slate-100 whitespace-pre-wrap">{item.conteudo}</p>
                                         </div>
                                         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button onClick={() => handleEditHistory('tecnico', item.id, item.conteudo)} className="text-slate-400 hover:text-teal-600 transition-colors p-1" title="Editar">
@@ -635,26 +635,26 @@ const ClientDetails = () => {
                     {/* Fatos Importantes */}
                     <div className="space-y-4">
                         <div className="flex justify-between items-center">
-                            <h3 className="font-bold text-lg text-slate-900">Fatos Importantes</h3>
+                            <h3 className="font-bold text-lg text-slate-900 dark:text-slate-100">Fatos Importantes</h3>
                             <Button variant="outline" size="sm" icon={Plus} onClick={() => setModalType('fato')}>Novo</Button>
                         </div>
                         {fatosImportantes.length === 0 ? (
-                            <div className="bg-slate-50 rounded-lg p-6 text-center text-slate-500 border border-dashed border-slate-300">
+                            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-6 text-center text-slate-500 dark:text-slate-400 border border-dashed border-slate-300">
                                 Nenhum fato importante encontrado.
                             </div>
                         ) : (
-                            <div className="bg-white rounded-lg border border-slate-200 shadow-sm divide-y divide-slate-100">
+                            <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm divide-y divide-slate-100">
                                 {fatosImportantes.map(item => (
-                                    <div key={item.id} className="group p-4 flex gap-4 items-start hover:bg-slate-50 transition-colors">
+                                    <div key={item.id} className="group p-4 flex gap-4 items-start hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
                                         <div className="mt-1">
                                             <div className="w-2 h-2 rounded-full bg-teal-500 mt-1.5"></div>
                                         </div>
                                         <div className="flex-1">
-                                            <div className="flex gap-4 text-xs text-slate-500 mb-2">
+                                            <div className="flex gap-4 text-xs text-slate-500 dark:text-slate-400 mb-2">
                                                 {item.createdAt && <span>Criado: {new Date(item.createdAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
                                                 {item.updatedAt && item.updatedAt !== item.createdAt && <span>Última Alteração: {new Date(item.updatedAt).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</span>}
                                             </div>
-                                            <p className="text-sm text-slate-900 whitespace-pre-wrap">{item.conteudo}</p>
+                                            <p className="text-sm text-slate-900 dark:text-slate-100 whitespace-pre-wrap">{item.conteudo}</p>
                                         </div>
                                         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button onClick={() => handleEditHistory('fato', item.id, item.conteudo)} className="text-slate-400 hover:text-teal-600 transition-colors p-1" title="Editar">
@@ -672,8 +672,8 @@ const ClientDetails = () => {
                 </div>
             )}
 
-            <div className="mt-12 pt-6 border-t border-slate-200">
-                <h3 className="text-lg font-bold text-slate-900 mb-2">Zona de Perigo</h3>
+            <div className="mt-12 pt-6 border-t border-slate-200 dark:border-slate-700">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">Zona de Perigo</h3>
                 <div className="bg-red-50 border border-red-200 rounded-lg p-6 flex flex-col md:flex-row justify-between items-center gap-4">
                     <div>
                         <p className="font-medium text-red-900">Inativar Cliente</p>
@@ -708,9 +708,9 @@ const ClientDetails = () => {
                     onClose={() => { setModalType(null); setModalItemId(null); setModalContent(''); }}
                     onSave={async (conteudo) => {
                         setSavingModal(true);
-                        const endpoint = modalType === 'comercial' ? '/contatos-comerciais' 
-                                       : modalType === 'tecnico' ? '/contatos-tecnicos' 
-                                       : '/fatos-importantes';
+                        const endpoint = modalType === 'comercial' ? '/contatos-comerciais'
+                            : modalType === 'tecnico' ? '/contatos-tecnicos'
+                                : '/fatos-importantes';
                         try {
                             if (modalItemId) {
                                 await api.put(`${endpoint}/${modalItemId}`, { conteudo });

@@ -56,7 +56,7 @@ const ProductReport = ({ products, manufacturersMap }) => {
 
     return (
         <div className="space-y-4">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-lg border border-slate-200 gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-700 gap-4">
                 <div className="relative w-full md:w-64">
                     <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
                     <Input
@@ -77,10 +77,10 @@ const ProductReport = ({ products, manufacturersMap }) => {
             </div>
 
             {showFilters && (
-                <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 animate-in fade-in slide-in-from-top-2">
+                <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 animate-in fade-in slide-in-from-top-2">
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Produto</label>
-                        <select name="nome" value={filters.nome} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Produto</label>
+                        <select name="nome" value={filters.nome} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             {products.map(p => (
                                 <option key={p.id} value={p.nome}>{p.nome}</option>
@@ -88,8 +88,8 @@ const ProductReport = ({ products, manufacturersMap }) => {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Fabricante</label>
-                        <select name="fabricante" value={filters.fabricante} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Fabricante</label>
+                        <select name="fabricante" value={filters.fabricante} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             {Object.values(manufacturersMap || {}).map(f => (
                                 <option key={f.id} value={f.nome}>{f.nome}</option>
@@ -97,23 +97,23 @@ const ProductReport = ({ products, manufacturersMap }) => {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Status</label>
-                        <select name="status" value={filters.status} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Status</label>
+                        <select name="status" value={filters.status} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             <option value="ativo">Ativo</option>
                             <option value="inativo">Inativo</option>
                         </select>
                     </div>
                     <div className="md:col-span-3 flex justify-end">
-                        <Button variant="ghost" icon={X} onClick={clearFilters} className="text-slate-500">Limpar Filtros</Button>
+                        <Button variant="ghost" icon={X} onClick={clearFilters} className="text-slate-500 dark:text-slate-400">Limpar Filtros</Button>
                     </div>
                 </div>
             )}
 
-            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden relative">
+            <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden relative">
                 <div className="overflow-x-auto max-h-[600px]">
                     <table className="w-full text-sm text-left">
-                        <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200 sticky top-0">
+                        <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 font-medium border-b border-slate-200 dark:border-slate-700 sticky top-0">
                             <tr>
                                 <th className="px-6 py-3">Nome do Produto</th>
                                 <th className="px-6 py-3">Fabricante</th>
@@ -122,9 +122,9 @@ const ProductReport = ({ products, manufacturersMap }) => {
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {filteredProducts.map(p => (
-                                <tr key={p.id} className="hover:bg-slate-50">
-                                    <td className="px-6 py-3 font-medium text-slate-900">{p.nome || '-'}</td>
-                                    <td className="px-6 py-3 text-slate-500">{manufacturersMap[p.id_fabricante]?.nome || '-'}</td>
+                                <tr key={p.id} className="hover:bg-slate-50 dark:bg-slate-800/50">
+                                    <td className="px-6 py-3 font-medium text-slate-900 dark:text-slate-100">{p.nome || '-'}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{manufacturersMap[p.id_fabricante]?.nome || '-'}</td>
                                     <td className="px-6 py-3">
                                         <Badge status={p.status} />
                                     </td>
@@ -132,7 +132,7 @@ const ProductReport = ({ products, manufacturersMap }) => {
                             ))}
                             {filteredProducts.length === 0 && (
                                 <tr>
-                                    <td colSpan="3" className="px-6 py-8 text-center text-slate-500">
+                                    <td colSpan="3" className="px-6 py-8 text-center text-slate-500 dark:text-slate-400">
                                         Nenhum registro encontrado.
                                     </td>
                                 </tr>
@@ -140,7 +140,7 @@ const ProductReport = ({ products, manufacturersMap }) => {
                         </tbody>
                     </table>
                 </div>
-                <div className="bg-slate-50 px-6 py-3 border-t border-slate-200 text-xs text-slate-500">
+                <div className="bg-slate-50 dark:bg-slate-800/50 px-6 py-3 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400">
                     Mostrando {filteredProducts.length} registro(s)
                 </div>
             </div>

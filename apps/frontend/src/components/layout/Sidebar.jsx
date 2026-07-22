@@ -1,13 +1,15 @@
-import { Shield, LayoutDashboard, Users, Briefcase, Database, FileText, Settings, LogOut } from 'lucide-react';
+import { Shield, LayoutDashboard, Users, Briefcase, Database, FileText, Settings, LogOut, Sun, Moon } from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useConfirm } from '../../context/ConfirmContext';
 import { confirmPresets } from '../../utils/confirmPresets';
+import { useTheme } from '../../context/ThemeContext';
 
 const Sidebar = ({ isOpen }) => {
     const navigate = useNavigate();
     const { confirm } = useConfirm();
     const [, , removeCookie] = useCookies(['jwtToken', 'nomeUsuario', 'id', 'tipo']);
+    const { isDark, alternarTema } = useTheme();
 
     const handleLogout = async () => {
         const confirmed = await confirm(confirmPresets.logout());
@@ -47,7 +49,29 @@ const Sidebar = ({ isOpen }) => {
                 ))}
             </nav>
 
-            <div className="p-4 border-t border-slate-800">
+            <div className="p-4 border-t border-slate-800 space-y-2">
+                {/* Toggle de Tema */}
+                <button
+                    onClick={alternarTema}
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-amber-400 dark:hover:text-sky-400 transition-colors group"
+                    title={isDark ? 'Ativar Modo Claro' : 'Ativar Modo Escuro'}
+                >
+                    {isDark ? (
+                        <Sun className="w-5 h-5 min-w-[20px] transition-transform group-hover:rotate-45" />
+                    ) : (
+                        <Moon className="w-5 h-5 min-w-[20px] transition-transform group-hover:-rotate-12" />
+                    )}
+                    {isOpen && (
+                        <div className="flex items-center justify-between flex-1">
+                            <span className="font-medium text-sm">{isDark ? 'Modo Claro' : 'Modo Escuro'}</span>
+                            <div className={`w-9 h-5 rounded-full relative transition-colors ${isDark ? 'bg-teal-600' : 'bg-slate-600'}`}>
+                                <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform ${isDark ? 'translate-x-4' : 'translate-x-0.5'}`} />
+                            </div>
+                        </div>
+                    )}
+                </button>
+
+                {/* Botão Sair */}
                 <button
                     onClick={handleLogout}
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-slate-400 hover:text-rose-400 transition-colors`}

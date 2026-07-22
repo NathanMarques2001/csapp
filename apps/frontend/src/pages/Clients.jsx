@@ -37,7 +37,8 @@ const Clients = () => {
     const [filters, setFilters] = useState({
         status: 'ativo',
         classification: '',
-        seller: ''
+        seller: '',
+        vp: ''
     });
 
     // Pagination State
@@ -130,8 +131,9 @@ const Clients = () => {
         const matchesStatus = filters.status === '' || (c.status || '').toLowerCase() === filters.status;
         const matchesClass = filters.classification === '' || String(c.id_classificacao_cliente) === String(filters.classification);
         const matchesSeller = filters.seller === '' || String(c.id_usuario) === String(filters.seller);
+        const matchesVp = filters.vp === '' || String(c.vp) === String(filters.vp);
 
-        return !c.id_grupo_economico && matchesSearch && matchesStatus && matchesClass && matchesSeller;
+        return !c.id_grupo_economico && matchesSearch && matchesStatus && matchesClass && matchesSeller && matchesVp;
     });
 
     const filteredGroups = groups.filter(g => {
@@ -163,7 +165,10 @@ const Clients = () => {
         // 4. Seller filter (groups don't have sellers, check children)
         const matchesSeller = filters.seller === '' || groupChildren.some(c => String(c.id_usuario) === String(filters.seller));
 
-        return matchesSearch && matchesStatus && matchesClass && matchesSeller;
+        // 5. VP filter
+        const matchesVp = filters.vp === '' || groupChildren.some(c => String(c.vp) === String(filters.vp));
+
+        return matchesSearch && matchesStatus && matchesClass && matchesSeller && matchesVp;
     });
 
     // Combine and paginate
@@ -223,8 +228,8 @@ const Clients = () => {
         <Card className="border-none shadow-sm h-full">
             <div className="flex items-center justify-between">
                 <div>
-                    <p className="text-sm text-slate-500 font-medium">{title}</p>
-                    <p className="text-xl font-bold text-slate-900 mt-1">{formatCurrency(value)}</p>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">{title}</p>
+                    <p className="text-xl font-bold text-slate-900 dark:text-slate-100 mt-1">{formatCurrency(value)}</p>
                 </div>
                 <div className={`p-3 rounded-full ${color}`}>
                     <Icon className="w-5 h-5 text-white" />
@@ -292,7 +297,7 @@ const Clients = () => {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <div className="flex items-center gap-2">
-                        <h1 className="text-2xl font-bold text-slate-900">Carteira de Clientes</h1>
+                        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Carteira de Clientes</h1>
                         <div className="group relative flex items-center">
                             <Info className="w-5 h-5 text-slate-400 cursor-help hover:text-indigo-500 transition-colors" />
                             
@@ -322,7 +327,7 @@ const Clients = () => {
                             </div>
                         </div>
                     </div>
-                    <p className="text-slate-500">Visão hierárquica de Grupos Econômicos e Empresas.</p>
+                    <p className="text-slate-500 dark:text-slate-400">Visão hierárquica de Grupos Econômicos e Empresas.</p>
                 </div>
                 <div className="flex items-center gap-3">
                     <Button variant="outline" icon={Filter} onClick={() => setFilterModalOpen(true)}>Filtrar</Button>
@@ -353,7 +358,7 @@ const Clients = () => {
                 })}
             </div>
 
-            <Card className="p-4 border-0 shadow-sm bg-white">
+            <Card className="p-4 border-0 shadow-sm bg-white dark:bg-slate-900">
                 <div className="relative">
                     <Search className="absolute left-3 top-2.5 h-5 w-5 text-slate-400" />
                     <Input
@@ -370,9 +375,9 @@ const Clients = () => {
                     {[1, 2, 3].map(i => <Skeleton key={i} className="h-12 w-full" />)}
                 </div>
             ) : (
-                <div className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+                <div className="bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
                     <table className="w-full text-sm text-left">
-                        <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200">
+                        <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 font-medium border-b border-slate-200 dark:border-slate-700">
                             <tr>
                                 <th className="px-6 py-3 w-12"></th>
                                 <th className="px-6 py-3">Nome / Razão Social</th>
@@ -380,6 +385,7 @@ const Clients = () => {
                                 <th className="px-6 py-3">Classificação</th>
                                 <th className="px-6 py-3">Valor Contratos</th>
                                 <th className="px-6 py-3">Vendedor</th>
+                                <th className="px-6 py-3">VP</th>
                                 <th className="px-6 py-3">Status</th>
                                 <th className="px-6 py-3 text-right">Ações</th>
                             </tr>
@@ -390,23 +396,24 @@ const Clients = () => {
                                     const group = entity.data;
                                     return (
                                         <React.Fragment key={`g-${group.id}`}>
-                                            <tr className="bg-slate-50 hover:bg-slate-100 cursor-pointer transition-colors" onClick={() => toggleGroup(group.id)}>
+                                            <tr className="bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:bg-slate-800 cursor-pointer transition-colors" onClick={() => toggleGroup(group.id)}>
                                                 <td className="px-6 py-3 text-center">
-                                                    {expandedGroups.includes(group.id) ? <ChevronDown className="w-4 h-4 text-slate-500" /> : <ChevronRight className="w-4 h-4 text-slate-500" />}
+                                                    {expandedGroups.includes(group.id) ? <ChevronDown className="w-4 h-4 text-slate-500 dark:text-slate-400" /> : <ChevronRight className="w-4 h-4 text-slate-500 dark:text-slate-400" />}
                                                 </td>
-                                                <td className="px-6 py-3 font-bold text-slate-800 flex items-center gap-2">
+                                                <td className="px-6 py-3 font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
                                                     <Building className="w-4 h-4 text-teal-600" />
                                                     {group.nome}
                                                 </td>
-                                                <td className="px-6 py-3 text-slate-500 italic">{group.descricao || 'Grupo Econômico'}</td>
+                                                <td className="px-6 py-3 text-slate-500 dark:text-slate-400 italic">{group.descricao || 'Grupo Econômico'}</td>
                                                 <td className="px-6 py-3">
                                                     <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100">
                                                         {classifications[group.id_classificacao_cliente] || '-'}
                                                     </span>
                                                 </td>
-                                                <td className="px-6 py-3 font-semibold text-slate-700">
+                                                <td className="px-6 py-3 font-semibold text-slate-700 dark:text-slate-300">
                                                     {formatCurrency(calculateGroupTotal(group.id))}
                                                 </td>
+                                                <td className="px-6 py-3"></td>
                                                 <td className="px-6 py-3"></td>
                                                 <td className="px-6 py-3 w-32">
                                                     <Badge status={group.status || 'ativo'} />
@@ -432,22 +439,25 @@ const Clients = () => {
                                             </tr>
 
                                             {expandedGroups.includes(group.id) && getClientsByGroup(group.id).map(client => (
-                                                <tr key={client.id} className="hover:bg-white bg-white border-l-4 border-l-transparent hover:border-l-teal-500 transition-all">
+                                                <tr key={client.id} className="hover:bg-white dark:bg-slate-900 bg-white dark:bg-slate-900 border-l-4 border-l-transparent hover:border-l-teal-500 transition-all">
                                                     <td className="px-6 py-3"></td>
-                                                    <td className="px-6 py-3 pl-12 flex items-center gap-2 font-medium text-slate-700">
+                                                    <td className="px-6 py-3 pl-12 flex items-center gap-2 font-medium text-slate-700 dark:text-slate-300">
                                                         {client.nome_fantasia}
                                                     </td>
-                                                    <td className="px-6 py-3 text-slate-500 font-mono text-xs">{client.cpf_cnpj}</td>
+                                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400 font-mono text-xs">{client.cpf_cnpj}</td>
                                                     <td className="px-6 py-3">
                                                         <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-amber-50 text-amber-700 border border-amber-100">
                                                             {classifications[client.id_classificacao_cliente] || '-'}
                                                         </span>
                                                     </td>
-                                                    <td className="px-6 py-3 text-slate-600 font-medium">
+                                                    <td className="px-6 py-3 text-slate-600 dark:text-slate-400 font-medium">
                                                         {formatCurrency(calculateContractTotal(client.id))}
                                                     </td>
-                                                    <td className="px-6 py-3 text-slate-500">
+                                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">
                                                         {sellers[client.id_usuario] || '-'}
+                                                    </td>
+                                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">
+                                                        {sellers[client.vp] || '-'}
                                                     </td>
                                                     <td className="px-6 py-3">
                                                         <Badge status={client.status} />
@@ -473,26 +483,29 @@ const Clients = () => {
                                     return (
                                         <React.Fragment key={`c-${client.id}`}>
                                             {showHeader && (
-                                                <tr className="bg-slate-50/80 border-t border-slate-200">
-                                                    <td colSpan="8" className="px-6 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                                <tr className="bg-slate-50 dark:bg-slate-800/50/80 border-t border-slate-200 dark:border-slate-700">
+                                                    <td colSpan="9" className="px-6 py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                                                         Clientes sem Grupo
                                                     </td>
                                                 </tr>
                                             )}
-                                            <tr className="hover:bg-slate-50 transition-colors">
+                                            <tr className="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors">
                                                 <td className="px-6 py-3"></td>
-                                                <td className="px-6 py-3 font-medium text-slate-900">{client.nome_fantasia}</td>
-                                                <td className="px-6 py-3 text-slate-500 font-mono text-xs">{client.cpf_cnpj}</td>
+                                                <td className="px-6 py-3 font-medium text-slate-900 dark:text-slate-100">{client.nome_fantasia}</td>
+                                                <td className="px-6 py-3 text-slate-500 dark:text-slate-400 font-mono text-xs">{client.cpf_cnpj}</td>
                                                 <td className="px-6 py-3">
-                                                    <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
+                                                    <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                                                         {classifications[client.id_classificacao_cliente] || '-'}
                                                     </span>
                                                 </td>
-                                                <td className="px-6 py-3 text-slate-600 font-medium">
+                                                <td className="px-6 py-3 text-slate-600 dark:text-slate-400 font-medium">
                                                     {formatCurrency(calculateContractTotal(client.id))}
                                                 </td>
-                                                <td className="px-6 py-3 text-slate-500">
+                                                <td className="px-6 py-3 text-slate-500 dark:text-slate-400">
                                                     {sellers[client.id_usuario] || '-'}
+                                                </td>
+                                                <td className="px-6 py-3 text-slate-500 dark:text-slate-400">
+                                                    {sellers[client.vp] || '-'}
                                                 </td>
                                                 <td className="px-6 py-3">
                                                     <Badge status={client.status} />
@@ -515,7 +528,7 @@ const Clients = () => {
 
                             {combinedEntities.length === 0 && (
                                 <tr>
-                                    <td colSpan="8" className="px-6 py-12 text-center text-slate-500">
+                                    <td colSpan="9" className="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
                                         Nenhum cliente ou grupo encontrado.
                                     </td>
                                 </tr>
@@ -524,15 +537,15 @@ const Clients = () => {
                     </table>
                     
                     {combinedEntities.length > 0 && (
-                        <div className="px-6 py-4 border-t border-slate-200 flex items-center justify-between bg-white">
-                            <div className="text-sm text-slate-500">
-                                Mostrando <span className="font-medium text-slate-900">{startIndex + 1}</span> a <span className="font-medium text-slate-900">{Math.min(startIndex + ITEMS_PER_PAGE, combinedEntities.length)}</span> de <span className="font-medium text-slate-900">{combinedEntities.length}</span> registros
+                        <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between bg-white dark:bg-slate-900">
+                            <div className="text-sm text-slate-500 dark:text-slate-400">
+                                Mostrando <span className="font-medium text-slate-900 dark:text-slate-100">{startIndex + 1}</span> a <span className="font-medium text-slate-900 dark:text-slate-100">{Math.min(startIndex + ITEMS_PER_PAGE, combinedEntities.length)}</span> de <span className="font-medium text-slate-900 dark:text-slate-100">{combinedEntities.length}</span> registros
                             </div>
                             <div className="flex items-center gap-1">
                                 <button 
                                     onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                                     disabled={currentPage === 1}
-                                    className="p-1 rounded text-slate-500 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    className="p-1 rounded text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                 >
                                     <ChevronLeft className="w-5 h-5" />
                                 </button>
@@ -548,7 +561,7 @@ const Clients = () => {
                                                 className={`w-8 h-8 flex items-center justify-center rounded text-sm font-medium transition-colors ${
                                                     currentPage === pageNum 
                                                     ? 'bg-teal-600 text-white' 
-                                                    : 'text-slate-600 hover:bg-slate-100'
+                                                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-slate-800'
                                                 }`}
                                             >
                                                 {pageNum}
@@ -563,7 +576,7 @@ const Clients = () => {
                                 <button 
                                     onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                                     disabled={currentPage === totalPages}
-                                    className="p-1 rounded text-slate-500 hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    className="p-1 rounded text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                 >
                                     <ChevronRight className="w-5 h-5" />
                                 </button>

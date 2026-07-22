@@ -15,7 +15,7 @@ module.exports = {
       }
 
       if (contrato.logs.length == 0) {
-        return res.status(404).send({ message: 'Nenhum log cadastrado!' });
+        return res.status(200).send({ logs: [] });
       }
 
       return res.status(200).send({ logs: contrato.logs });
@@ -32,7 +32,7 @@ module.exports = {
       });
 
       if (logs.length == 0) {
-        return res.status(404).send({ message: 'Nenhum log cadastrado!' });
+        return res.status(200).send({ logs: [] });
       }
 
       return res.status(200).send({ logs });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { createBrowserRouter, RouterProvider, createRoutesFromElements, Route, Navigate } from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route, Navigate } from "react-router-dom";
 import PrivateRoute from './components/auth/PrivateRoute';
 import DashboardLayout from './components/layout/DashboardLayout';
 import Dashboard from './pages/Dashboard';
@@ -18,7 +18,7 @@ import Login from "./pages/Login";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <>
+    <Route>
       <Route path="/login" element={<Login />} />
 
       {/* Protected Routes (Wrapper) */}
@@ -45,10 +45,11 @@ const router = createBrowserRouter(
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
-    </>
+    </Route>
   )
 );
 
 export default function App() {
   return <RouterProvider router={router} />;
 }
+

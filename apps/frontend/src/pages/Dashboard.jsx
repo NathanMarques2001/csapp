@@ -120,8 +120,8 @@ const Dashboard = () => {
         <div className="space-y-6 animate-in fade-in duration-500">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-900">Painel de Controle</h1>
-                    <p className="text-slate-500 text-sm mt-1">
+                    <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Painel de Controle</h1>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
                         Visão geral da operação de segurança e faturamento.
                     </p>
                 </div>
@@ -141,20 +141,20 @@ const Dashboard = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {[
                     { label: 'Clientes ativos', value: activeClients, icon: Users, color: 'text-teal-600 bg-teal-50' },
-                    { label: 'Clientes inativos', value: inactiveClients, icon: Users, color: 'text-slate-500 bg-slate-100' },
+                    { label: 'Clientes inativos', value: inactiveClients, icon: Users, color: 'text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800' },
                     { label: 'Grupos econômicos', value: groups.length, icon: Building2, color: 'text-indigo-600 bg-indigo-50' },
                     { label: 'Grupos ativos', value: activeGroups, icon: Building2, color: 'text-emerald-600 bg-emerald-50' },
                 ].map(item => (
                     <div
                         key={item.label}
-                        className="bg-white border border-slate-200 rounded-lg p-4 flex items-center gap-3 shadow-sm"
+                        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-4 flex items-center gap-3 shadow-sm"
                     >
                         <div className={`p-2 rounded-lg ${item.color}`}>
                             <item.icon className="w-5 h-5" />
                         </div>
                         <div>
-                            <p className="text-xs text-slate-500">{item.label}</p>
-                            <p className="text-xl font-bold text-slate-900">{item.value}</p>
+                            <p className="text-xs text-slate-500 dark:text-slate-400">{item.label}</p>
+                            <p className="text-xl font-bold text-slate-900 dark:text-slate-100">{item.value}</p>
                         </div>
                     </div>
                 ))}
@@ -204,14 +204,14 @@ const Dashboard = () => {
                                 return (
                                     <div
                                         key={n.id}
-                                        className="flex flex-col p-3 rounded-lg bg-slate-50 hover:bg-rose-50/40 cursor-pointer text-sm transition-colors border border-slate-100"
+                                        className="flex flex-col p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50 hover:bg-rose-50/40 cursor-pointer text-sm transition-colors border border-slate-100 dark:border-slate-700/50"
                                         onClick={() => navigate('/relatorios')}
                                     >
                                         <div className="flex justify-between items-start mb-1">
-                                            <span className="font-medium text-slate-900">{cliente?.nome_fantasia || 'Cliente Desconhecido'}</span>
-                                            <span className="text-xs text-slate-500">{formatDate(n.created_at || n.createdAt)}</span>
+                                            <span className="font-medium text-slate-900 dark:text-slate-100">{cliente?.nome_fantasia || 'Cliente Desconhecido'}</span>
+                                            <span className="text-xs text-slate-500 dark:text-slate-400">{formatDate(n.created_at || n.createdAt)}</span>
                                         </div>
-                                        <p className="text-slate-600 line-clamp-2">{n.descricao}</p>
+                                        <p className="text-slate-600 dark:text-slate-400 line-clamp-2">{n.descricao}</p>
                                         <div className="flex items-center gap-2 mt-2">
                                             <Badge variant="secondary">{n.modulo}</Badge>
                                             <span className="text-xs text-slate-400">Contrato #{n.id_contrato}</span>
@@ -238,18 +238,18 @@ const Dashboard = () => {
                             <p className="text-sm text-center">Nenhum log recente.</p>
                         </div>
                     ) : (
-                        <div className="space-y-4 max-h-56 overflow-y-auto pr-2 relative before:absolute before:inset-0 before:ml-2.5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
+                        <div className="space-y-4 max-h-56 overflow-y-auto pr-2 relative before:absolute before:inset-0 before:ml-2.5 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 dark:before:via-slate-700 before:to-transparent">
                             {logs.map((log, index) => (
                                 <div key={log.id || index} className="relative flex items-start gap-4">
-                                    <div className="absolute left-0 md:left-1/2 w-5 h-5 rounded-full bg-white border-4 border-teal-100 flex items-center justify-center -translate-x-0.5 md:-translate-x-1/2 mt-1.5 z-10">
+                                    <div className="absolute left-0 w-5 h-5 rounded-full bg-white dark:bg-slate-900 border-4 border-teal-100 dark:border-teal-900/50 flex items-center justify-center -translate-x-0.5 mt-1.5 z-10">
                                         <div className="w-1.5 h-1.5 rounded-full bg-teal-500"></div>
                                     </div>
-                                    <div className="ml-8 md:ml-0 md:w-full bg-slate-50 rounded-lg p-3 border border-slate-100 relative shadow-sm">
+                                    <div className="ml-8 bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3 border border-slate-100 dark:border-slate-700/50 relative shadow-sm w-full">
                                         <div className="flex justify-between items-center mb-1">
-                                            <span className="text-xs font-semibold text-slate-900">{log.nome_usuario}</span>
+                                            <span className="text-xs font-semibold text-slate-900 dark:text-slate-100">{log.nome_usuario}</span>
                                             <span className="text-[10px] text-slate-400">{formatDate(log.created_at || log.createdAt)}</span>
                                         </div>
-                                        <p className="text-xs text-slate-600 line-clamp-2" title={log.alteracao}>
+                                        <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2" title={log.alteracao}>
                                             {log.alteracao}
                                         </p>
                                     </div>
@@ -277,7 +277,7 @@ const Dashboard = () => {
                             return (
                                 <div
                                     key={c.id}
-                                    className="flex justify-between items-center py-3 px-2 -mx-2 rounded-lg hover:bg-slate-50 cursor-pointer transition-colors border-b border-slate-50 last:border-0"
+                                    className="flex justify-between items-center py-3 px-2 -mx-2 rounded-lg hover:bg-slate-50 dark:bg-slate-800/50 cursor-pointer transition-colors border-b border-slate-50 last:border-0"
                                     onClick={() => navigate(`/contratos/${c.id}/editar`)}
                                 >
                                     <div className="flex items-center gap-3 min-w-0">
@@ -285,10 +285,10 @@ const Dashboard = () => {
                                             <FileText className="w-4 h-4 text-indigo-500" />
                                         </div>
                                         <div className="min-w-0">
-                                            <p className="font-medium text-slate-900 text-sm truncate">
+                                            <p className="font-medium text-slate-900 dark:text-slate-100 text-sm truncate">
                                                 {cliente?.nome_fantasia || `Cliente #${c.id_cliente}`}
                                             </p>
-                                            <p className="text-xs text-slate-500 truncate">
+                                            <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                                                 #{c.id} · {produto?.nome || 'Produto'}
                                                 {getContractCreatedAt(c) && (
                                                     <> · Cadastro {formatDate(getContractCreatedAt(c))}</>
@@ -297,7 +297,7 @@ const Dashboard = () => {
                                         </div>
                                     </div>
                                     <div className="text-right shrink-0 ml-3">
-                                        <p className="font-mono text-sm font-medium text-slate-700">
+                                        <p className="font-mono text-sm font-medium text-slate-700 dark:text-slate-300">
                                             {formatCurrency(c.valor_mensal)}
                                         </p>
                                         <Badge status={c.status} />
@@ -306,7 +306,7 @@ const Dashboard = () => {
                             );
                         })}
                         {recentContracts.length === 0 && (
-                            <p className="text-sm text-slate-500 text-center py-6">Nenhum contrato encontrado.</p>
+                            <p className="text-sm text-slate-500 dark:text-slate-400 text-center py-6">Nenhum contrato encontrado.</p>
                         )}
                     </div>
                 </Card>
@@ -333,14 +333,14 @@ const Dashboard = () => {
                                 return (
                                     <div
                                         key={c.id}
-                                        className="flex items-center justify-between p-3 rounded-lg bg-slate-50 hover:bg-amber-50/50 cursor-pointer transition-colors"
+                                        className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50 hover:bg-amber-50/50 cursor-pointer transition-colors"
                                         onClick={() => navigate(`/contratos/${c.id}/editar`)}
                                     >
                                         <div className="min-w-0">
-                                            <p className="text-sm font-medium text-slate-900 truncate">
+                                            <p className="text-sm font-medium text-slate-900 dark:text-slate-100 truncate">
                                                 {cliente?.nome_fantasia || `Cliente #${c.id_cliente}`}
                                             </p>
-                                            <p className="text-xs text-slate-500">
+                                            <p className="text-xs text-slate-500 dark:text-slate-400">
                                                 Contrato #{c.id} · {formatDate(c.vencimento)}
                                             </p>
                                         </div>
@@ -371,21 +371,21 @@ const Dashboard = () => {
                         Top 5 soluções por receita recorrente
                     </div>
                     {revenueByProduct.length === 0 ? (
-                        <p className="text-sm text-slate-500 text-center py-6">Sem dados de faturamento.</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 text-center py-6">Sem dados de faturamento.</p>
                     ) : (
                         <div className="space-y-4">
                             {revenueByProduct.map((item, idx) => (
                                 <div key={item.id}>
                                     <div className="flex justify-between text-sm mb-1">
-                                        <span className="font-medium text-slate-700 truncate pr-2">
+                                        <span className="font-medium text-slate-700 dark:text-slate-300 truncate pr-2">
                                             <span className="text-slate-400 mr-1">#{idx + 1}</span>
                                             {item.nome}
                                         </span>
-                                        <span className="font-mono text-slate-600 shrink-0">
+                                        <span className="font-mono text-slate-600 dark:text-slate-400 shrink-0">
                                             {formatCurrency(item.mrr)}
                                         </span>
                                     </div>
-                                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                                    <div className="h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                                         <div
                                             className="h-full bg-gradient-to-r from-teal-500 to-indigo-500 rounded-full transition-all duration-500"
                                             style={{ width: `${(item.mrr / maxProductMrr) * 100}%` }}
@@ -404,16 +404,16 @@ const Dashboard = () => {
                         Distribuição de clientes ativos
                     </div>
                     {clientsByClass.length === 0 ? (
-                        <p className="text-sm text-slate-500 text-center py-6">Nenhum cliente classificado.</p>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 text-center py-6">Nenhum cliente classificado.</p>
                     ) : (
                         <div className="space-y-3">
                             {clientsByClass.map(item => (
                                 <div key={item.id}>
                                     <div className="flex justify-between text-sm mb-1">
-                                        <span className="text-slate-700 truncate pr-2">{item.nome}</span>
-                                        <span className="font-semibold text-slate-900 shrink-0">{item.count}</span>
+                                        <span className="text-slate-700 dark:text-slate-300 truncate pr-2">{item.nome}</span>
+                                        <span className="font-semibold text-slate-900 dark:text-slate-100 shrink-0">{item.count}</span>
                                     </div>
-                                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                                    <div className="h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                                         <div
                                             className="h-full bg-purple-500 rounded-full"
                                             style={{ width: `${(item.count / maxClassCount) * 100}%` }}
@@ -448,14 +448,14 @@ const Dashboard = () => {
                                 return (
                                     <div
                                         key={c.id}
-                                        className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 hover:bg-indigo-50/40 cursor-pointer text-sm"
+                                        className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/50 hover:bg-indigo-50/40 cursor-pointer text-sm"
                                         onClick={() => navigate(`/contratos/${c.id}/editar`)}
                                     >
                                         <div className="min-w-0">
-                                            <p className="font-medium text-slate-800 truncate">
+                                            <p className="font-medium text-slate-800 dark:text-slate-200 truncate">
                                                 {cliente?.nome_fantasia || `#${c.id_cliente}`}
                                             </p>
-                                            <p className="text-xs text-slate-500">{formatDate(c.parsedReajuste)}</p>
+                                            <p className="text-xs text-slate-500 dark:text-slate-400">{formatDate(c.parsedReajuste)}</p>
                                         </div>
                                         <span className={`text-xs font-medium px-2 py-0.5 rounded-full shrink-0 ${urgency.className}`}>
                                             {days}d

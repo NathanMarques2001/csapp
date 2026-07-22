@@ -110,7 +110,7 @@ const GeneralReport = ({ clients, products, usersMap }) => {
 
     return (
         <div className="space-y-4">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-lg border border-slate-200 gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-700 gap-4">
                 <div className="relative w-full md:w-64">
                     <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
                     <Input
@@ -131,10 +131,10 @@ const GeneralReport = ({ clients, products, usersMap }) => {
             </div>
 
             {showFilters && (
-                <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 animate-in fade-in slide-in-from-top-2">
+                <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 animate-in fade-in slide-in-from-top-2">
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Cliente (Nome Fantasia)</label>
-                        <select name="nome_fantasia" value={filters.nome_fantasia} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Cliente (Nome Fantasia)</label>
+                        <select name="nome_fantasia" value={filters.nome_fantasia} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             {clients.map((c) => (
                                 <option key={c.id} value={c.nome_fantasia}>{c.nome_fantasia}</option>
@@ -142,8 +142,8 @@ const GeneralReport = ({ clients, products, usersMap }) => {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Produto</label>
-                        <select name="produto" value={filters.produto} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Produto</label>
+                        <select name="produto" value={filters.produto} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             {products && products.map((p) => (
                                 <option key={p.id} value={p.nome}>{p.nome}</option>
@@ -151,8 +151,8 @@ const GeneralReport = ({ clients, products, usersMap }) => {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Vendedor</label>
-                        <select name="vendedor" value={filters.vendedor} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Vendedor</label>
+                        <select name="vendedor" value={filters.vendedor} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             {usersMap && Object.values(usersMap).map((u) => (
                                 <option key={u.id} value={u.nome}>{u.nome}</option>
@@ -160,8 +160,8 @@ const GeneralReport = ({ clients, products, usersMap }) => {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">VP</label>
-                        <select name="vp" value={filters.vp} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">VP</label>
+                        <select name="vp" value={filters.vp} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             {usersMap && Object.values(usersMap).map((u) => (
                                 <option key={u.id} value={u.nome}>{u.nome}</option>
@@ -169,36 +169,36 @@ const GeneralReport = ({ clients, products, usersMap }) => {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Status Contrato</label>
-                        <select name="status_contrato" value={filters.status_contrato} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Status Contrato</label>
+                        <select name="status_contrato" value={filters.status_contrato} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             <option value="ativo">Ativo</option>
                             <option value="inativo">Inativo</option>
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Status Cliente</label>
-                        <select name="status_cliente" value={filters.status_cliente} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Status Cliente</label>
+                        <select name="status_cliente" value={filters.status_cliente} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             <option value="ativo">Ativo</option>
                             <option value="inativo">Inativo</option>
                         </select>
                     </div>
                     <div className="md:col-span-3 flex justify-end">
-                        <Button variant="ghost" icon={X} onClick={clearFilters} className="text-slate-500">Limpar Filtros</Button>
+                        <Button variant="ghost" icon={X} onClick={clearFilters} className="text-slate-500 dark:text-slate-400">Limpar Filtros</Button>
                     </div>
                 </div>
             )}
 
-            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden relative">
+            <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden relative">
                 {loading && (
-                    <div className="absolute inset-0 bg-white/50 z-10 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-white dark:bg-slate-900/50 z-10 flex items-center justify-center">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
                     </div>
                 )}
                 <div className="overflow-x-auto max-h-[600px]">
                     <table className="w-full text-sm text-left">
-                        <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200 sticky top-0">
+                        <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 font-medium border-b border-slate-200 dark:border-slate-700 sticky top-0">
                             <tr>
                                 <th className="px-6 py-3 whitespace-nowrap">Nome Fantasia</th>
                                 <th className="px-6 py-3 whitespace-nowrap">CPF/CNPJ</th>
@@ -214,32 +214,32 @@ const GeneralReport = ({ clients, products, usersMap }) => {
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {dadosFiltrados.map((item, index) => (
-                                <tr key={index} className="hover:bg-slate-50">
-                                    <td className="px-6 py-3 font-medium text-slate-900">{item.nome_fantasia || '-'}</td>
-                                    <td className="px-6 py-3 text-slate-500 font-mono text-xs">{item.cpf_cnpj || '-'}</td>
-                                    <td className="px-6 py-3 text-slate-500">{item.solucao || '-'}</td>
-                                    <td className="px-6 py-3 text-right font-medium text-slate-700">{formatCurrency(item.valor_contrato || 0)}</td>
-                                    <td className="px-6 py-3 text-slate-500">{item.vendedor || '-'}</td>
-                                    <td className="px-6 py-3 text-slate-500">{item.vp || '-'}</td>
+                                <tr key={index} className="hover:bg-slate-50 dark:bg-slate-800/50">
+                                    <td className="px-6 py-3 font-medium text-slate-900 dark:text-slate-100">{item.nome_fantasia || '-'}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400 font-mono text-xs">{item.cpf_cnpj || '-'}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{item.solucao || '-'}</td>
+                                    <td className="px-6 py-3 text-right font-medium text-slate-700 dark:text-slate-300">{formatCurrency(item.valor_contrato || 0)}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{item.vendedor || '-'}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{item.vp || '-'}</td>
                                     <td className="px-6 py-3">
                                         <Badge variant={(item.status || '').toLowerCase() === 'ativo' ? 'success' : 'secondary'}>{item.status || '-'}</Badge>
                                     </td>
                                     <td className="px-6 py-3">
                                         <Badge variant={(item.status_contrato || '').toLowerCase() === 'ativo' ? 'success' : 'secondary'}>{item.status_contrato || '-'}</Badge>
                                     </td>
-                                    <td className="px-6 py-3 text-slate-500">{item.gestor_chamados_nome || '-'}</td>
-                                    <td className="px-6 py-3 text-slate-500">{item.gestor_financeiro_nome || '-'}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{item.gestor_chamados_nome || '-'}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{item.gestor_financeiro_nome || '-'}</td>
                                 </tr>
                             ))}
                             {!loading && dadosFiltrados.length === 0 && (
                                 <tr>
-                                    <td colSpan="10" className="px-6 py-8 text-center text-slate-500">
+                                    <td colSpan="10" className="px-6 py-8 text-center text-slate-500 dark:text-slate-400">
                                         Nenhum registro encontrado.
                                     </td>
                                 </tr>
                             )}
                         </tbody>
-                        <tfoot className="bg-slate-50 font-bold text-slate-900 sticky bottom-0 border-t border-slate-200">
+                        <tfoot className="bg-slate-50 dark:bg-slate-800/50 font-bold text-slate-900 dark:text-slate-100 sticky bottom-0 border-t border-slate-200 dark:border-slate-700">
                             <tr>
                                 <td colSpan="3" className="px-6 py-3 text-right">Total:</td>
                                 <td className="px-6 py-3 text-right">{formatCurrency(totalValor)}</td>
@@ -248,7 +248,7 @@ const GeneralReport = ({ clients, products, usersMap }) => {
                         </tfoot>
                     </table>
                 </div>
-                <div className="bg-slate-50 px-6 py-3 border-t border-slate-200 text-xs text-slate-500">
+                <div className="bg-slate-50 dark:bg-slate-800/50 px-6 py-3 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400">
                     Mostrando {dadosFiltrados.length} registro(s)
                 </div>
             </div>

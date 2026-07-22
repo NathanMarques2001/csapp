@@ -91,7 +91,7 @@ const Reports = () => {
         { id: 'birthdays', title: 'Aniversariantes', icon: Users, color: 'text-pink-600', bg: 'bg-pink-100', component: BirthdayReport },
         { id: 'history', title: 'Histórico', icon: ClipboardList, color: 'text-orange-600', bg: 'bg-orange-100', component: HistoryReport },
         { id: 'notifications', title: 'Notificações', icon: Activity, color: 'text-red-600', bg: 'bg-red-100', component: NotificationReport },
-        { id: 'logs', title: 'Logs do Sistema', icon: Activity, color: 'text-slate-600', bg: 'bg-slate-100', component: LogsReport },
+        { id: 'logs', title: 'Logs do Sistema', icon: Activity, color: 'text-slate-600 dark:text-slate-400', bg: 'bg-slate-100 dark:bg-slate-800', component: LogsReport },
     ];
 
     const handleSelectReport = (id) => {
@@ -111,8 +111,8 @@ const Reports = () => {
         return (
             <div className="mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-bold text-slate-900">{reportTypes.find(r => r.id === selectedReport)?.title}</h2>
-                    <button onClick={() => setSelectedReport(null)} className="text-sm text-slate-500 hover:text-red-500">Fechar Relatório</button>
+                    <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">{reportTypes.find(r => r.id === selectedReport)?.title}</h2>
+                    <button onClick={() => setSelectedReport(null)} className="text-sm text-slate-500 dark:text-slate-400 hover:text-red-500">Fechar Relatório</button>
                 </div>
                 <ReportComponent
                     clients={data.clients}
@@ -136,8 +136,8 @@ const Reports = () => {
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-2xl font-bold text-slate-900">Relatórios Gerenciais</h1>
-                <p className="text-slate-500">Acompanhe a performance da carteira, contratos e cadastros em tempo real.</p>
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Relatórios Gerenciais</h1>
+                <p className="text-slate-500 dark:text-slate-400">Acompanhe a performance da carteira, contratos e cadastros em tempo real.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
@@ -148,7 +148,7 @@ const Reports = () => {
                         onClick={() => handleSelectReport(rep.id)}
                     >
                         {generatingReport === rep.id && (
-                            <div className="absolute inset-0 bg-white/80 z-10 flex flex-col items-center justify-center backdrop-blur-[1px]">
+                            <div className="absolute inset-0 bg-white dark:bg-slate-900/80 z-10 flex flex-col items-center justify-center backdrop-blur-[1px]">
                                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-teal-600 mb-1"></div>
                                 <span className="text-xs font-medium text-teal-700">Gerando...</span>
                             </div>
@@ -158,7 +158,7 @@ const Reports = () => {
                                 <rep.icon className={`w-5 h-5 ${rep.color}`} />
                             </div>
                             <div>
-                                <h3 className="font-bold text-sm text-slate-900 group-hover:text-teal-700 transition-colors">{rep.title}</h3>
+                                <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-teal-700 transition-colors">{rep.title}</h3>
                                 <p className="text-xs text-slate-400 mt-0.5">Visualizar</p>
                             </div>
                         </div>
@@ -167,11 +167,11 @@ const Reports = () => {
             </div>
 
             {selectedReport ? renderSelectedReport() : (
-                <Card className="p-12 flex flex-col items-center justify-center min-h-[300px] text-center bg-slate-50/50 border-dashed border-2 border-slate-200">
-                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 shadow-sm">
+                <Card className="p-12 flex flex-col items-center justify-center min-h-[300px] text-center bg-slate-50 dark:bg-slate-800/50/50 border-dashed border-2 border-slate-200 dark:border-slate-700">
+                    <div className="w-16 h-16 bg-white dark:bg-slate-900 rounded-full flex items-center justify-center mb-4 shadow-sm">
                         <ClipboardList className="w-8 h-8 text-slate-300" />
                     </div>
-                    <h3 className="text-lg font-medium text-slate-900 mb-1">Selecione um relatório</h3>
+                    <h3 className="text-lg font-medium text-slate-900 dark:text-slate-100 mb-1">Selecione um relatório</h3>
                     <p className="text-slate-400 max-w-sm text-sm">
                         Clique em um dos cards acima para carregar o relatório detalhado e as opções de exportação.
                     </p>

@@ -143,14 +143,14 @@ const ClientForm = () => {
     if (loading) return <Skeleton className="h-96 w-full" />;
 
     const SectionTitle = ({ title }) => (
-        <h3 className="text-lg font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4 mt-6 first:mt-0">
+        <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-700 pb-2 mb-4 mt-6 first:mt-0">
             {title}
         </h3>
     );
 
     const FormGroup = ({ label, required, children }) => (
         <div className="space-y-1">
-            <label className="block text-sm font-medium text-slate-700">
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                 {label} {required && <span className="text-rose-500">*</span>}
             </label>
             {children}
@@ -159,16 +159,16 @@ const ClientForm = () => {
 
     const Input = ({ ...props }) => (
         <input
-            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 disabled:text-slate-500 transition-colors"
+            className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+            focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 dark:bg-slate-800/50 disabled:text-slate-500 dark:text-slate-400 transition-colors"
             {...props}
         />
     );
 
     const Select = ({ children, ...props }) => (
         <select
-            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 disabled:text-slate-500 transition-colors"
+            className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+            focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 dark:bg-slate-800/50 disabled:text-slate-500 dark:text-slate-400 transition-colors"
             {...props}
         >
             {children}
@@ -178,12 +178,12 @@ const ClientForm = () => {
     return (
         <div className="max-w-4xl mx-auto space-y-6 pb-20">
             <div className="flex items-center gap-4">
-                <BackButton fallback="/clientes" onClick={requestLeave} className="p-2 hover:bg-slate-100 rounded-full" />
+                <BackButton fallback="/clientes" onClick={requestLeave} className="p-2 hover:bg-slate-100 dark:bg-slate-800 rounded-full" />
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-900">
+                    <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                         {mode === 'cadastro' ? 'Novo Cliente' : 'Editar Cliente'}
                     </h1>
-                    <p className="text-slate-500">Preencha os dados abaixo para {mode === 'cadastro' ? 'cadastrar um novo' : 'editar o'} cliente.</p>
+                    <p className="text-slate-500 dark:text-slate-400">Preencha os dados abaixo para {mode === 'cadastro' ? 'cadastrar um novo' : 'editar o'} cliente.</p>
                 </div>
             </div>
 

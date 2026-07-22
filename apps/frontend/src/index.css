@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Transição suave global para alternância de tema */
+*,
+*::before,
+*::after {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+/* Exceções: elementos que não devem ter transição (animações, transforms) */
+.animate-pulse,
+.animate-spin,
+.animate-in {
+    transition-property: none !important;
+}

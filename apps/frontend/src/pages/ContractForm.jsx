@@ -31,14 +31,14 @@ const removeAcentos = (str) => {
 };
 
 const SectionTitle = ({ title }) => (
-    <h3 className="text-lg font-bold text-slate-800 border-b border-slate-200 pb-2 mb-4 mt-6 first:mt-0">
+    <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-700 pb-2 mb-4 mt-6 first:mt-0">
         {title}
     </h3>
 );
 
 const FormGroup = ({ label, required, children }) => (
     <div className="space-y-1">
-        <label className="block text-sm font-medium text-slate-700">
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             {label} {required && <span className="text-rose-500">*</span>}
         </label>
         {children}
@@ -47,16 +47,16 @@ const FormGroup = ({ label, required, children }) => (
 
 const Input = ({ ...props }) => (
     <input
-        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-        focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 disabled:text-slate-500 transition-colors"
+        className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+        focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 dark:bg-slate-800/50 disabled:text-slate-500 dark:text-slate-400 transition-colors"
         {...props}
     />
 );
 
 const Select = ({ children, ...props }) => (
     <select
-        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-        focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 disabled:text-slate-500 transition-colors"
+        className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+        focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 dark:bg-slate-800/50 disabled:text-slate-500 dark:text-slate-400 transition-colors"
         {...props}
     >
         {children}
@@ -274,12 +274,12 @@ const ContractForm = () => {
         <div className="max-w-5xl mx-auto space-y-6 pb-20">
             <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
-                    <BackButton fallback="/contratos" onClick={requestLeave} className="p-2 hover:bg-slate-100 rounded-full" />
+                    <BackButton fallback="/contratos" onClick={requestLeave} className="p-2 hover:bg-slate-100 dark:bg-slate-800 rounded-full" />
                     <div>
-                        <h1 className="text-2xl font-bold text-slate-900">
+                        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                             {mode === 'cadastro' ? 'Novo Contrato' : 'Editar Contrato'}
                         </h1>
-                        <div className="flex items-center gap-2 text-slate-500">
+                        <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
                             <span>Preencha os dados do contrato.</span>
                             {mode === 'edicao' && (
                                 <Badge variant={formData.status === 'ativo' ? 'success' : 'secondary'}>
@@ -358,7 +358,7 @@ const ContractForm = () => {
                                             onChange={handleChange}
                                             className="w-4 h-4 text-teal-600 rounded border-slate-300 focus:ring-teal-500"
                                         />
-                                        <span className="text-sm font-medium text-slate-700">Renovação Automática</span>
+                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Renovação Automática</span>
                                     </label>
                                 </div>
                             </div>
@@ -436,7 +436,7 @@ const ContractForm = () => {
                                         name="descricao"
                                         value={formData.descricao}
                                         onChange={handleChange}
-                                        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors"
+                                        className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors"
                                         rows={3}
                                     />
                                 </FormGroup>
@@ -448,7 +448,7 @@ const ContractForm = () => {
                 <div className="space-y-6">
                     {/* Actions Card */}
                     <Card className="p-4 sticky top-6">
-                        <h3 className="font-bold text-slate-800 mb-4">Ações</h3>
+                        <h3 className="font-bold text-slate-800 dark:text-slate-200 mb-4">Ações</h3>
                         <div className="flex flex-col gap-3">
                             <Button type="submit" form="contract-form" icon={Save} loading={saving} fullWidth>
                                 {mode === 'cadastro' ? 'Salvar Contrato' : 'Salvar Alterações'}
@@ -463,20 +463,20 @@ const ContractForm = () => {
                     {mode === 'edicao' && (
                         <Card className="p-4">
                             <div className="flex items-center gap-2 mb-4">
-                                <History className="w-5 h-5 text-slate-500" />
-                                <h3 className="font-bold text-slate-800">Histórico</h3>
+                                <History className="w-5 h-5 text-slate-500 dark:text-slate-400" />
+                                <h3 className="font-bold text-slate-800 dark:text-slate-200">Histórico</h3>
                             </div>
                             <div className="max-h-96 overflow-y-auto space-y-4 pr-2">
                                 {logs.length === 0 ? (
                                     <p className="text-sm text-slate-400 text-center py-4">Nenhum registro encontrado.</p>
                                 ) : (
                                     logs.map((log) => (
-                                        <div key={log.id} className="text-sm border-l-2 border-slate-200 pl-3 py-1">
-                                            <div className="flex justify-between text-xs text-slate-500 mb-1">
+                                        <div key={log.id} className="text-sm border-l-2 border-slate-200 dark:border-slate-700 pl-3 py-1">
+                                            <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 mb-1">
                                                 <span>{new Date(log.createdAt).toLocaleDateString()}</span>
                                                 <span>{users[log.id_usuario] || 'Usuário'}</span>
                                             </div>
-                                            <p className="text-slate-700">{log.alteracao}</p>
+                                            <p className="text-slate-700 dark:text-slate-300">{log.alteracao}</p>
                                         </div>
                                     ))
                                 )}

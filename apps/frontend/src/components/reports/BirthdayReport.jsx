@@ -100,14 +100,14 @@ const BirthdayReport = ({ clients }) => {
 
     return (
         <div className="space-y-4">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-lg border border-slate-200 gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-700 gap-4">
                 <div className="flex items-center gap-3">
                     <Calendar className="h-5 w-5 text-slate-400" />
-                    <label className="text-sm font-medium text-slate-700">Mês do Aniversário:</label>
+                    <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Mês do Aniversário:</label>
                     <select
                         value={mesSelecionado}
                         onChange={(e) => setMesSelecionado(e.target.value)}
-                        className="text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3"
+                        className="text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3"
                     >
                         {meses.map((m, i) => (
                             <option key={i} value={String(i + 1)}>
@@ -121,10 +121,10 @@ const BirthdayReport = ({ clients }) => {
                 </div>
             </div>
 
-            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden relative">
+            <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden relative">
                 <div className="overflow-x-auto max-h-[600px]">
                     <table className="w-full text-sm text-left">
-                        <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200 sticky top-0">
+                        <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 font-medium border-b border-slate-200 dark:border-slate-700 sticky top-0">
                             <tr>
                                 <th className="px-6 py-3">Cliente</th>
                                 <th className="px-6 py-3">CPF/CNPJ</th>
@@ -135,17 +135,17 @@ const BirthdayReport = ({ clients }) => {
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {aniversariantes.map((item, index) => (
-                                <tr key={index} className="hover:bg-slate-50">
-                                    <td className="px-6 py-3 font-medium text-slate-900">{item.Cliente}</td>
-                                    <td className="px-6 py-3 text-slate-500 font-mono text-xs">{item["CPF/CNPJ"] || '-'}</td>
-                                    <td className="px-6 py-3 text-slate-500">{item.Pessoa}</td>
-                                    <td className="px-6 py-3 text-slate-500">{item.Cargo}</td>
-                                    <td className="px-6 py-3 text-right font-medium text-slate-700">{item["Data Aniversário"]}</td>
+                                <tr key={index} className="hover:bg-slate-50 dark:bg-slate-800/50">
+                                    <td className="px-6 py-3 font-medium text-slate-900 dark:text-slate-100">{item.Cliente}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400 font-mono text-xs">{item["CPF/CNPJ"] || '-'}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{item.Pessoa}</td>
+                                    <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{item.Cargo}</td>
+                                    <td className="px-6 py-3 text-right font-medium text-slate-700 dark:text-slate-300">{item["Data Aniversário"]}</td>
                                 </tr>
                             ))}
                             {aniversariantes.length === 0 && (
                                 <tr>
-                                    <td colSpan="5" className="px-6 py-8 text-center text-slate-500">
+                                    <td colSpan="5" className="px-6 py-8 text-center text-slate-500 dark:text-slate-400">
                                         Nenhum aniversariante encontrado para {meses[Number(mesSelecionado) - 1]}.
                                     </td>
                                 </tr>
@@ -153,7 +153,7 @@ const BirthdayReport = ({ clients }) => {
                         </tbody>
                     </table>
                 </div>
-                <div className="bg-slate-50 px-6 py-3 border-t border-slate-200 text-xs text-slate-500">
+                <div className="bg-slate-50 dark:bg-slate-800/50 px-6 py-3 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400">
                     Mostrando {aniversariantes.length} registro(s)
                 </div>
             </div>

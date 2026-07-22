@@ -6,10 +6,10 @@ import { useModalGuard } from '../../hooks/useFormGuard';
 
 const ModalBase = ({ title, onClose, children }) => (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-        <div className="bg-white rounded-lg shadow-xl w-full max-w-md animate-fade-in">
-            <div className="flex items-center justify-between p-4 border-b border-slate-100">
-                <h3 className="font-bold text-slate-800">{title}</h3>
-                <button onClick={onClose} className="text-slate-400 hover:text-slate-600">
+        <div className="bg-white dark:bg-slate-900 rounded-lg shadow-xl w-full max-w-md animate-fade-in">
+            <div className="flex items-center justify-between p-4 border-b border-slate-100 dark:border-slate-700/50">
+                <h3 className="font-bold text-slate-800 dark:text-slate-200">{title}</h3>
+                <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:text-slate-400">
                     <X className="w-5 h-5" />
                 </button>
             </div>
@@ -73,7 +73,7 @@ export const UserFormModal = ({ user, onClose, onSuccess }) => {
         <ModalBase title={isEditing ? 'Editar Usuário' : 'Novo Usuário'} onClose={handleClose}>
             <form onSubmit={handleSubmit} className="p-4 space-y-4">
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Nome</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nome</label>
                     <input
                         type="text"
                         required
@@ -83,18 +83,18 @@ export const UserFormModal = ({ user, onClose, onSuccess }) => {
                     />
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
                     <input
                         type="email"
                         required
                         disabled={isEditing}
-                        className="w-full px-3 py-2 border rounded-md disabled:bg-slate-50"
+                        className="w-full px-3 py-2 border rounded-md disabled:bg-slate-50 dark:bg-slate-800/50"
                         value={formData.email}
                         onChange={e => setFormData({ ...formData, email: e.target.value })}
                     />
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Tipo</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tipo</label>
                     <select
                         className="w-full px-3 py-2 border rounded-md"
                         value={formData.tipo}
@@ -107,7 +107,7 @@ export const UserFormModal = ({ user, onClose, onSuccess }) => {
                 {!isEditing && (
                     <>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Senha</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Senha</label>
                             <input
                                 type="password"
                                 required
@@ -117,7 +117,7 @@ export const UserFormModal = ({ user, onClose, onSuccess }) => {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Confirmar Senha</label>
+                            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Confirmar Senha</label>
                             <input
                                 type="password"
                                 required
@@ -196,7 +196,7 @@ export const ProductFormModal = ({ product, onClose, onSuccess }) => {
         <ModalBase title={product ? 'Editar Produto' : 'Novo Produto'} onClose={handleClose}>
             <form onSubmit={handleSubmit} className="p-4 space-y-4">
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Nome</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nome</label>
                     <input
                         type="text"
                         required
@@ -206,7 +206,7 @@ export const ProductFormModal = ({ product, onClose, onSuccess }) => {
                     />
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Fabricante</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Fabricante</label>
                     <select
                         required
                         className="w-full px-3 py-2 border rounded-md"
@@ -218,7 +218,7 @@ export const ProductFormModal = ({ product, onClose, onSuccess }) => {
                     </select>
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Categoria</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Categoria</label>
                     <select
                         required
                         className="w-full px-3 py-2 border rounded-md"
@@ -278,7 +278,7 @@ export const GenericFormModal = ({ title, endpoint, item, onClose, onSuccess }) 
         <ModalBase title={`${item ? 'Editar' : 'Novo'} ${title}`} onClose={handleClose}>
             <form onSubmit={handleSubmit} className="p-4 space-y-4">
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Nome</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nome</label>
                     <input
                         type="text"
                         required
@@ -362,7 +362,7 @@ export const ClientClassificationFormModal = ({ classification, hasQuantityClass
         <ModalBase title={isEditing ? 'Editar Classificação' : 'Nova Classificação'} onClose={handleClose}>
             <form onSubmit={handleSubmit} className="p-4 space-y-4">
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Nome</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nome</label>
                     <input
                         type="text"
                         required
@@ -374,7 +374,7 @@ export const ClientClassificationFormModal = ({ classification, hasQuantityClass
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Tipo de Critério</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Tipo de Critério</label>
                     <div className="flex gap-4 mt-2">
                         <label 
                             className={`flex items-center gap-2 ${isQuantidadeDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
@@ -389,7 +389,7 @@ export const ClientClassificationFormModal = ({ classification, hasQuantityClass
                                 onChange={() => setTipoCategoria('quantidade')}
                                 className="text-teal-600 focus:ring-teal-500"
                             />
-                            <span className="text-sm text-slate-700">Por Quantidade (Ranking)</span>
+                            <span className="text-sm text-slate-700 dark:text-slate-300">Por Quantidade (Ranking)</span>
                         </label>
                         <label className="flex items-center gap-2 cursor-pointer">
                             <input
@@ -400,14 +400,14 @@ export const ClientClassificationFormModal = ({ classification, hasQuantityClass
                                 onChange={() => setTipoCategoria('valor')}
                                 className="text-teal-600 focus:ring-teal-500"
                             />
-                            <span className="text-sm text-slate-700">Por Valor Mínimo</span>
+                            <span className="text-sm text-slate-700 dark:text-slate-300">Por Valor Mínimo</span>
                         </label>
                     </div>
                 </div>
 
                 {tipoCategoria === 'quantidade' && (
                     <div className="animate-fade-in">
-                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                             Quantidade de Clientes (Top X)
                         </label>
                         <input
@@ -419,7 +419,7 @@ export const ClientClassificationFormModal = ({ classification, hasQuantityClass
                             onChange={e => setFormData({ ...formData, quantidade: e.target.value })}
                             placeholder="Ex: 30 para os 30 maiores"
                         />
-                        <p className="text-xs text-slate-500 mt-1">
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                             Esta classificação será aplicada automaticamente aos {formData.quantidade || 'X'} maiores clientes.
                         </p>
                     </div>
@@ -427,7 +427,7 @@ export const ClientClassificationFormModal = ({ classification, hasQuantityClass
 
                 {tipoCategoria === 'valor' && (
                     <div className="animate-fade-in">
-                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                             Valor Mínimo (R$)
                         </label>
                         <input
@@ -440,13 +440,13 @@ export const ClientClassificationFormModal = ({ classification, hasQuantityClass
                             onChange={e => setFormData({ ...formData, valor: e.target.value })}
                             placeholder="0.00"
                         />
-                        <p className="text-xs text-slate-500 mt-1">
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                             Esta classificação será aplicada a clientes com faturamento acima deste valor.
                         </p>
                     </div>
                 )}
 
-                <div className="flex justify-end gap-2 pt-4 border-t border-slate-100 mt-6">
+                <div className="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-700/50 mt-6">
                     <Button type="button" variant="secondary" onClick={handleClose}>Cancelar</Button>
                     <Button type="submit" loading={loading}>Salvar</Button>
                 </div>
@@ -497,7 +497,7 @@ export const GroupFormModal = ({ group, onClose, onSuccess }) => {
         <ModalBase title={isEditing ? 'Editar Grupo Econômico' : 'Novo Grupo Econômico'} onClose={handleClose}>
             <form onSubmit={handleSubmit} className="p-4 space-y-4">
                 <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">Nome</label>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nome</label>
                     <input
                         type="text"
                         required
@@ -507,7 +507,7 @@ export const GroupFormModal = ({ group, onClose, onSuccess }) => {
                         placeholder="Nome do Grupo"
                     />
                 </div>
-                <div className="flex justify-end gap-2 pt-4 border-t border-slate-100 mt-6">
+                <div className="flex justify-end gap-2 pt-4 border-t border-slate-100 dark:border-slate-700/50 mt-6">
                     <Button type="button" variant="secondary" onClick={handleClose}>Cancelar</Button>
                     <Button type="submit" loading={loading}>Salvar</Button>
                 </div>

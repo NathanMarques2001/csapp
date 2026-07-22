@@ -77,13 +77,13 @@ const SettingsUsers = () => {
         <div className="space-y-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-lg font-bold text-slate-900">Usuários</h2>
-                    <p className="text-slate-500 text-sm">Gerencie o acesso ao sistema.</p>
+                    <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Usuários</h2>
+                    <p className="text-slate-500 dark:text-slate-400 text-sm">Gerencie o acesso ao sistema.</p>
                 </div>
                 <Button icon={Plus} size="sm" onClick={handleNew}>Novo Usuário</Button>
             </div>
 
-            <Card className="p-4 border-0 shadow-sm bg-white">
+            <Card className="p-4 border-0 shadow-sm bg-white dark:bg-slate-900">
                 <div className="relative">
                     <Search className="absolute left-3 top-2.5 h-5 w-5 text-slate-400" />
                     <Input
@@ -100,10 +100,10 @@ const SettingsUsers = () => {
                     {[1, 2, 3].map(i => <Skeleton key={i} className="h-16 w-full" />)}
                 </div>
             ) : (
-                <div className="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-sm">
+                <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
-                            <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200">
+                            <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 font-medium border-b border-slate-200 dark:border-slate-700">
                                 <tr>
                                     <th className="px-6 py-3">Nome</th>
                                     <th className="px-6 py-3">Email</th>
@@ -116,9 +116,9 @@ const SettingsUsers = () => {
                                     u.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
                                     u.email.toLowerCase().includes(searchTerm.toLowerCase())
                                 ).map(u => (
-                                    <tr key={u.id} className="hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
-                                        <td className="px-6 py-3 font-medium text-slate-900">{u.nome}</td>
-                                        <td className="px-6 py-3 text-slate-500">{u.email}</td>
+                                    <tr key={u.id} className="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors border-b border-slate-100 dark:border-slate-700/50 last:border-0">
+                                        <td className="px-6 py-3 font-medium text-slate-900 dark:text-slate-100">{u.nome}</td>
+                                        <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{u.email}</td>
                                         <td className="px-6 py-3">
                                             <Badge status={fetchUserType(u.tipo)} />
                                         </td>
@@ -138,7 +138,7 @@ const SettingsUsers = () => {
                                 ))}
                                 {users.length === 0 && (
                                     <tr>
-                                        <td colSpan="4" className="px-6 py-12 text-center text-slate-500">
+                                        <td colSpan="4" className="px-6 py-12 text-center text-slate-500 dark:text-slate-400">
                                             Nenhum usuário encontrado.
                                         </td>
                                     </tr>

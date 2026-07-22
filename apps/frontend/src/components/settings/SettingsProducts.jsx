@@ -121,11 +121,11 @@ const SettingsProducts = () => {
     return (
         <div>
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-bold text-slate-900">Produtos e Serviços</h2>
+                <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Produtos e Serviços</h2>
                 <Button icon={Plus} size="sm" onClick={handleNew}>Novo Produto</Button>
             </div>
 
-            <Card className="p-4 border-0 shadow-sm bg-white mb-6">
+            <Card className="p-4 border-0 shadow-sm bg-white dark:bg-slate-900 mb-6">
                 <div className="relative">
                     <Search className="absolute left-3 top-2.5 h-5 w-5 text-slate-400" />
                     <Input
@@ -137,9 +137,9 @@ const SettingsProducts = () => {
                 </div>
             </Card>
 
-            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
                 <table className="w-full text-sm text-left">
-                    <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200">
+                    <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 font-medium border-b border-slate-200 dark:border-slate-700">
                         <tr>
                             <th className="px-6 py-3">Nome</th>
                             <th className="px-6 py-3">Fornecedor</th>
@@ -154,10 +154,10 @@ const SettingsProducts = () => {
                             (manufacturerMap[p.id_fabricante] && manufacturerMap[p.id_fabricante].toLowerCase().includes(searchTerm.toLowerCase())) ||
                             (categoriesMap[p.id_categoria_produto] && categoriesMap[p.id_categoria_produto].toLowerCase().includes(searchTerm.toLowerCase()))
                         ).map(p => (
-                            <tr key={p.id} className="hover:bg-slate-50 border-b border-slate-100 last:border-0">
-                                <td className="px-6 py-3 font-medium text-slate-900">{p.nome}</td>
-                                <td className="px-6 py-3 text-slate-500">{manufacturerMap[p.id_fabricante] || '-'}</td>
-                                <td className="px-6 py-3 text-slate-500">{categoriesMap[p.id_categoria_produto] || '-'}</td>
+                            <tr key={p.id} className="hover:bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-700/50 last:border-0">
+                                <td className="px-6 py-3 font-medium text-slate-900 dark:text-slate-100">{p.nome}</td>
+                                <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{manufacturerMap[p.id_fabricante] || '-'}</td>
+                                <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{categoriesMap[p.id_categoria_produto] || '-'}</td>
                                 <td className="px-6 py-3">
                                     <Badge status={p.status === 'ativo' ? 'Ativo' : 'Inativo'} />
                                 </td>

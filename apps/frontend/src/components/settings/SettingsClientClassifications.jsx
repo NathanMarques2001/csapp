@@ -69,11 +69,11 @@ const SettingsClientClassifications = () => {
     return (
         <div>
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-bold text-slate-900">Classificações de Clientes</h2>
+                <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Classificações de Clientes</h2>
                 <Button icon={Plus} size="sm" onClick={handleNew}>Nova Classificação</Button>
             </div>
 
-            <Card className="p-4 border-0 shadow-sm bg-white mb-6">
+            <Card className="p-4 border-0 shadow-sm bg-white dark:bg-slate-900 mb-6">
                 <div className="relative">
                     <Search className="absolute left-3 top-2.5 h-5 w-5 text-slate-400" />
                     <Input
@@ -85,9 +85,9 @@ const SettingsClientClassifications = () => {
                 </div>
             </Card>
 
-            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
                 <table className="w-full text-sm text-left">
-                    <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200">
+                    <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 font-medium border-b border-slate-200 dark:border-slate-700">
                         <tr>
                             <th className="px-6 py-3">Nome</th>
                             <th className="px-6 py-3">Categoria</th>
@@ -100,12 +100,12 @@ const SettingsClientClassifications = () => {
                         {classifications.filter(c =>
                             c.nome.toLowerCase().includes(searchTerm.toLowerCase())
                         ).map(c => (
-                            <tr key={c.id} className="hover:bg-slate-50 border-b border-slate-100 last:border-0">
-                                <td className="px-6 py-3 font-medium text-slate-900">{c.nome}</td>
-                                <td className="px-6 py-3 text-slate-500">
+                            <tr key={c.id} className="hover:bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-700/50 last:border-0">
+                                <td className="px-6 py-3 font-medium text-slate-900 dark:text-slate-100">{c.nome}</td>
+                                <td className="px-6 py-3 text-slate-500 dark:text-slate-400">
                                     {c.tipo_categoria === 'quantidade' ? 'Quantidade' : 'Valor'}
                                 </td>
-                                <td className="px-6 py-3 text-slate-500">
+                                <td className="px-6 py-3 text-slate-500 dark:text-slate-400">
                                     {c.tipo_categoria === 'quantidade'
                                         ? c.quantidade
                                         : `R$ ${parseFloat(c.valor || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`}

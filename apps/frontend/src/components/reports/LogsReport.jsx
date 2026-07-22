@@ -152,7 +152,7 @@ const LogsReport = ({ contracts, clients, products }) => {
 
     return (
         <div className="space-y-4">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-4 rounded-lg border border-slate-200 gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white dark:bg-slate-900 p-4 rounded-lg border border-slate-200 dark:border-slate-700 gap-4">
                 <div className="relative w-full md:w-64">
                     <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
                     <Input
@@ -173,10 +173,10 @@ const LogsReport = ({ contracts, clients, products }) => {
             </div>
 
             {showFilters && (
-                <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 animate-in fade-in slide-in-from-top-2">
+                <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 animate-in fade-in slide-in-from-top-2">
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Usuário</label>
-                        <select name="usuario" value={filters.usuario} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Usuário</label>
+                        <select name="usuario" value={filters.usuario} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             {usuarios.map(u => (
                                 <option key={u} value={u}>{u}</option>
@@ -184,8 +184,8 @@ const LogsReport = ({ contracts, clients, products }) => {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Cliente</label>
-                        <select name="cliente" value={filters.cliente} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Cliente</label>
+                        <select name="cliente" value={filters.cliente} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             {clientesNomes.map(cn => (
                                 <option key={cn} value={cn}>{cn}</option>
@@ -193,8 +193,8 @@ const LogsReport = ({ contracts, clients, products }) => {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Status Cliente</label>
-                        <select name="statusCliente" value={filters.statusCliente} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Status Cliente</label>
+                        <select name="statusCliente" value={filters.statusCliente} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todos</option>
                             {listaStatus.map(s => (
                                 <option key={s} value={s}>{s}</option>
@@ -202,8 +202,8 @@ const LogsReport = ({ contracts, clients, products }) => {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-medium text-slate-700 mb-1">Solução</label>
-                        <select name="solucao" value={filters.solucao} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white py-2 px-3">
+                        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Solução</label>
+                        <select name="solucao" value={filters.solucao} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
                             <option value="">Todas</option>
                             {listaProdutos.map(p => (
                                 <option key={p} value={p}>{p}</option>
@@ -211,20 +211,20 @@ const LogsReport = ({ contracts, clients, products }) => {
                         </select>
                     </div>
                     <div className="md:col-span-4 flex justify-end">
-                        <Button variant="ghost" icon={X} onClick={clearFilters} className="text-slate-500">Limpar Filtros</Button>
+                        <Button variant="ghost" icon={X} onClick={clearFilters} className="text-slate-500 dark:text-slate-400">Limpar Filtros</Button>
                     </div>
                 </div>
             )}
 
-            <div className="bg-white rounded-lg border border-slate-200 overflow-hidden relative">
+            <div className="bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden relative">
                 {loading && (
-                    <div className="absolute inset-0 bg-white/50 z-10 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-white dark:bg-slate-900/50 z-10 flex items-center justify-center">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
                     </div>
                 )}
                 <div className="overflow-x-auto max-h-[600px]">
                     <table className="w-full text-sm text-left">
-                        <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200 sticky top-0">
+                        <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 font-medium border-b border-slate-200 dark:border-slate-700 sticky top-0">
                             <tr>
                                 <th className="px-6 py-3">Data</th>
                                 <th className="px-6 py-3">Usuário</th>
@@ -242,15 +242,15 @@ const LogsReport = ({ contracts, clients, products }) => {
                                 const dataFormatada = l.createdAt ? new Date(l.createdAt).toLocaleString("pt-BR") : "";
 
                                 return (
-                                    <tr key={index} className="hover:bg-slate-50">
-                                        <td className="px-6 py-3 text-slate-500 whitespace-nowrap">{dataFormatada}</td>
-                                        <td className="px-6 py-3 text-slate-500">{l.nome_usuario || 'Sistema'}</td>
-                                        <td className="px-6 py-3 font-medium text-slate-900">{cliente?.nome_fantasia || '-'}</td>
-                                        <td className="px-6 py-3 text-slate-500">{produto?.nome || '-'}</td>
+                                    <tr key={index} className="hover:bg-slate-50 dark:bg-slate-800/50">
+                                        <td className="px-6 py-3 text-slate-500 dark:text-slate-400 whitespace-nowrap">{dataFormatada}</td>
+                                        <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{l.nome_usuario || 'Sistema'}</td>
+                                        <td className="px-6 py-3 font-medium text-slate-900 dark:text-slate-100">{cliente?.nome_fantasia || '-'}</td>
+                                        <td className="px-6 py-3 text-slate-500 dark:text-slate-400">{produto?.nome || '-'}</td>
                                         <td className="px-6 py-3">
                                             <Badge variant={(cliente?.status || '').toLowerCase() === 'ativo' ? 'success' : 'secondary'}>{cliente?.status || '-'}</Badge>
                                         </td>
-                                        <td className="px-6 py-3 text-slate-500">
+                                        <td className="px-6 py-3 text-slate-500 dark:text-slate-400">
                                             <div className="max-w-md truncate" title={l.alteracao}>
                                                 {l.alteracao || '-'}
                                             </div>
@@ -260,7 +260,7 @@ const LogsReport = ({ contracts, clients, products }) => {
                             })}
                             {!loading && logsFiltrados.length === 0 && (
                                 <tr>
-                                    <td colSpan="6" className="px-6 py-8 text-center text-slate-500">
+                                    <td colSpan="6" className="px-6 py-8 text-center text-slate-500 dark:text-slate-400">
                                         Nenhum log encontrado.
                                     </td>
                                 </tr>
@@ -268,7 +268,7 @@ const LogsReport = ({ contracts, clients, products }) => {
                         </tbody>
                     </table>
                 </div>
-                <div className="bg-slate-50 px-6 py-3 border-t border-slate-200 text-xs text-slate-500 flex justify-between">
+                <div className="bg-slate-50 dark:bg-slate-800/50 px-6 py-3 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400 flex justify-between">
                     <span>Mostrando {Math.min(logsFiltrados.length, 500)} de {logsFiltrados.length} registro(s)</span>
                     {logsFiltrados.length > 500 && (
                         <span className="text-amber-600">Para ver todos, exporte o CSV.</span>

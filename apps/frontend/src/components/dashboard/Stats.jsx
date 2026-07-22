@@ -43,7 +43,7 @@ const Stats = ({ clientes = [], contratos = [], classifications = [] }) => {
             value: alertas,
             sub: 'Renovações + reajustes',
             icon: AlertTriangle,
-            iconBg: alertas > 0 ? 'bg-amber-50 text-amber-600' : 'bg-slate-50 text-slate-500',
+            iconBg: alertas > 0 ? 'bg-amber-50 text-amber-600' : 'bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400',
             highlight: alertas > 0,
         },
     ];
@@ -69,8 +69,8 @@ const Stats = ({ clientes = [], contratos = [], classifications = [] }) => {
                         )}
                     </div>
                     <div>
-                        <h4 className="text-slate-500 text-sm font-medium">{stat.label}</h4>
-                        <span className="text-2xl font-bold text-slate-900 tracking-tight block mt-1">
+                        <h4 className="text-slate-500 dark:text-slate-400 text-sm font-medium">{stat.label}</h4>
+                        <span className="text-2xl font-bold text-slate-900 dark:text-slate-100 tracking-tight block mt-1">
                             {stat.value}
                         </span>
                         <p className="text-xs text-slate-400 mt-1">{stat.sub}</p>

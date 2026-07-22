@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { THEME } from '../../utils/constants';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import Toast from '../ui/Toast';
@@ -24,7 +23,7 @@ const DashboardLayout = () => {
 
     return (
         <ConfirmProvider>
-            <div className={`min-h-screen ${THEME.colors.bg} flex font-inter`}>
+            <div className={`min-h-screen bg-slate-50 dark:bg-slate-950 flex font-inter`}>
                 <style>{`
               @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Montserrat:wght@600;700&display=swap');
               body { font-family: 'Inter', sans-serif; }

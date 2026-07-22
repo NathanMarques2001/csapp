@@ -207,35 +207,35 @@ const Header = ({ sidebarOpen, setSidebarOpen, selectedItem }) => {
         if (status === 'inativo') {
             return {
                 icon: Info,
-                iconContainer: 'bg-slate-100 text-slate-400',
-                badge: 'bg-slate-100 text-slate-500'
+                iconContainer: 'bg-slate-100 dark:bg-slate-800 text-slate-400',
+                badge: 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
             };
         }
         if (days < 0) {
             return {
                 icon: AlertTriangle,
-                iconContainer: 'bg-rose-50 text-rose-600',
-                badge: 'bg-rose-100 text-rose-700'
+                iconContainer: 'bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400',
+                badge: 'bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400'
             };
         }
         if (days === 0) {
             return {
                 icon: AlertTriangle,
-                iconContainer: 'bg-rose-50 text-rose-600',
-                badge: 'bg-rose-100 text-rose-700'
+                iconContainer: 'bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400',
+                badge: 'bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400'
             };
         }
         if (days <= 30) {
             return {
                 icon: AlertCircle,
-                iconContainer: 'bg-amber-50 text-amber-600',
-                badge: 'bg-amber-100 text-amber-700'
+                iconContainer: 'bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400',
+                badge: 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400'
             };
         }
         return {
             icon: Info,
-            iconContainer: 'bg-teal-50 text-teal-600',
-            badge: 'bg-teal-50 text-teal-700'
+            iconContainer: 'bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400',
+            badge: 'bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400'
         };
     };
 
@@ -250,18 +250,18 @@ const Header = ({ sidebarOpen, setSidebarOpen, selectedItem }) => {
     };
 
     return (
-        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-40">
+        <header className="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between px-6 sticky top-0 z-40">
             <div className="flex items-center gap-4">
-                <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-slate-100 rounded-md text-slate-600">
+                <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md text-slate-600 dark:text-slate-400">
                     <Menu className="w-5 h-5" />
                 </button>
                 {/* Breadcrumbs Mock */}
-                <div className="hidden md:flex items-center text-sm text-slate-500">
+                <div className="hidden md:flex items-center text-sm text-slate-500 dark:text-slate-400">
                     <span className="capitalize">{activePage}</span>
                     {selectedItem && (
                         <>
                             <ChevronRight className="w-4 h-4 mx-1" />
-                            <span className="text-slate-900 font-medium">Detalhes</span>
+                            <span className="text-slate-900 dark:text-slate-200 font-medium">Detalhes</span>
                         </>
                     )}
                 </div>
@@ -276,27 +276,27 @@ const Header = ({ sidebarOpen, setSidebarOpen, selectedItem }) => {
                             if (!isOpen) fetchNotifications(); // Refresh on open
                         }} 
                         className={`relative p-2 rounded-full transition-all ${
-                            isOpen ? 'bg-slate-100 text-teal-600' : 'text-slate-400 hover:text-teal-600 hover:bg-slate-50'
+                            isOpen ? 'bg-slate-100 dark:bg-slate-800 text-teal-600 dark:text-teal-400' : 'text-slate-400 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-50 dark:hover:bg-slate-800'
                         }`}
                     >
                         <Bell className="w-5 h-5" />
                         {activeCount > 0 && (
-                            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white animate-pulse"></span>
+                            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white dark:ring-slate-900 animate-pulse"></span>
                         )}
                     </button>
 
                     {isOpen && (
-                        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white border border-slate-200 rounded-xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
                             {/* Header */}
-                            <div className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+                            <div className="p-4 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
                                 <div>
-                                    <h4 className="font-bold text-slate-800 text-sm">Central de Notificações</h4>
+                                    <h4 className="font-bold text-slate-800 dark:text-slate-200 text-sm">Central de Notificações</h4>
                                     <p className="text-slate-400 text-[10px]">Avisos operacionais e alertas</p>
                                 </div>
                                 {activeCount > 0 && (
                                     <button 
                                         onClick={handleMarkAllAsRead} 
-                                        className="text-[11px] text-teal-600 hover:text-teal-700 font-bold flex items-center gap-1 bg-white hover:bg-slate-100 border border-slate-200 rounded-md px-2.5 py-1.5 shadow-sm transition-all duration-200"
+                                        className="text-[11px] text-teal-600 dark:text-teal-400 hover:text-teal-700 font-bold flex items-center gap-1 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-md px-2.5 py-1.5 shadow-sm transition-all duration-200"
                                     >
                                         <CheckCheck className="w-3.5 h-3.5 text-teal-500" />
                                         Lidas
@@ -305,7 +305,7 @@ const Header = ({ sidebarOpen, setSidebarOpen, selectedItem }) => {
                             </div>
 
                             {/* Tabs */}
-                            <div className="flex border-b border-slate-100 bg-white">
+                            <div className="flex border-b border-slate-100 dark:border-slate-700/50 bg-white dark:bg-slate-900">
                                 <button
                                     onClick={() => setActiveTab('active')}
                                     className={`flex-1 py-2.5 text-center text-xs font-bold border-b-2 transition-all relative ${
@@ -339,7 +339,7 @@ const Header = ({ sidebarOpen, setSidebarOpen, selectedItem }) => {
                             </div>
 
                             {/* Body Content */}
-                            <div className="max-h-80 overflow-y-auto bg-white divide-y divide-slate-100">
+                            <div className="max-h-80 overflow-y-auto bg-white dark:bg-slate-900 divide-y divide-slate-100 dark:divide-slate-800">
                                 {loading ? (
                                     <div className="flex flex-col items-center justify-center py-10 text-slate-400">
                                         <Loader2 className="w-6 h-6 animate-spin text-teal-500 mb-2" />
@@ -347,10 +347,10 @@ const Header = ({ sidebarOpen, setSidebarOpen, selectedItem }) => {
                                     </div>
                                 ) : displayedNotifications.length === 0 ? (
                                     <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-                                        <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center text-slate-300 mb-3 border border-slate-100">
+                                        <div className="w-12 h-12 bg-slate-50 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-300 dark:text-slate-600 mb-3 border border-slate-100 dark:border-slate-700">
                                             <BellOff className="w-5 h-5" />
                                         </div>
-                                        <h5 className="font-bold text-slate-700 text-xs">Nenhum aviso encontrado</h5>
+                                        <h5 className="font-bold text-slate-700 dark:text-slate-300 text-xs">Nenhum aviso encontrado</h5>
                                         <p className="text-[11px] text-slate-400 mt-1 max-w-xs leading-relaxed">
                                             {activeTab === 'active' 
                                                 ? 'Não há vencimentos ativos para monitorar no momento. Bom trabalho!'
@@ -364,7 +364,7 @@ const Header = ({ sidebarOpen, setSidebarOpen, selectedItem }) => {
                                         return (
                                             <div
                                                 key={notif.id}
-                                                className={`flex items-start gap-3 p-3.5 hover:bg-slate-50/50 transition-all relative ${
+                                                className={`flex items-start gap-3 p-3.5 hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-all relative ${
                                                     notif.status === 'ativo' ? 'bg-teal-50/5' : 'opacity-70'
                                                 }`}
                                             >
@@ -373,7 +373,7 @@ const Header = ({ sidebarOpen, setSidebarOpen, selectedItem }) => {
                                                 </div>
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-center gap-1.5">
-                                                        <span className="font-semibold text-slate-800 text-xs">
+                                                        <span className="font-semibold text-slate-800 dark:text-slate-200 text-xs">
                                                             {notif.status === 'ativo' ? 'Vencimento de Contrato' : 'Aviso Arquivado'}
                                                         </span>
                                                         {notif.status === 'ativo' && notif.dias_restantes <= 0 && (
@@ -383,7 +383,7 @@ const Header = ({ sidebarOpen, setSidebarOpen, selectedItem }) => {
                                                             </span>
                                                         )}
                                                     </div>
-                                                    <p className="text-slate-600 text-xs leading-relaxed mt-0.5">
+                                                    <p className="text-slate-600 dark:text-slate-400 text-xs leading-relaxed mt-0.5">
                                                         O contrato #{notif.id_contrato} da empresa <strong>{notif.cliente_nome}</strong> expira em {formatDate(notif.data_vencimento)}.
                                                     </p>
 
@@ -398,7 +398,7 @@ const Header = ({ sidebarOpen, setSidebarOpen, selectedItem }) => {
                                                                     e.stopPropagation();
                                                                     handleNavigateToContract(notif.id_contrato);
                                                                 }}
-                                                                className="px-2.5 py-1 text-[11px] font-semibold text-slate-600 hover:text-slate-900 bg-white border border-slate-200 rounded-md transition-all hover:bg-slate-50 shadow-sm"
+                                                                className="px-2.5 py-1 text-[11px] font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-md transition-all hover:bg-slate-50 dark:hover:bg-slate-700 shadow-sm"
                                                             >
                                                                 Ver Contrato
                                                             </button>
@@ -446,14 +446,14 @@ const Header = ({ sidebarOpen, setSidebarOpen, selectedItem }) => {
                     )}
                 </div>
 
-                <div className="h-8 w-px bg-slate-200 mx-1"></div>
-                <div className="flex items-center gap-3 cursor-pointer hover:bg-slate-50 p-1.5 rounded-full pr-3 transition-colors">
-                    <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs">
+                <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-1"></div>
+                <div className="flex items-center gap-3 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 p-1.5 rounded-full pr-3 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 flex items-center justify-center font-bold text-xs">
                         {getInitials(nome)}
                     </div>
                     <div className="hidden md:block text-sm">
-                        <p className="font-medium text-slate-900 leading-none">{nome}</p>
-                        <p className="text-xs text-slate-500 mt-0.5">{getTipoLabel(tipo)}</p>
+                        <p className="font-medium text-slate-900 dark:text-slate-100 leading-none">{nome}</p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{getTipoLabel(tipo)}</p>
                     </div>
                 </div>
             </div>

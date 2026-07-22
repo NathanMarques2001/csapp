@@ -47,8 +47,8 @@ const Settings = () => {
     return (
         <div className="space-y-6">
             <div>
-                <h1 className="text-2xl font-bold text-slate-900">Configurações e Cadastros</h1>
-                <p className="text-slate-500">Gerencie tabelas auxiliares e usuários do sistema.</p>
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Configurações e Cadastros</h1>
+                <p className="text-slate-500 dark:text-slate-400">Gerencie tabelas auxiliares e usuários do sistema.</p>
             </div>
 
             <div className="flex flex-col lg:flex-row gap-6">
@@ -61,7 +61,7 @@ const Settings = () => {
                                 onClick={() => setActiveTab(tab.id)}
                                 className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-md transition-colors ${activeTab === tab.id
                                     ? 'bg-teal-50 text-teal-700'
-                                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:bg-slate-800/50 hover:text-slate-900 dark:text-slate-100'
                                     }`}
                             >
                                 <tab.icon className={`w-5 h-5 ${activeTab === tab.id ? 'text-teal-600' : 'text-slate-400'}`} />
