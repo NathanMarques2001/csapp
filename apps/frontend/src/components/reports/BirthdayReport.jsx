@@ -107,7 +107,7 @@ const BirthdayReport = ({ clients }) => {
                     <select
                         value={mesSelecionado}
                         onChange={(e) => setMesSelecionado(e.target.value)}
-                        className="text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3"
+                        className="h-10 px-3 min-w-[150px] rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                     >
                         {meses.map((m, i) => (
                             <option key={i} value={String(i + 1)}>

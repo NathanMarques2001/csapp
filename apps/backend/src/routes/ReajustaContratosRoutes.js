@@ -3,5 +3,6 @@ const ReajustaContratosController = require('../controllers/ReajustaContratosCon
 const router = express.Router();
 
 router.get('/', ReajustaContratosController.reajustaContratos);
+router.get('/erros', ReajustaContratosController.getErros);
 
 module.exports = router;

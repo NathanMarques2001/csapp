@@ -17,6 +17,43 @@ const formatDateForInput = (dateString) => {
     return date.toISOString().split('T')[0];
 };
 
+const SectionTitle = ({ title }) => (
+    <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-700 pb-2 mb-4 mt-6 first:mt-0">
+        {title}
+    </h3>
+);
+
+const FormGroup = ({ label, required, children }) => (
+    <div className="space-y-1">
+        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+            {label} {required && <span className="text-rose-500">*</span>}
+        </label>
+        {children}
+    </div>
+);
+
+const Input = ({ value, ...props }) => {
+    const safeValue = value === null || value === undefined ? '' : value;
+    return (
+        <input
+            className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+            focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 dark:bg-slate-800/50 disabled:text-slate-500 dark:text-slate-400 transition-colors"
+            value={safeValue}
+            {...props}
+        />
+    );
+};
+
+const Select = ({ children, ...props }) => (
+    <select
+        className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+        focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 dark:bg-slate-800/50 disabled:text-slate-500 dark:text-slate-400 transition-colors"
+        {...props}
+    >
+        {children}
+    </select>
+);
+
 const EMPTY_CLIENT_FORM = {
     razao_social: "",
     nome_fantasia: "",
@@ -141,39 +178,6 @@ const ClientForm = () => {
     };
 
     if (loading) return <Skeleton className="h-96 w-full" />;
-
-    const SectionTitle = ({ title }) => (
-        <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 border-b border-slate-200 dark:border-slate-700 pb-2 mb-4 mt-6 first:mt-0">
-            {title}
-        </h3>
-    );
-
-    const FormGroup = ({ label, required, children }) => (
-        <div className="space-y-1">
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-                {label} {required && <span className="text-rose-500">*</span>}
-            </label>
-            {children}
-        </div>
-    );
-
-    const Input = ({ ...props }) => (
-        <input
-            className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 dark:bg-slate-800/50 disabled:text-slate-500 dark:text-slate-400 transition-colors"
-            {...props}
-        />
-    );
-
-    const Select = ({ children, ...props }) => (
-        <select
-            className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 dark:bg-slate-800/50 disabled:text-slate-500 dark:text-slate-400 transition-colors"
-            {...props}
-        >
-            {children}
-        </select>
-    );
 
     return (
         <div className="max-w-4xl mx-auto space-y-6 pb-20">

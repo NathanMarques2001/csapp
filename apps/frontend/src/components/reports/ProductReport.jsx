@@ -80,7 +80,7 @@ const ProductReport = ({ products, manufacturersMap }) => {
                 <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 animate-in fade-in slide-in-from-top-2">
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Produto</label>
-                        <select name="nome" value={filters.nome} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="nome" value={filters.nome} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             {products.map(p => (
                                 <option key={p.id} value={p.nome}>{p.nome}</option>
@@ -89,7 +89,7 @@ const ProductReport = ({ products, manufacturersMap }) => {
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Fabricante</label>
-                        <select name="fabricante" value={filters.fabricante} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="fabricante" value={filters.fabricante} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             {Object.values(manufacturersMap || {}).map(f => (
                                 <option key={f.id} value={f.nome}>{f.nome}</option>
@@ -98,7 +98,7 @@ const ProductReport = ({ products, manufacturersMap }) => {
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Status</label>
-                        <select name="status" value={filters.status} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="status" value={filters.status} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             <option value="ativo">Ativo</option>
                             <option value="inativo">Inativo</option>

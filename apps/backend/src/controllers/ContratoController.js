@@ -2,6 +2,7 @@ const Contrato = require('../models/Contrato');
 const Cliente = require('../models/Cliente');
 const VencimentoContratos = require('../models/VencimentoContratos');
 const classifyCustomers = require('../utils/classifyCustomers');
+const ContratoService = require('../services/ContratoService');
 
 module.exports = {
   async index(req, res) {
@@ -96,44 +97,15 @@ module.exports = {
 
   async update(req, res) {
     try {
-      const { id_cliente, id_produto, id_faturado, dia_vencimento, indice_reajuste, nome_indice, proximo_reajuste, status, duracao, valor_mensal, quantidade, descricao, data_inicio, tipo_faturamento, link_contrato, email_envio, renovacao_automatica } = req.body;
       const { id } = req.params;
-      //const containsLetters = /[a-zA-Z]/;
+      const { message, aviso } = await ContratoService.update(id, req.body);
 
-      const contrato = await Contrato.findByPk(id);
-
-      if (!contrato) {
-        return res.status(404).send({ message: 'Contrato não encontrado!' });
-      } //else if (containsLetters.test(valor_mensal)) {
-      //   return res.status(400).send({ message: 'O campo valor mensal só aceita números!' });
-      // } else if (containsLetters.test(quantidade)) {
-      //   return res.status(400).send({ message: 'O campo quantidade só aceita números!' });
-      // }
-
-      let valor_antigo_update = contrato.valor_antigo;
-      
-      if (valor_mensal !== undefined && Number(valor_mensal) !== Number(contrato.valor_mensal)) {
-          valor_antigo_update = contrato.valor_mensal;
-      }
-
-      await Contrato.update({ id_cliente, id_produto, id_faturado, dia_vencimento, indice_reajuste, nome_indice, proximo_reajuste, status, duracao, valor_mensal, quantidade, descricao, data_inicio, tipo_faturamento, link_contrato, email_envio, renovacao_automatica, valor_antigo: valor_antigo_update }, { where: { id: id } });
-
-      await classifyCustomers();
-
-      if (data_inicio || status || duracao) {
-        const inicio = data_inicio ? new Date(data_inicio) : new Date(contrato.data_inicio);
-        const duracaoContrato = duracao ? duracao : contrato.duracao;
-        const vencimento = new Date(inicio.setMonth(inicio.getMonth() + Number(duracaoContrato)));
-        const statusContrato = status ? status : contrato.status;
-        await VencimentoContratos.update(
-          { id_contrato: contrato.id, status: statusContrato, data_vencimento: vencimento },
-          { where: { id_contrato: contrato.id } }
-        );
-      }
-
-      return res.status(200).send({ message: 'Contrato atualizado com sucesso!' });
+      return res.status(200).send({ message, aviso });
     } catch (error) {
       console.error(error);
+      if (error.message === 'Contrato não encontrado!') {
+        return res.status(404).send({ message: error.message });
+      }
       return res.status(500).send({ message: 'Ocorreu um erro ao atualizar o contrato.' });
     }
   },

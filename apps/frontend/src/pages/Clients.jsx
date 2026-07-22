@@ -226,12 +226,12 @@ const Clients = () => {
 
     const StatsCard = ({ title, value, icon: Icon, color }) => (
         <Card className="border-none shadow-sm h-full">
-            <div className="flex items-center justify-between">
-                <div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">{title}</p>
-                    <p className="text-xl font-bold text-slate-900 dark:text-slate-100 mt-1">{formatCurrency(value)}</p>
+            <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                    <p className="text-sm text-slate-500 dark:text-slate-400 font-medium truncate" title={title}>{title}</p>
+                    <p className="text-xl font-bold text-slate-900 dark:text-slate-100 mt-1 truncate" title={formatCurrency(value)}>{formatCurrency(value)}</p>
                 </div>
-                <div className={`p-3 rounded-full ${color}`}>
+                <div className={`p-3 rounded-full shrink-0 ${color}`}>
                     <Icon className="w-5 h-5 text-white" />
                 </div>
             </div>
@@ -336,7 +336,7 @@ const Clients = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-4">
                 <StatsCard 
                     title="Total de Contratos Ativos" 
                     value={statsByCategory.totalAtivos} 
@@ -370,6 +370,40 @@ const Clients = () => {
                 </div>
             </Card>
 
+            {/* Active Filters Display */}
+            <div className="flex flex-wrap gap-2">
+                <span className="text-sm text-slate-500 dark:text-slate-400 self-center">Filtros ativos:</span>
+                
+                <Badge variant="secondary" className="flex items-center gap-1">
+                    status: {filters.status === '' ? 'todos' : filters.status}
+                    {filters.status !== '' && (
+                        <span className="cursor-pointer ml-1 hover:text-red-500" onClick={() => setFilters(prev => ({ ...prev, status: '' }))}>×</span>
+                    )}
+                </Badge>
+                
+                    {filters.classification && (
+                        <Badge variant="secondary" className="flex items-center gap-1">
+                            classificação: {classifications[filters.classification] || filters.classification}
+                            <span className="cursor-pointer ml-1 hover:text-red-500" onClick={() => setFilters(prev => ({ ...prev, classification: '' }))}>×</span>
+                        </Badge>
+                    )}
+
+                    {filters.seller && (
+                        <Badge variant="secondary" className="flex items-center gap-1">
+                            vendedor: {sellers[filters.seller] || filters.seller}
+                            <span className="cursor-pointer ml-1 hover:text-red-500" onClick={() => setFilters(prev => ({ ...prev, seller: '' }))}>×</span>
+                        </Badge>
+                    )}
+
+                    {filters.vp && (
+                        <Badge variant="secondary" className="flex items-center gap-1">
+                            vp: {sellers[filters.vp] || filters.vp}
+                            <span className="cursor-pointer ml-1 hover:text-red-500" onClick={() => setFilters(prev => ({ ...prev, vp: '' }))}>×</span>
+                        </Badge>
+                    )}
+
+                    <Button variant="ghost" size="sm" className="text-slate-500 dark:text-slate-400 h-6" onClick={() => setFilters({ status: 'ativo', classification: '', seller: '', vp: '' })}>Limpar tudo</Button>
+                </div>
             {loading ? (
                 <div className="space-y-4">
                     {[1, 2, 3].map(i => <Skeleton key={i} className="h-12 w-full" />)}

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 import { Save, FileText, History } from 'lucide-react';
 import Api from '../utils/api';
 import BackButton from '../components/ui/BackButton';
@@ -45,13 +46,17 @@ const FormGroup = ({ label, required, children }) => (
     </div>
 );
 
-const Input = ({ ...props }) => (
-    <input
-        className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-        focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 dark:bg-slate-800/50 disabled:text-slate-500 dark:text-slate-400 transition-colors"
-        {...props}
-    />
-);
+const Input = ({ value, ...props }) => {
+    const safeValue = value === null || value === undefined ? '' : value;
+    return (
+        <input
+            className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+            focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 disabled:bg-slate-50 dark:bg-slate-800/50 disabled:text-slate-500 dark:text-slate-400 transition-colors"
+            value={safeValue}
+            {...props}
+        />
+    );
+};
 
 const Select = ({ children, ...props }) => (
     <select
@@ -83,6 +88,7 @@ const EMPTY_CONTRACT_FORM = {
 };
 
 const ContractForm = () => {
+    const [cookies] = useCookies(['nomeUsuario', 'id']);
     const api = new Api();
     const goBack = useGoBack('/contratos');
     const { confirm } = useConfirm();
@@ -232,7 +238,8 @@ const ContractForm = () => {
                 duracao: Number(formData.duracao),
                 valor_mensal: Number(formData.valor_mensal),
                 quantidade: formData.quantidade ? Number(formData.quantidade) : null,
-                // Add current user ID if needed for logs
+                nome_usuario: cookies.nomeUsuario,
+                id_usuario: cookies.id,
             };
 
             if (mode === 'cadastro') {
@@ -434,9 +441,9 @@ const ContractForm = () => {
                                 <FormGroup label="Descrição Breve">
                                     <textarea
                                         name="descricao"
-                                        value={formData.descricao}
+                                        value={formData.descricao === null || formData.descricao === undefined ? '' : formData.descricao}
                                         onChange={handleChange}
-                                        className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors"
+                                        className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md text-sm text-slate-900 dark:text-slate-100 shadow-sm placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-colors"
                                         rows={3}
                                     />
                                 </FormGroup>

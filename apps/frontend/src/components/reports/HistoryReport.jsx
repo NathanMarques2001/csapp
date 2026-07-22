@@ -229,7 +229,7 @@ const HistoryReport = ({ clients, contracts, products, segmentsMap, groupsMap, c
                     {abaAtiva === 'clientes' && (
                         <div>
                             <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Status Cliente</label>
-                            <select value={statusCliente} onChange={e => setStatusCliente(e.target.value)} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                            <select value={statusCliente} onChange={e => setStatusCliente(e.target.value)} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                                 <option value="">Todos</option>
                                 <option value="ativo">Ativo</option>
                                 <option value="inativo">Inativo</option>
@@ -239,7 +239,7 @@ const HistoryReport = ({ clients, contracts, products, segmentsMap, groupsMap, c
                     {abaAtiva === 'contratos' && (
                         <div>
                             <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Status Contrato</label>
-                            <select value={statusContrato} onChange={e => setStatusContrato(e.target.value)} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                            <select value={statusContrato} onChange={e => setStatusContrato(e.target.value)} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                                 <option value="">Todos</option>
                                 <option value="ativo">Ativo</option>
                                 <option value="inativo">Inativo</option>

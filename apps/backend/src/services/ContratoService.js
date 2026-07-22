@@ -39,14 +39,25 @@ class ContratoService {
     }
 
     normalizarValor(valor) {
+        if (!valor) return valor;
+
         if (valor instanceof Date) {
             return valor.toISOString().split("T")[0]; // só a data
         }
         if (typeof valor === "number") {
             return valor.toString();
         }
-        if (typeof valor === "string" && !isNaN(valor)) {
-            return parseFloat(valor).toString(); // trata decimais tipo "2500.00"
+        if (typeof valor === "string") {
+            // Se for string de data (ex: '2026-02-01 00:00:00' ou '2026-02-01')
+            if (/^\d{4}-\d{2}-\d{2}/.test(valor)) {
+                const d = new Date(valor);
+                if (!isNaN(d.getTime())) {
+                    return d.toISOString().split("T")[0];
+                }
+            }
+            if (!isNaN(valor)) {
+                return parseFloat(valor).toString(); // trata decimais tipo "2500.00"
+            }
         }
         return valor;
     }

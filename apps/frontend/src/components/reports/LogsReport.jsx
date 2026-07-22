@@ -176,7 +176,7 @@ const LogsReport = ({ contracts, clients, products }) => {
                 <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 animate-in fade-in slide-in-from-top-2">
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Usuário</label>
-                        <select name="usuario" value={filters.usuario} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="usuario" value={filters.usuario} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             {usuarios.map(u => (
                                 <option key={u} value={u}>{u}</option>
@@ -185,7 +185,7 @@ const LogsReport = ({ contracts, clients, products }) => {
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Cliente</label>
-                        <select name="cliente" value={filters.cliente} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="cliente" value={filters.cliente} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             {clientesNomes.map(cn => (
                                 <option key={cn} value={cn}>{cn}</option>
@@ -194,7 +194,7 @@ const LogsReport = ({ contracts, clients, products }) => {
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Status Cliente</label>
-                        <select name="statusCliente" value={filters.statusCliente} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="statusCliente" value={filters.statusCliente} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             {listaStatus.map(s => (
                                 <option key={s} value={s}>{s}</option>
@@ -203,7 +203,7 @@ const LogsReport = ({ contracts, clients, products }) => {
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Solução</label>
-                        <select name="solucao" value={filters.solucao} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="solucao" value={filters.solucao} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todas</option>
                             {listaProdutos.map(p => (
                                 <option key={p} value={p}>{p}</option>

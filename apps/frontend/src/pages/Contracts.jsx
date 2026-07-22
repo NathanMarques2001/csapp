@@ -191,13 +191,13 @@ const Contracts = () => {
     };
 
     const StatsCard = ({ title, value, icon: Icon, color }) => (
-        <Card className="border-none shadow-sm">
-            <div className="flex items-center justify-between">
-                <div>
-                    <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">{title}</p>
-                    <p className="text-xl font-bold text-slate-900 dark:text-slate-100 mt-1">{formatCurrency(value)}</p>
+        <Card className="border-none shadow-sm h-full">
+            <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                    <p className="text-sm text-slate-500 dark:text-slate-400 font-medium truncate" title={title}>{title}</p>
+                    <p className="text-xl font-bold text-slate-900 dark:text-slate-100 mt-1 truncate" title={formatCurrency(value)}>{formatCurrency(value)}</p>
                 </div>
-                <div className={`p-3 rounded-full ${color}`}>
+                <div className={`p-3 rounded-full shrink-0 ${color}`}>
                     <Icon className="w-5 h-5 text-white" />
                 </div>
             </div>
@@ -218,11 +218,11 @@ const Contracts = () => {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatsCard title="Total Ativo (Filtro)" value={totalActive} icon={TrendingUp} color="bg-teal-500" />
                 <StatsCard title="Faturamento Mensal" value={totalMonthly} icon={DollarSign} color="bg-indigo-500" />
                 <StatsCard title="Faturamento Anual" value={totalAnnual} icon={FileText} color="bg-blue-500" />
-                <StatsCard title="Total Geral (Filtro)" value={totalDisplayed} icon={DollarSign} color="bg-slate-50 dark:bg-slate-800/500" />
+                <StatsCard title="Total Geral (Filtro)" value={totalDisplayed} icon={DollarSign} color="bg-amber-500" />
             </div>
 
             {/* Filter Bar */}

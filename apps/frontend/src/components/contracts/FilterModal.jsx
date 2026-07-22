@@ -64,7 +64,7 @@ const FilterModal = ({ isOpen, onClose, onApply, initialFilters, clients, produc
                             name="razao_social"
                             value={filters.razao_social}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 rounded-md text-sm shadow-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                            className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md text-sm text-slate-900 dark:text-slate-100 shadow-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                         >
                             <option value="">Selecione...</option>
                             {Object.values(clients).map((client) => (
@@ -81,7 +81,7 @@ const FilterModal = ({ isOpen, onClose, onApply, initialFilters, clients, produc
                             name="nome_fantasia"
                             value={filters.nome_fantasia}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 rounded-md text-sm shadow-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                            className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md text-sm text-slate-900 dark:text-slate-100 shadow-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                         >
                             <option value="">Selecione...</option>
                             {Object.values(clients).map((client) => (
@@ -98,7 +98,7 @@ const FilterModal = ({ isOpen, onClose, onApply, initialFilters, clients, produc
                             name="status"
                             value={filters.status}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 rounded-md text-sm shadow-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                            className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md text-sm text-slate-900 dark:text-slate-100 shadow-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                         >
                             <option value="">Selecione...</option>
                             <option value="ativo">Ativo</option>
@@ -112,7 +112,7 @@ const FilterModal = ({ isOpen, onClose, onApply, initialFilters, clients, produc
                             name="nome_produto"
                             value={filters.nome_produto}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 rounded-md text-sm shadow-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                            className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md text-sm text-slate-900 dark:text-slate-100 shadow-sm focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
                         >
                             <option value="">Selecione...</option>
                             {Object.values(products).map((product) => (

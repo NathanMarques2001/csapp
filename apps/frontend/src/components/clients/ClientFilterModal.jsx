@@ -48,7 +48,7 @@ const ClientFilterModal = ({ isOpen, onClose, onApply, filters, classifications,
                             name="status"
                             value={localFilters.status}
                             onChange={handleChange}
-                            className="w-full h-10 px-3 rounded-md border border-slate-300 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                            className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                         >
                             <option value="">Todos</option>
                             <option value="ativo">Ativo</option>
@@ -62,7 +62,7 @@ const ClientFilterModal = ({ isOpen, onClose, onApply, filters, classifications,
                             name="classification"
                             value={localFilters.classification}
                             onChange={handleChange}
-                            className="w-full h-10 px-3 rounded-md border border-slate-300 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                            className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                         >
                             <option value="">Todas</option>
                             {Object.entries(classifications).map(([id, name]) => (
@@ -77,7 +77,7 @@ const ClientFilterModal = ({ isOpen, onClose, onApply, filters, classifications,
                             name="seller"
                             value={localFilters.seller}
                             onChange={handleChange}
-                            className="w-full h-10 px-3 rounded-md border border-slate-300 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                            className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                         >
                             <option value="">Todos</option>
                             {Object.entries(sellers).map(([id, name]) => (
@@ -92,7 +92,7 @@ const ClientFilterModal = ({ isOpen, onClose, onApply, filters, classifications,
                             name="vp"
                             value={localFilters.vp}
                             onChange={handleChange}
-                            className="w-full h-10 px-3 rounded-md border border-slate-300 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                            className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                         >
                             <option value="">Todos</option>
                             {Object.entries(sellers).map(([id, name]) => (

@@ -149,7 +149,7 @@ const NotificationReport = ({ usersMap, contracts, clients, products }) => {
                 <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 animate-in fade-in slide-in-from-top-2">
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Vendedor</label>
-                        <select name="usuario" value={filters.usuario} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="usuario" value={filters.usuario} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             {Object.values(usersMap || {}).map((u) => (
                                 <option key={u.id} value={u.nome}>{u.nome}</option>
@@ -158,7 +158,7 @@ const NotificationReport = ({ usersMap, contracts, clients, products }) => {
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Módulo</label>
-                        <select name="modulo" value={filters.modulo} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="modulo" value={filters.modulo} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             {modulos.map((m) => (
                                 <option key={m} value={m}>{m}</option>
@@ -167,7 +167,7 @@ const NotificationReport = ({ usersMap, contracts, clients, products }) => {
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Cliente</label>
-                        <select name="cliente" value={filters.cliente} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="cliente" value={filters.cliente} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             {clients.map((c) => (
                                 <option key={c.id} value={c.razao_social}>{c.razao_social}</option>
@@ -176,7 +176,7 @@ const NotificationReport = ({ usersMap, contracts, clients, products }) => {
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Solução</label>
-                        <select name="solucao" value={filters.solucao} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="solucao" value={filters.solucao} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todas</option>
                             {products.map((p) => (
                                 <option key={p.id} value={p.nome}>{p.nome}</option>
@@ -185,7 +185,7 @@ const NotificationReport = ({ usersMap, contracts, clients, products }) => {
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Confirmado</label>
-                        <select name="confirmado" value={filters.confirmado} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="confirmado" value={filters.confirmado} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             <option value="sim">Sim</option>
                             <option value="não">Não</option>
@@ -193,7 +193,7 @@ const NotificationReport = ({ usersMap, contracts, clients, products }) => {
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Índice Reajuste</label>
-                        <select name="indiceReajuste" value={filters.indiceReajuste} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="indiceReajuste" value={filters.indiceReajuste} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             {indicesReajuste.map((i) => (
                                 <option key={i} value={i}>{i}</option>
@@ -202,7 +202,7 @@ const NotificationReport = ({ usersMap, contracts, clients, products }) => {
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Renovação Automática</label>
-                        <select name="renovacaoAutomatica" value={filters.renovacaoAutomatica} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="renovacaoAutomatica" value={filters.renovacaoAutomatica} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             <option value="sim">Sim</option>
                             <option value="não">Não</option>

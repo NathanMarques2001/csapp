@@ -226,11 +226,22 @@ async function reajustaContratos(req, res) {
   }
 }
 
+async function getErros(req, res) {
+  try {
+    const erros = await ContratoErroReajuste.findAll({});
+    return res.status(200).send({ erros });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ message: 'Erro ao buscar erros de reajuste.' });
+  }
+}
+
 module.exports = {
   reajustaContratos,
   filaContratos,
   ajustaIndice,
   ajustaNovaData,
   ajustaValorMensal,
-  reprocessaContratosErro
+  reprocessaContratosErro,
+  getErros
 };

@@ -134,7 +134,7 @@ const GeneralReport = ({ clients, products, usersMap }) => {
                 <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 animate-in fade-in slide-in-from-top-2">
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Cliente (Nome Fantasia)</label>
-                        <select name="nome_fantasia" value={filters.nome_fantasia} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="nome_fantasia" value={filters.nome_fantasia} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             {clients.map((c) => (
                                 <option key={c.id} value={c.nome_fantasia}>{c.nome_fantasia}</option>
@@ -143,7 +143,7 @@ const GeneralReport = ({ clients, products, usersMap }) => {
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Produto</label>
-                        <select name="produto" value={filters.produto} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="produto" value={filters.produto} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             {products && products.map((p) => (
                                 <option key={p.id} value={p.nome}>{p.nome}</option>
@@ -152,7 +152,7 @@ const GeneralReport = ({ clients, products, usersMap }) => {
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Vendedor</label>
-                        <select name="vendedor" value={filters.vendedor} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="vendedor" value={filters.vendedor} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             {usersMap && Object.values(usersMap).map((u) => (
                                 <option key={u.id} value={u.nome}>{u.nome}</option>
@@ -161,7 +161,7 @@ const GeneralReport = ({ clients, products, usersMap }) => {
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">VP</label>
-                        <select name="vp" value={filters.vp} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="vp" value={filters.vp} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             {usersMap && Object.values(usersMap).map((u) => (
                                 <option key={u.id} value={u.nome}>{u.nome}</option>
@@ -170,7 +170,7 @@ const GeneralReport = ({ clients, products, usersMap }) => {
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Status Contrato</label>
-                        <select name="status_contrato" value={filters.status_contrato} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="status_contrato" value={filters.status_contrato} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             <option value="ativo">Ativo</option>
                             <option value="inativo">Inativo</option>
@@ -178,7 +178,7 @@ const GeneralReport = ({ clients, products, usersMap }) => {
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Status Cliente</label>
-                        <select name="status_cliente" value={filters.status_cliente} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="status_cliente" value={filters.status_cliente} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             <option value="ativo">Ativo</option>
                             <option value="inativo">Inativo</option>

@@ -33,12 +33,12 @@ const DashboardLayout = () => {
                 <Sidebar isOpen={sidebarOpen} />
 
                 {/* Main Content Wrapper */}
-                <div className={`flex-1 flex flex-col transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-20'}`}>
+                <div className={`flex-1 min-w-0 flex flex-col transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-20'}`}>
 
                     <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
                     {/* Content Scroll Area */}
-                    <main className="flex-1 p-6 lg:p-8 overflow-y-auto">
+                    <main className="flex-1 min-w-0 p-6 lg:p-8 overflow-y-auto overflow-x-hidden">
                         <NavigationProvider>
                             <Outlet />
                         </NavigationProvider>

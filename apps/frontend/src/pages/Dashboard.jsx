@@ -52,7 +52,7 @@ const Dashboard = () => {
                 // Optionally fetch erros de reajuste se o endpoint existir. Se não, pegamos vazio.
                 let errosRes = { erros: [] };
                 try {
-                    errosRes = await api.get('/reajusta-contrato/erros');
+                    errosRes = await api.get('/reajusta-contratos/erros');
                 } catch (e) {
                     // Ignora se não existir
                 }
@@ -169,7 +169,7 @@ const Dashboard = () => {
                             Atenção: Falha no reajuste automático de {errosReajuste.length} contrato(s)
                         </h3>
                         <p className="text-xs text-red-600 mt-1">
-                            Alguns contratos não puderam ser reajustados devido à ausência de índice no sistema para o mês atual. 
+                            Alguns contratos não puderam ser reajustados devido à ausência de índice no sistema para o mês atual.
                             Por favor, verifique o módulo de Reajustes.
                         </p>
                     </div>
@@ -205,7 +205,7 @@ const Dashboard = () => {
                                     <div
                                         key={n.id}
                                         className="flex flex-col p-3 rounded-lg bg-slate-50 dark:bg-slate-800/50 hover:bg-rose-50/40 cursor-pointer text-sm transition-colors border border-slate-100 dark:border-slate-700/50"
-                                        onClick={() => navigate('/relatorios')}
+                                        onClick={() => navigate(`/contratos/${n.id_contrato}/editar`)}
                                     >
                                         <div className="flex justify-between items-start mb-1">
                                             <span className="font-medium text-slate-900 dark:text-slate-100">{cliente?.nome_fantasia || 'Cliente Desconhecido'}</span>
@@ -325,8 +325,8 @@ const Dashboard = () => {
                             <p className="text-sm">Nenhuma renovação nos próximos 90 dias.</p>
                         </div>
                     ) : (
-                        <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
-                            {upcomingRenewals.slice(0, 8).map(c => {
+                        <div className="space-y-2 h-[380px] overflow-y-auto pr-1">
+                            {upcomingRenewals.map(c => {
                                 const cliente = clientsById[c.id_cliente];
                                 const days = getDaysUntil(c.vencimento);
                                 const urgency = urgencyLabel(days);
@@ -353,11 +353,6 @@ const Dashboard = () => {
                                     </div>
                                 );
                             })}
-                            {upcomingRenewals.length > 8 && (
-                                <p className="text-xs text-center text-slate-400 pt-2">
-                                    +{upcomingRenewals.length - 8} renovações
-                                </p>
-                            )}
                         </div>
                     )}
                 </Card>

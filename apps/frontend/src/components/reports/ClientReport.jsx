@@ -139,7 +139,7 @@ const ClientReport = ({
                 <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 animate-in fade-in slide-in-from-top-2">
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Tipo</label>
-                        <select name="tipo" value={filters.tipo} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="tipo" value={filters.tipo} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             <option value="top 30">TOP 30</option>
                             <option value="a">A</option>
@@ -149,7 +149,7 @@ const ClientReport = ({
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Status</label>
-                        <select name="status" value={filters.status} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="status" value={filters.status} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             <option value="ativo">Ativo</option>
                             <option value="inativo">Inativo</option>
@@ -157,7 +157,7 @@ const ClientReport = ({
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Vendedor</label>
-                        <select name="vendedor" value={filters.vendedor} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="vendedor" value={filters.vendedor} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             {Object.values(usersMap || {}).map((u) => (
                                 <option key={u.id} value={u.nome}>{u.nome}</option>
@@ -166,7 +166,7 @@ const ClientReport = ({
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">VP</label>
-                        <select name="vp" value={filters.vp} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="vp" value={filters.vp} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             {Object.values(usersMap || {}).map((u) => (
                                 <option key={u.id} value={u.nome}>{u.nome}</option>
@@ -175,7 +175,7 @@ const ClientReport = ({
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Segmento</label>
-                        <select name="segmento" value={filters.segmento} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="segmento" value={filters.segmento} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             {Object.values(segmentsMap || {}).map((s) => (
                                 <option key={s.id} value={s.nome}>{s.nome}</option>
@@ -184,7 +184,7 @@ const ClientReport = ({
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Grupo Econômico</label>
-                        <select name="grupo_economico" value={filters.grupo_economico} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="grupo_economico" value={filters.grupo_economico} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             {Object.values(groupsMap || {}).map((g) => (
                                 <option key={g.id} value={g.nome}>{g.nome}</option>
@@ -193,7 +193,7 @@ const ClientReport = ({
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Pertence a Grupo?</label>
-                        <select name="pertence_grupo" value={filters.pertence_grupo} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="pertence_grupo" value={filters.pertence_grupo} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             <option value="sim">Sim</option>
                             <option value="não">Não</option>
@@ -201,7 +201,7 @@ const ClientReport = ({
                     </div>
                     <div>
                         <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">Tipo Faturamento</label>
-                        <select name="tipo_faturamento" value={filters.tipo_faturamento} onChange={handleFilterChange} className="w-full text-sm border-slate-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500 bg-white dark:bg-slate-900 py-2 px-3">
+                        <select name="tipo_faturamento" value={filters.tipo_faturamento} onChange={handleFilterChange} className="w-full h-10 px-3 rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent">
                             <option value="">Todos</option>
                             <option value="mensal">Mensal</option>
                             <option value="anual">Anual</option>
